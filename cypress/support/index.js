@@ -6,4 +6,11 @@
 // ***********************************************************
 
 // Import commands.ts using ES2015 syntax:
+
+const path = require('path');
+
 import './commands'
+import { setGlobalConfig } from "@storybook/testing-react";
+import * as sbPreview from "../../src/.storybook/preview";
+
+setGlobalConfig(sbPreview);

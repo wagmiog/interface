@@ -1,8 +1,13 @@
 {
   "baseUrl": "http://localhost:3000",
-  "pluginsFile": false,
+  "pageLoadTimeout": 180000,
+  "pluginsFile": "cypress/plugins/index.js",
   "fixturesFolder": false,
   "supportFile": "cypress/support/index.js",
   "video": false,
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 10000,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*spec.{js,jsx,ts,tsx}"
+  }
 }

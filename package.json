@@ -14,6 +14,12 @@
     "@reach/dialog": "^0.10.3",
     "@reach/portal": "^0.10.3",
     "@reduxjs/toolkit": "^1.3.5",
+    "@storybook/addon-actions": "^6.3.8",
+    "@storybook/addon-essentials": "^6.3.8",
+    "@storybook/addon-links": "^6.3.8",
+    "@storybook/node-logger": "^6.3.8",
+    "@storybook/preset-create-react-app": "^3.2.0",
+    "@storybook/react": "^6.3.8",
     "@types/jest": "^25.2.1",
     "@types/lodash.flatmap": "^4.5.6",
     "@types/luxon": "^1.24.4",
@@ -45,7 +51,7 @@
     "cids": "^1.0.0",
     "copy-to-clipboard": "^3.2.0",
     "cross-env": "^7.0.2",
-    "cypress": "^4.11.0",
+    "cypress": "^8.4.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
@@ -102,12 +108,25 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "serve": "serve build -l 3000",
-    "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
+    "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
+    "component-test": "npx cypress open-ct",
+    "storybook": "start-storybook -p 6006 -s public -c ./src/.storybook",
+    "build-storybook": "build-storybook -s public -c ./src/.storybook"
   },
   "eslintConfig": {
     "extends": "react-app",
     "ignorePatterns": [
       "node_modules"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "browserslist": {
@@ -124,7 +143,11 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@cypress/react": "^5.10.0",
+    "@cypress/webpack-dev-server": "^1.6.0",
+    "@storybook/testing-react": "^0.0.22",
     "@types/crypto-js": "^4.0.2",
-    "crypto-js": "^4.0.0"
+    "crypto-js": "^4.0.0",
+    "webpack-dev-server": "^4.2.1"
   }
 }
