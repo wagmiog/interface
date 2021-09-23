@@ -17,8 +17,8 @@ export const Yellow = () => <YellowCard>Yellow</YellowCard>
 
 export const Outline = () => <OutlineCard>Outline</OutlineCard>
 
-export const Red = () => <RedCard>White</RedCard>
+export const Red = () => <RedCard>Red</RedCard>
 
-export const Pink = () => <PinkCard>Empty</PinkCard>
+export const Pink = () => <PinkCard>Pink</PinkCard>
 
 export const Blue = () => <BlueCard>Blue</BlueCard>

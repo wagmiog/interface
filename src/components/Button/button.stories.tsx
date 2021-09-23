@@ -13,6 +13,7 @@ import {
   ButtonRadio,
   ButtonDropdown
 } from '.'
+import { ComponentStory } from '@storybook/react'
 
 export default {
   component: ButtonPrimary,
@@ -35,11 +36,30 @@ export const White = () => <ButtonWhite>White</ButtonWhite>
 
 export const Empty = () => <ButtonEmpty>Empty</ButtonEmpty>
 
-export const Confirmed = () => <ButtonConfirmed confirmed>Confirmed</ButtonConfirmed>
+const TemplateConfirmed: ComponentStory<typeof ButtonConfirmed> = (args: any) => (
+  <ButtonConfirmed {...args}>Confirmed</ButtonConfirmed>
+)
 
-export const Error = () => <ButtonError error>Error</ButtonError>
+export const Confirmed = TemplateConfirmed.bind({})
+Confirmed.args = {
+  confirmed: true
+}
 
-export const Radio = () => <ButtonRadio active>Radio</ButtonRadio>
+const TemplateError: ComponentStory<typeof ButtonError> = (args: any) => <ButtonError {...args}>Error</ButtonError>
+
+export const Error = TemplateError.bind({})
+Error.args = {
+  error: true
+}
+
+const TemplateRadioButton: ComponentStory<typeof ButtonRadio> = (args: any) => (
+  <ButtonRadio {...args}>Radio</ButtonRadio>
+)
+
+export const Radio = TemplateRadioButton.bind({})
+Radio.args = {
+  active: true
+}
 
 export const Dropdown = () => (
   <ButtonDropdown>

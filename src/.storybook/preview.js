@@ -1,6 +1,8 @@
 import React from 'react'
 import store from '../state'
+import '../i18n'
 import { Provider } from 'react-redux'
+import { HashRouter } from 'react-router-dom'
 import ThemeProvider, { ThemedGlobalStyle } from '../theme'
 
 // Global decorator to apply the styles to all stories
@@ -10,7 +12,9 @@ export const decorators = [
       <Provider store={store}>
         <ThemeProvider>
           <ThemedGlobalStyle />
-          <Story />
+          <HashRouter>
+            <Story />
+          </HashRouter>
         </ThemeProvider>
       </Provider>
     </>
