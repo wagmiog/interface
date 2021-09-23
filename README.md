@@ -28,6 +28,18 @@ yarn
 yarn start
 ```
 
+### Run Storybook
+
+```bash
+yarn storybook
+```
+
+### Run Cypress Component Test
+
+```bash
+yarn component-test
+```
+
 ### Configuring the environment (optional)
 
 To have the interface default to a different network when a wallet is not connected:
