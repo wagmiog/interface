@@ -93,6 +93,7 @@
     "react-window": "^1.8.5",
     "rebass": "^4.0.7",
     "redux-localstorage-simple": "^2.3.1",
+    "rimraf": "^3.0.2",
     "serve": "^11.3.0",
     "start-server-and-test": "^1.11.0",
     "styled-components": "^4.2.0",
@@ -112,7 +113,9 @@
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
     "component-test": "npx cypress open-ct",
     "storybook": "start-storybook -p 6006 -s public -c ./src/.storybook",
-    "build-storybook": "build-storybook -s public -c ./src/.storybook"
+    "build-storybook": "build-storybook -s public -c ./src/.storybook",
+    "rm-buggy-typefiles": "rimraf ./node_modules/@emotion/core/types/index.d.ts && rimraf ./node_modules/@storybook/testing-react/dist/types.d.ts",
+    "postinstall": "npm run rm-buggy-typefiles"
   },
   "eslintConfig": {
     "extends": "react-app",

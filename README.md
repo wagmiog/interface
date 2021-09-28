@@ -53,5 +53,11 @@ Note that the interface only works on testnets where both
 [multicall](https://github.com/makerdao/multicall) are deployed.
 The interface will not work on other networks.
 
+### Things to note
+
+`rm-buggy-typefiles`: we need this npm script because as of today while writing this there is issue in storybook -> emotion version, which introduce [global typescript bug](https://github.com/emotion-js/emotion/issues/1800). So while postinstall we are removing the type files till it get fixed in future storybook version.  
+
+`SKIP_PREFLIGHT_CHECK=true`: in .env file we are keeping this variable for now. as create-react-app wrongly throwing babel-loader error if we dont keep this flag. I think this introduced after we added storybook.
+
 ## Attribution
 This code was adapted from this Uniswap repo: [uniswap-interface](https://github.com/Uniswap/uniswap-interface).
