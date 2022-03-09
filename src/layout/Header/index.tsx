@@ -38,6 +38,7 @@ import MobileFooter from '../MobileFooter'
 import { Logo } from '../../components/Icons'
 import { Hidden } from 'src/theme'
 import { useChainId } from 'src/hooks'
+import { RenderChangeChainModal } from './SwitchChainModal'
 
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.FUJI]: 'Fuji',
@@ -69,6 +70,13 @@ export default function Header() {
   useOnClickOutside(node, open ? toggle : undefined)
 
   const [isDark, toggleDarkMode] = useDarkModeManager()
+  const [chainModal, setChainModal] = useState<boolean>(true)
+
+  const hideChainModal = () => {
+    setChainModal(false)
+  }
+
+
 
   return (
     <HeaderFrame>
@@ -107,8 +115,9 @@ export default function Header() {
           </LegacyButtonWrapper>
           <Hidden upToSmall={true}>
             {chainId && NETWORK_LABELS[chainId] && (
-              <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
+              <NetworkCard title={NETWORK_LABELS[chainId]} onClick={() => setChainModal(true)}>{NETWORK_LABELS[chainId]}</NetworkCard>
             )}
+              <RenderChangeChainModal hideChainModal={hideChainModal} chainModal={chainModal}/>
           </Hidden>
           {aggregateBalance && (
             <PNGWrapper onClick={() => setShowPngBalanceModal(true)}>

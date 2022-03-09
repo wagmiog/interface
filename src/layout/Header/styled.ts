@@ -199,6 +199,12 @@ export const MobileLogoWrapper = styled.div`
 `
 
 export const LegacyButtonWrapper = styled.div`
+  :hover {
+    opacity: 0.8;
+  }
+  :active {
+    opacity: 0.9;
+  }
   display: block;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: none;
