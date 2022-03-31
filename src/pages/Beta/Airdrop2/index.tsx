@@ -4,7 +4,7 @@ import { Text, Box } from '@pangolindex/components'
 import { useActiveWeb3React } from 'src/hooks'
 import { BoxChangeChain, BoxCheckEligibility, BoxClaimReward, BoxNotConnected } from './BoxesType'
 import { QuestionAnswer } from './QuestionBox'
-import { useUserHasAvailableClaim, useUserUnclaimedAmount, useClaimCallback } from 'src/state/airdrop/hooks'
+import {  useUserUnclaimedAmount, useClaimCallback } from 'src/state/airdrop/hooks'
 import NearLogo from 'src/assets/images/near.png'
 import Modal from 'src/components/Modal'
 import Confetti from 'src/components/Confetti'
@@ -19,14 +19,15 @@ const AirdropUI: React.FC = () => {
   const [changeMyChain, setChangeChain] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
-  const canClaim = useUserHasAvailableClaim(account)
+  // const canClaim = useUserHasAvailableClaim(account)
   const claimAmount = useUserUnclaimedAmount(account)
   const amount = claimAmount?.toFixed(0, { groupSeparator: ',' })
   const { claimCallback } = useClaimCallback(account)
 
   const checkStatus = () => {
-    if (canClaim) setEligible(true)
-    else setModalOpen(true)
+    // if (canClaim) setEligible(true)
+    // else setModalOpen(true)
+    setEligible(true)
   }
 
   // const buyFTM = () => {
