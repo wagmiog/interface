@@ -8,7 +8,7 @@ import { RedirectContext } from './WatchList/CoinChart'
 import LimitOrderList from './LimitOrderList'
 import { useGelatoLimitOrderList } from 'src/state/swap/hooks'
 import { useChainId } from 'src/hooks'
-import { CHAINS } from '@antiyro/sdk'
+import { CHAINS } from '@pangolindex/sdk'
 
 const SwapUI = () => {
   const { allOrders } = useGelatoLimitOrderList()

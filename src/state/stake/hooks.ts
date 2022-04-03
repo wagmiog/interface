@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WAVAX, Pair, Percent } from '@antiyro/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WAVAX, Pair, Percent } from '@pangolindex/sdk'
 import { useMemo, useEffect, useState, useCallback } from 'react'
 import {
   MINICHEF_ADDRESS,
@@ -30,7 +30,7 @@ import { usePngContract, useStakingContract } from '../../hooks/useContract'
 import { SINGLE_SIDE_STAKING_REWARDS_INFO } from './singleSideConfig'
 import { DOUBLE_SIDE_STAKING_REWARDS_INFO } from './doubleSideConfig'
 import { ZERO_ADDRESS } from '../../constants'
-import { CHAINS } from '../../constants/chains'
+import { CHAINS } from '@pangolindex/sdk'
 import { unwrappedToken } from 'src/utils/wrappedCurrency'
 import { useTokens } from '../../hooks/Tokens'
 import { useRewardViaMultiplierContract } from '../../hooks/useContract'
