@@ -46,11 +46,31 @@ import GovernanceV2 from './Beta/Governance'
 import GovernanceDetailV2 from './Beta/GovernanceDetail'
 import BuyV2 from './Beta/Buy'
 import PoolV2 from './Beta/Pool'
-import BridgeV2 from './Beta/Bridge'
 import AirdropV2 from './Beta/Airdrop2'
 import { BETA_MENU_LINK } from 'src/constants'
 
 import Policy from './Beta/Policy'
+
+
+
+
+import Transfer from './Beta/Bridge/components/Transfer'
+import Attest from "src/pages/Beta/Bridge/components/Attest";
+import Migration from "src/pages/Beta/Bridge/components/Migration";
+import EvmQuickMigrate from "src/pages/Beta/Bridge/components/Migration/EvmQuickMigrate";
+import SolanaQuickMigrate from "src/pages/Beta/Bridge/components/Migration/SolanaQuickMigrate";
+import NFT from "src/pages/Beta/Bridge/components/NFT";
+import NFTOriginVerifier from "src/pages/Beta/Bridge/components/NFTOriginVerifier";
+// import Recovery from "src/pages/Beta/Bridge/components/Recovery";
+import Stats from "src/pages/Beta/Bridge/components/Stats";
+import TokenOriginVerifier from "src/pages/Beta/Bridge/components/TokenOriginVerifier";
+import WithdrawTokensTerra from "src/pages/Beta/Bridge/components/WithdrawTokensTerra";
+
+import {
+  CHAIN_ID_BSC,
+  CHAIN_ID_ETH,
+  CHAIN_ID_SOLANA,
+} from "@certusone/wormhole-sdk";
 
 const AppWrapper = styled.div`
   display: flex;
@@ -165,7 +185,6 @@ export default function App() {
               />
               <CustomRoute exact strict path={`${BETA_MENU_LINK.buy}`} component={BuyV2} layout={Layout} />
               <CustomRoute exact path={`${BETA_MENU_LINK.pool}`} component={PoolV2} layout={Layout} />
-              <CustomRoute exact path={`${BETA_MENU_LINK.bridge}`} component={BridgeV2} layout={Layout} />
               <CustomRoute exact strict path={`${BETA_MENU_LINK.airdrop}`} component={AirdropV2} layout={Layout} />
 
               {/* <Route exact path="/beta/migrate/:version" component={MigrateV2} /> */}
@@ -175,21 +194,46 @@ export default function App() {
                 path="/beta/policy/privacy"
                 component={() => <Policy policy="privacy" />}
                 layout={Layout}
-              />
+                />
               <CustomRoute
                 exact
                 path="/beta/policy/cookie"
                 component={() => <Policy policy="cookie" />}
                 layout={Layout}
-              />
+                />
               <CustomRoute
                 exact
                 path="/beta/policy/terms"
                 component={() => <Policy policy="terms" />}
                 layout={Layout}
-              />
+                />
 
+              <CustomRoute exact path={`${BETA_MENU_LINK.transfer}`} component={Transfer} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.NFT}`} component={NFT} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.attest}`} component={Attest} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.NFTOriginVerifier}`} component={NFTOriginVerifier} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.TokenOriginVerifier}`} component={TokenOriginVerifier} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.stats}`} component={Stats} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.SolanaQuickMigrate}`} component={SolanaQuickMigrate} layout={Layout} />
+              <CustomRoute exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}`} component={WithdrawTokensTerra} layout={Layout} />
+              
+              <Route exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}/Solana/:legacyAsset/:fromTokenAccount`}>
+                <Migration chainId={CHAIN_ID_SOLANA} />
+              </Route>
+              <Route exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}/Ethereum/:legacyAsset/`}>
+                <Migration chainId={CHAIN_ID_ETH} />
+              </Route>
+              <Route exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}/BinanceSmartChain/:legacyAsset/`}>
+                <Migration chainId={CHAIN_ID_BSC} />
+              </Route>
+              <Route exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}/Ethereum/`}>
+                <EvmQuickMigrate chainId={CHAIN_ID_ETH} />
+              </Route>
+              <Route exact path={`${BETA_MENU_LINK.WithdrawTokensTerra}/BinanceSmartChain/`}>
+                <EvmQuickMigrate chainId={CHAIN_ID_BSC} />
+              </Route>
               <Route component={RedirectPathToSwapOnly} />
+
             </Switch>
           </Web3ReactManager>
           {!isBeta && <Marginer />}
@@ -198,3 +242,4 @@ export default function App() {
     </Suspense>
   )
 }
+

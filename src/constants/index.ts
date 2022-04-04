@@ -269,6 +269,16 @@ export enum BETA_MENU_LINK {
   stake = '/beta/stake',
   vote = '/beta/vote',
   migrate = '/beta/migrate',
-  bridge = '/beta/bridge',
-  airdrop = '/beta/airdrop'
+  airdrop = '/beta/airdrop',
+  transfer = '/beta/bridge/transfer',
+  attest = '/beta/bridge/attest',
+  migration = '/beta/bridge/migration',
+  EvmQuickMigrate = '/beta/bridge/evmquickmigrate',
+  SolanaQuickMigrate = '/beta/bridge/solanaquickmigrate',
+  NFT = '/beta/bridge/nft',
+  NFTOriginVerifier = '/beta/bridge/nftoriginverifier',
+  recovery = '/beta/bridge/recovery',
+  stats = '/beta/bridge/stats',
+  TokenOriginVerifier = '/beta/bridge/tokenoriginverifier',
+  WithdrawTokensTerra = '/beta/bridge/withdrawtokensterra',
 }

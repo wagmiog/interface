@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ConnectorUpdate } from '@web3-react/types'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import invariant from 'tiny-invariant'
@@ -89,7 +90,6 @@ class MiniRpcProvider implements AsyncSendable {
         reject,
         request: { method }
       } = byKey[result.id]
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       if (resolve && reject) {
         if ('error' in result) {

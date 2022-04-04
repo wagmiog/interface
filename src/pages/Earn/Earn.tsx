@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useCallback, useEffect, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import { ChevronDown, ChevronUp } from 'react-feather'
@@ -227,10 +228,8 @@ const Earn: React.FC<EarnProps> = ({ version, stakingInfos, poolMap }) => {
         const poolCards = updatedStakingInfos.map((stakingInfo, index) => {
           return (
             <DoubleSidePoolCard
-              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
               // @ts-ignore
               swapFeeApr={stakingInfo.swapFeeApr}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
               // @ts-ignore
               stakingApr={stakingInfo.stakingApr}
               key={index}
