@@ -1,5 +1,5 @@
-import { ChainId, TokenAmount } from '@pangolindex/sdk'
-import { Button, Box, Text } from '@pangolindex/components'
+import { ChainId, TokenAmount, CHAINS } from '@antiyro/sdk'
+import { Button, Box, Text } from '@antiyro/components'
 import React, { useContext, useState, useRef } from 'react'
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
@@ -41,15 +41,17 @@ import { useChainId } from 'src/hooks'
 import NetworkSelection from './NetworkSelection'
 
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
-  [ChainId.FUJI]: 'Fuji',
-  [ChainId.AVALANCHE]: 'Avalanche',
-  [ChainId.WAGMI]: 'Wagmi'
+  [ChainId.FUJI]: CHAINS[ChainId.FUJI].name,
+  [ChainId.AVALANCHE]: CHAINS[ChainId.AVALANCHE].name,
+  [ChainId.WAGMI]: CHAINS[ChainId.WAGMI].name,
+  [ChainId.COSTON]: CHAINS[ChainId.COSTON].name,
 }
 
 const NETWORK_CURRENCY: { [chainId in ChainId]?: string } = {
-  [ChainId.FUJI]: 'AVAX',
-  [ChainId.AVALANCHE]: 'AVAX',
-  [ChainId.WAGMI]: 'WGM'
+  [ChainId.FUJI]: CHAINS[ChainId.FUJI].nativeCurrency.symbol,
+  [ChainId.AVALANCHE]: CHAINS[ChainId.AVALANCHE].nativeCurrency.symbol,
+  [ChainId.WAGMI]: CHAINS[ChainId.WAGMI].nativeCurrency.symbol,
+  [ChainId.COSTON]: CHAINS[ChainId.COSTON].nativeCurrency.symbol,
 }
 
 export default function Header() {

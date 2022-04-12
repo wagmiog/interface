@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WAVAX, Pair, Percent } from '@pangolindex/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WAVAX, Pair, Percent } from '@antiyro/sdk'
 import { useMemo, useEffect, useState, useCallback } from 'react'
 import {
   MINICHEF_ADDRESS,
@@ -260,7 +260,7 @@ export function useStakingInfo(version: number, pairToFilterBy?: Pair | null): D
   )
 
   const usdPriceTmp = useUSDCPrice(WAVAX[chainId])
-  const usdPrice = chainId !== ChainId.WAGMI ? usdPriceTmp : undefined
+  const usdPrice = chainId !== ChainId.WAGMI || ChainId.COSTON ? usdPriceTmp : undefined
 
   return useMemo(() => {
     if (!chainId || !png) return []
@@ -743,9 +743,9 @@ export function useGetPairDataFromPair(pair: Pair) {
   const token1 = pair?.token1 || dummyToken
 
   const usdPriceCurrency0Tmp = useUSDCPrice(token0)
-  const usdPriceCurrency0 = chainId !== ChainId.WAGMI ? usdPriceCurrency0Tmp : undefined
+  const usdPriceCurrency0 = chainId !== ChainId.WAGMI || ChainId.COSTON ? usdPriceCurrency0Tmp : undefined
   const usdPriceCurrency1Tmp = useUSDCPrice(token1)
-  const usdPriceCurrency1 = chainId !== ChainId.WAGMI ? usdPriceCurrency1Tmp : undefined
+  const usdPriceCurrency1 = chainId !== ChainId.WAGMI || ChainId.COSTON ? usdPriceCurrency1Tmp : undefined
 
   const zeroTokenAmount0 = new TokenAmount(token0, '0')
   const zeroTokenAmount1 = new TokenAmount(token1, '0')
@@ -901,7 +901,7 @@ export const useMinichefStakingInfos = (version = 2, pairToFilterBy?: Pair | nul
   const totalAllocPoint = useSingleCallResult(minichefContract, 'totalAllocPoint', []).result
   const rewardsExpiration = useSingleCallResult(minichefContract, 'rewardsExpiration', []).result
   const usdPriceTmp = useUSDCPrice(WAVAX[chainId])
-  const usdPrice = chainId !== ChainId.WAGMI ? usdPriceTmp : undefined
+  const usdPrice = chainId !== ChainId.WAGMI || ChainId.COSTON ? usdPriceTmp : undefined
 
   const arr = useMemo(() => {
     if (!chainId || !png) return []
@@ -993,7 +993,7 @@ export const useMinichefStakingInfos = (version = 2, pairToFilterBy?: Pair | nul
         const isAvaxPool = pair.involvesToken(WAVAX[chainId])
         const isPngPool = pair.involvesToken(PNG[chainId])
 
-        let totalStakedInUsd = chainId !== ChainId.WAGMI
+        let totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
           ? new TokenAmount(DAIe[chainId], BIG_INT_ZERO)
           : undefined
         const totalStakedInWavax = new TokenAmount(WAVAX[chainId], BIG_INT_ZERO)
@@ -1003,31 +1003,31 @@ export const useMinichefStakingInfos = (version = 2, pairToFilterBy?: Pair | nul
         } else if (pair.involvesToken(DAIe[chainId])) {
           const pairValueInDAI = JSBI.multiply(pair.reserveOf(DAIe[chainId]).raw, BIG_INT_TWO)
           const stakedValueInDAI = JSBI.divide(JSBI.multiply(pairValueInDAI, totalSupplyStaked), totalSupplyAvailable)
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? new TokenAmount(DAIe[chainId], stakedValueInDAI)
             : undefined
         } else if (pair.involvesToken(USDCe[chainId])) {
           const pairValueInUSDC = JSBI.multiply(pair.reserveOf(USDCe[chainId]).raw, BIG_INT_TWO)
           const stakedValueInUSDC = JSBI.divide(JSBI.multiply(pairValueInUSDC, totalSupplyStaked), totalSupplyAvailable)
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? new TokenAmount(USDCe[chainId], stakedValueInUSDC)
             : undefined
         } else if (pair.involvesToken(USDC[chainId])) {
           const pairValueInUSDC = JSBI.multiply(pair.reserveOf(USDC[chainId]).raw, BIG_INT_TWO)
           const stakedValueInUSDC = JSBI.divide(JSBI.multiply(pairValueInUSDC, totalSupplyStaked), totalSupplyAvailable)
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? new TokenAmount(USDC[chainId], stakedValueInUSDC)
             : undefined
         } else if (pair.involvesToken(axlUST[chainId])) {
           const pairValueInUST = JSBI.multiply(pair.reserveOf(axlUST[chainId]).raw, BIG_INT_TWO)
           const stakedValueInUST = JSBI.divide(JSBI.multiply(pairValueInUST, totalSupplyStaked), totalSupplyAvailable)
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? new TokenAmount(axlUST[chainId], stakedValueInUST)
             : undefined
         } else if (pair.involvesToken(USDTe[chainId])) {
           const pairValueInUSDT = JSBI.multiply(pair.reserveOf(USDTe[chainId]).raw, BIG_INT_TWO)
           const stakedValueInUSDT = JSBI.divide(JSBI.multiply(pairValueInUSDT, totalSupplyStaked), totalSupplyAvailable)
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? new TokenAmount(USDTe[chainId], stakedValueInUSDT)
             : undefined
         } else if (isAvaxPool) {
@@ -1037,7 +1037,7 @@ export const useMinichefStakingInfos = (version = 2, pairToFilterBy?: Pair | nul
             pair.reserveOf(WAVAX[chainId]).raw,
             chainId
           )
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? totalStakedInWavax && (usdPrice?.quote(totalStakedInWavax, chainId) as TokenAmount)
             : undefined
         } else if (isPngPool) {
@@ -1049,7 +1049,7 @@ export const useMinichefStakingInfos = (version = 2, pairToFilterBy?: Pair | nul
             pair.reserveOf(png).raw,
             chainId
           )
-          totalStakedInUsd = chainId !== ChainId.WAGMI
+          totalStakedInUsd = chainId !== ChainId.WAGMI || ChainId.COSTON
             ? totalStakedInWavax && (usdPrice?.quote(totalStakedInWavax, chainId) as TokenAmount)
             : undefined
         } else {
@@ -1147,10 +1147,10 @@ export function useGetPoolDollerWorth(pair: Pair | null) {
   const token0 = pair?.token0
   const currency0 = unwrappedToken(token0 as Token, chainId)
   const currency0PriceTmp = useUSDCPrice(currency0)
-  const currency0Price = chainId !== ChainId.WAGMI ? currency0PriceTmp : undefined
+  const currency0Price = chainId !== ChainId.WAGMI || ChainId.COSTON ? currency0PriceTmp : undefined
 
   const userPglTmp = useTokenBalance(account ?? undefined, pair?.liquidityToken)
-  const userPgl = chainId !== ChainId.WAGMI ? userPglTmp : undefined
+  const userPgl = chainId !== ChainId.WAGMI || ChainId.COSTON ? userPglTmp : undefined
 
   const totalPoolTokens = useTotalSupply(pair?.liquidityToken)
 
@@ -1166,7 +1166,7 @@ export function useGetPoolDollerWorth(pair: Pair | null) {
         ]
       : [undefined, undefined]
 
-  const liquidityInUSD = chainId !== ChainId.WAGMI
+  const liquidityInUSD = chainId !== ChainId.WAGMI || ChainId.COSTON
     ? currency0Price && token0Deposited
       ? Number(currency0Price.toFixed()) * 2 * Number(token0Deposited?.toSignificant(6))
       : 0

@@ -1,4 +1,4 @@
-import { Currency, CAVAX, Token, ChainId } from '@pangolindex/sdk'
+import { Currency, CAVAX, Token, ChainId } from '@antiyro/sdk'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -54,6 +54,8 @@ export default function CurrencyLogo({
   } else if (chainId && currency === CAVAX[ChainId.FUJI]) {
     return <StyledEthereumLogo src={AvaxLogo} size={`${size}px`} style={style} />
   } else if (chainId && currency === CAVAX[ChainId.WAGMI]) {
+    return <StyledEthereumLogo src={WgmLogo} size={`${size}px`} style={style} />
+  } else if (chainId && currency === CAVAX[ChainId.COSTON]) {
     return <StyledEthereumLogo src={WgmLogo} size={`${size}px`} style={style} />
   }
 

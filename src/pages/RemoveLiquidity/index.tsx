@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, CAVAX, Percent, WAVAX, ChainId } from '@pangolindex/sdk'
+import { Currency, currencyEquals, CAVAX, Percent, WAVAX, ChainId, CHAINS } from '@antiyro/sdk'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { ArrowDown, Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -355,15 +355,17 @@ export default function RemoveLiquidity({
   }
 
   const NETWORK_CURRENCY: { [chainId in ChainId]?: string } = {
-    [ChainId.FUJI]: 'AVAX',
-    [ChainId.AVALANCHE]: 'AVAX',
-    [ChainId.WAGMI]: 'WGM'
+    [ChainId.FUJI]: CHAINS[ChainId.FUJI].nativeCurrency.symbol,
+    [ChainId.AVALANCHE]: CHAINS[ChainId.AVALANCHE].nativeCurrency.symbol,
+    [ChainId.WAGMI]: CHAINS[ChainId.WAGMI].nativeCurrency.symbol,
+    [ChainId.COSTON]: CHAINS[ChainId.COSTON].nativeCurrency.symbol,
   }
 
   const NETWORK_WRAPPED_CURRENCY: { [chainId in ChainId]?: string } = {
     [ChainId.FUJI]: 'WAVAX',
     [ChainId.AVALANCHE]: 'WAVAX',
-    [ChainId.WAGMI]: 'wWAGMI'
+    [ChainId.WAGMI]: 'wWAGMI',
+    [ChainId.COSTON]: 'wCFLR'
   }
 
   function modalHeader() {
