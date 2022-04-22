@@ -1,26 +1,26 @@
 import React from 'react'
 import { ClaimBox, StyledLogo, Separator } from '../../styleds'
 import { Text, Button } from '@pangolindex/components'
-import WgmLogo from 'src/assets/images/wgmlogo.png'
+import CostonLogo from 'src/assets/images/flare.jpeg'
 
 type IclaimPNG = {
   claimPNG: () => void
   amount?: string
 }
 
-export const BoxClaimReward: React.FC<IclaimPNG> = ({ claimPNG, amount }) => {
+export const BoxClaimRewardCoston: React.FC<IclaimPNG> = ({ claimPNG, amount }) => {
   return (
     <ClaimBox>
       <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '20px' }}>
         <Text fontSize={28} fontWeight={700} lineHeight="33px" color="text10">
           Claim Your Reward
         </Text>
-        <StyledLogo src={WgmLogo} size={'50px'} />
+        <StyledLogo src={CostonLogo} size={'50px'} />
       </span>
       <Separator />
       <span style={{ padding: '20px' }}></span>
       <Text fontSize={16} fontWeight={500} lineHeight="18px" color="text10">
-        you are eligible for:
+        You are eligible for:
       </Text>
       <Text fontSize={22} fontWeight={500} lineHeight="22px" color="text10" textAlign="center">
         {amount}
@@ -30,7 +30,7 @@ export const BoxClaimReward: React.FC<IclaimPNG> = ({ claimPNG, amount }) => {
         <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>CLAIM</span>
       </Button>
       <span style={{ textAlign: 'center' }}>
-        <Text fontSize={14} fontWeight={500} lineHeight="35px" color="text8">
+        <Text fontSize={14} fontWeight={500} lineHeight="18px" color="text8">
           To be eligible or not to be eligible...
         </Text>
       </span>

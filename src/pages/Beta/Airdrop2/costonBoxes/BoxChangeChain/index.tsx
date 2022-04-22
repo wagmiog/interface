@@ -1,38 +1,41 @@
 import React from 'react'
 import { ClaimBox, StyledLogo, Separator } from '../../styleds'
 import { Text, Button } from '@pangolindex/components'
-import WgmLogo from 'src/assets/images/wgmlogo.png'
+import CostonLogo from 'src/assets/images/flare.jpeg'
 
 type IChangeChain = {
-  changeChain: () => void
+    changeChainCoston: () => void
 }
 
-export const BoxChangeChain: React.FC<IChangeChain> = ({ changeChain }) => {
-  const switchNetworkFantom = async () => {
-    changeChain()
+export const BoxChangeChainCoston: React.FC<IChangeChain> = ({ changeChainCoston }) => {
 
-    let ethereum: any
+  const switchNetworkCoston = async () => {
+      console.log('hello')
+    changeChainCoston()
+    // let ethereum: any
     try {
+      // @ts-ignore
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x2B67' }]
+        params: [{ chainId: '0x10' }]
       })
     } catch (error) {
       if ((error as any).code === 4902) {
         try {
+          // @ts-ignore
           await ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [
               {
-                chainId: '0x2B67',
-                chainName: 'WAGMI',
-                rpcUrls: ['https://api.trywagmi.xyz/rpc'],
+                chainId: '0x10',
+                chainName: 'Coston',
+                rpcUrls: ['https://coston-api.flare.network/ext/bc/C/rpc'],
                 nativeCurrency: {
-                  name: 'WGM',
-                  symbol: 'WGM',
+                  name: 'CFLR',
+                  symbol: 'CFLR',
                   decimals: 18
                 },
-                blockExplorerUrls: ['']
+                blockExplorerUrls: ['https://coston-explorer.flare.network']
               }
             ]
           })
@@ -49,19 +52,19 @@ export const BoxChangeChain: React.FC<IChangeChain> = ({ changeChain }) => {
         <Text fontSize={28} fontWeight={700} lineHeight="33px" color="text10">
           You are eligible
         </Text>
-        <StyledLogo src={WgmLogo} size={'50px'} />
+        <StyledLogo src={CostonLogo} size={'50px'} />
       </span>
       <Separator />
       <span style={{ padding: '20px' }}></span>
       <Text fontSize={16} fontWeight={500} lineHeight="18px" color="text10">
-        Congratulations. You are eligible for the airdrop! Now let&apos;s go crosschain!
+        Go to Coston to see if you are eligible!
       </Text>
       <span style={{ padding: '20px' }}></span>
-      <Button variant="primary" color="white" height="46px" onClick={switchNetworkFantom}>
-        <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>GO TO WAGMI</span>
+      <Button variant="primary" color="white" height="46px" onClick={switchNetworkCoston}>
+        <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>GO TO COSTON</span>
       </Button>
       <span style={{ textAlign: 'center' }}>
-        <Text fontSize={14} fontWeight={500} lineHeight="35px" color="text8">
+        <Text fontSize={14} fontWeight={500} lineHeight="18px" color="text8">
           To be eligible or not to be eligible...
         </Text>
       </span>
