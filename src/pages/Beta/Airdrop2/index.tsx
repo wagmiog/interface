@@ -151,6 +151,7 @@ const AirdropUI: React.FC = () => {
       <BoxWrapper>
         {renderBoxesWagmi()}
         <Confetti start={Boolean(eligible)} />
+        {renderBoxesCoston()}
         <ClaimBox>
           <span
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '20px' }}
@@ -167,7 +168,6 @@ const AirdropUI: React.FC = () => {
           </Text>
           <span style={{ padding: '20px' }}></span>
         </ClaimBox>
-        {renderBoxesCoston()}
         {/* <ClaimBox>
           <span
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '20px' }}
