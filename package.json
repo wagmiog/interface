@@ -167,6 +167,7 @@
     "@types/react-portal": "^4.0.4",
     "crypto-js": "^4.0.0",
     "lightweight-charts": "^3.7.0",
+    "near-api-js": "^0.44.2",
     "react-portal": "^4.2.1"
   }
 }

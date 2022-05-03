@@ -1,6 +1,6 @@
 import { ChainId, TokenAmount, CHAINS } from '@pangolindex/sdk'
 import { Button, Box, Text } from '@pangolindex/components'
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { useETHBalances, useAggregatePngBalance } from '../../state/wallet/hooks'
@@ -39,6 +39,8 @@ import { Logo } from '../../components/Icons'
 import { Hidden } from 'src/theme'
 import { useChainId } from 'src/hooks'
 import NetworkSelection from './NetworkSelection'
+import { connect, keyStores, WalletConnection } from 'near-api-js'
+// import { useNearLogin } from 'src/hooks'
 
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.FUJI]: CHAINS[ChainId.FUJI].name,
@@ -79,6 +81,69 @@ export default function Header() {
     setOpenNetworkSelection(false)
   }
 
+  const [login, setLogin] = useState<boolean>()
+  const [accountNear, setAccountNear] = useState({})
+
+  const init = async() => {
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+    const config = {
+      networkId: "testnet",
+      keyStore,
+      nodeUrl: 'https://rpc.testnet.near.org',
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
+    };
+    // @ts-ignore
+    const near = await connect(config)
+    const wallet = new WalletConnection(near, 'png')
+    wallet.requestSignIn("dev-1650966900941-97217298551664")
+  }
+
+
+  useEffect(() => {
+    const init = async() => {
+      const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+      const config = {
+        networkId: "testnet",
+        keyStore,
+        nodeUrl: 'https://rpc.testnet.near.org',
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org',
+        explorerUrl: 'https://explorer.testnet.near.org',
+      };
+      // @ts-ignore
+      const near = await connect(config)
+      const wallet = new WalletConnection(near, 'png')
+      // wallet.requestSignIn("dev-1650966900941-97217298551664")
+      setAccountNear(wallet.account())
+      setLogin(wallet.isSignedIn())
+      
+    }
+    init()
+    
+  }, [])
+
+  const logout = async() => {
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  
+    const config = {
+      networkId: "testnet",
+      keyStore,
+      nodeUrl: 'https://rpc.testnet.near.org',
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
+    };
+    // @ts-ignore
+    const near = await connect(config)
+    const wallet = new WalletConnection(near, 'png')
+    wallet.signOut();
+    setLogin(false)
+  }
+
+  // console.log('login',login)
+  console.log('accoun', accountNear)
   return (
     <HeaderFrame>
       <Modal isOpen={showPngBalanceModal} onDismiss={() => setShowPngBalanceModal(false)}>
@@ -109,6 +174,15 @@ export default function Header() {
 
       <HeaderControls>
         <HeaderElement>
+          {!login ? (
+            <Button variant="primary" height={36} padding="4px 6px" onClick={init}>
+              <span style={{ whiteSpace: 'nowrap', color: '#000' }}>Near connect</span>
+            </Button>
+          ) : (
+            <Button variant="primary" height={36} padding="4px 6px" onClick={logout}>
+              <span style={{ whiteSpace: 'nowrap', color: '#000' }}>Near logout</span>
+            </Button>
+          )}
           <LegacyButtonWrapper>
             <Button variant="primary" height={36} padding="4px 6px" href="/" as="a">
               <span style={{ whiteSpace: 'nowrap', color: '#000' }}>{t('header.returnToLegacySite')}</span>
