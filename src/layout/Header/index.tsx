@@ -81,6 +81,8 @@ export default function Header() {
     setOpenNetworkSelection(false)
   }
 
+  // const [wallet, setWallet] = useState()
+
   const [login, setLogin] = useState<boolean>()
   const [accountNear, setAccountNear] = useState({})
 
@@ -115,7 +117,6 @@ export default function Header() {
       // @ts-ignore
       const near = await connect(config)
       const wallet = new WalletConnection(near, 'png')
-      // wallet.requestSignIn("dev-1650966900941-97217298551664")
       setAccountNear(wallet.account())
       setLogin(wallet.isSignedIn())
       
@@ -123,7 +124,7 @@ export default function Header() {
     init()
     
   }, [])
-
+  
   const logout = async() => {
     const keyStore = new keyStores.BrowserLocalStorageKeyStore();
   
@@ -139,11 +140,12 @@ export default function Header() {
     const near = await connect(config)
     const wallet = new WalletConnection(near, 'png')
     wallet.signOut();
+    setAccountNear({})
     setLogin(false)
   }
-
-  // console.log('login',login)
   console.log('accoun', accountNear)
+  console.log('login?', login)
+
   return (
     <HeaderFrame>
       <Modal isOpen={showPngBalanceModal} onDismiss={() => setShowPngBalanceModal(false)}>

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { gnosisSafe, injected, xDefi } from '../connectors'
 import { IS_IN_IFRAME, NetworkContextName } from '../constants'
-import { connect, keyStores, WalletConnection } from 'near-api-js'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & { chainId?: ChainId } {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -123,20 +122,4 @@ export const useChainId = () => {
 
 export const useChain = (chainId: number) => {
   return ALL_CHAINS.filter(chain => chain.chain_id === chainId)[0]
-}
-
-export const useNearLogin = async() => {
-  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-  const config = {
-    networkId: "testnet",
-    keyStore,
-    nodeUrl: 'https://rpc.testnet.near.org',
-    walletUrl: 'https://wallet.testnet.near.org',
-    helperUrl: 'https://helper.testnet.near.org',
-    explorerUrl: 'https://explorer.testnet.near.org',
-  };
-  // @ts-ignore
-  const near = await connect(config)
-  const wallet = new WalletConnection(near, 'png')
-  return wallet
 }
