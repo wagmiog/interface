@@ -1,71 +1,107 @@
-import React from 'react'
-import { PageWrapper, Ibridge, ChainSelect, Separator, MaxButton, WrapButton } from './styleds'
-import { Text, Box, ToggleButtons, Button } from '@pangolindex/components'
+import React, { useState, useEffect } from 'react'
 import { useActiveWeb3React } from 'src/hooks'
-import { useTranslation } from 'react-i18next'
-import { useWalletModalToggle } from 'src/state/application/hooks'
-import { QuestionAnswer } from './TabulationBox'
+// import { useETHBalances } from '@pangolindex/components'
+import { useChainId } from 'src/hooks'
+import { useETHBalances } from 'src/state/wallet/hooks'
+import { connect, keyStores, WalletConnection } from 'near-api-js'
+import { Button } from '@pangolindex/components'
 
 const BridgeUI = () => {
   const { account } = useActiveWeb3React()
-  const { t } = useTranslation()
-  const toggleWalletModal = useWalletModalToggle()
+  const chainId = useChainId()
+  const userEthBalance = useETHBalances(chainId, account ? [account] : [])?.[account ?? '']
 
-  const renderButton = () => {
-    if (!account) {
-      return (
-        <Button variant="primary" color="white" onClick={toggleWalletModal}>
-          <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>{t('swapPage.connectWallet')}</span>
-        </Button>
-      )
-    } else {
-      return (
-        <Button variant="primary" color="white">
-          <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>BRIDGE</span>
-        </Button>
-      )
-    }
+
+
+  const [login, setLogin] = useState<boolean>()
+  const [accountNear, setAccountNear] = useState('')
+  const [accountBalance, setAccountBalance] = useState('')
+
+  const init = async() => {
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+    const config = {
+      networkId: "testnet",
+      keyStore,
+      nodeUrl: 'https://rpc.testnet.near.org',
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
+    };
+    // @ts-ignore
+    const near = await connect(config)
+    const wallet = new WalletConnection(near, 'png')
+    wallet.requestSignIn("dev-1650966900941-97217298551664")
   }
 
+
+  useEffect(() => {
+    const init = async() => {
+      const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+      const config = {
+        networkId: "testnet",
+        keyStore,
+        nodeUrl: 'https://rpc.testnet.near.org',
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org',
+        explorerUrl: 'https://explorer.testnet.near.org',
+      };
+      // @ts-ignore
+      const near = await connect(config)
+      const wallet = new WalletConnection(near, 'png')
+      setAccountNear(wallet.getAccountId())
+      setLogin(wallet.isSignedIn())
+      if (login && accountNear) {
+        const ac = await near.account('helix.testnet');
+        const ts = await ac.getAccountBalance()
+        setAccountBalance(ts.available)
+      }
+    }
+    init()
+    
+  }, [login, accountNear])
+  
+  const logout = async() => {
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  
+    const config = {
+      networkId: "testnet",
+      keyStore,
+      nodeUrl: 'https://rpc.testnet.near.org',
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
+    };
+    // @ts-ignore
+    const near = await connect(config)
+    const wallet = new WalletConnection(near, 'png')
+    wallet.signOut();
+    setAccountNear('')
+    setLogin(false)
+  }
+  // @ts-ignore
+  // console.log('accoun', accountNear)
+  // console.log('login?', login)
+  // console.log('EVM', account)
+  // console.log(accountBalance)
   return (
-    <PageWrapper>
-      <QuestionAnswer />
-      <Ibridge>
-        <Box p={20}>
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Text fontSize={24} fontWeight={500} lineHeight="36px" color="text10">
-              Cross Chain
-            </Text>
-            <ToggleButtons options={['Bridge', 'Swap']} />
-          </Box>
-          <Separator />
-          <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-            From
-          </Text>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-            Destination
-          </Text>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-              Amount
-            </Text>
-            <WrapButton>
-              <MaxButton width="20%">25%</MaxButton>
-              <MaxButton width="20%">50%</MaxButton>
-              <MaxButton width="20%">75%</MaxButton>
-              <MaxButton width="20%">100%</MaxButton>
-            </WrapButton>
-          </Box>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          {renderButton()}
-        </Box>
-      </Ibridge>
-    </PageWrapper>
+    <>
+    <div style={{paddingTop: '50px'}}></div>
+     {!login ? (
+            <Button variant="primary" height={36} padding="4px 6px" onClick={init}>
+              <span style={{ whiteSpace: 'nowrap', color: '#000' }}>Near connect</span>
+            </Button>
+          ) : (
+            <Button variant="primary" height={36} padding="4px 6px" onClick={logout}>
+              <span style={{ whiteSpace: 'nowrap', color: '#000' }}>Near logout</span>
+            </Button>
+          )}
+      <p style={{color: 'white'}}>EVM account :{ account }</p>
+      <p style={{color: 'white'}}>EVM balance:{ userEthBalance?.toSignificant(4) }</p>
+      
+      <p style={{color: 'white'}}>NEAR account: { accountNear }</p>
+      <p style={{color: 'white'}}>NEAR balance: {accountBalance}</p>
+      
+    </>
   )
 }
 
