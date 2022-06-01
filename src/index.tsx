@@ -25,6 +25,24 @@ import { useIsBetaUI } from './hooks/useLocation'
 import { useActiveWeb3React } from './hooks'
 import Package from '../package.json'
 import { fetchMinichefData } from './state/stake/hooks'
+import { Provider as EvmProvider } from "wagmi";
+import { providers } from "ethers";
+import { chains } from "./pages/Beta/Bridge/constants/config";
+import { connectors } from "./pages/Beta/Bridge/clients/walletClient";
+
+type ProviderInput = {
+  chainId?: number;
+};
+
+const provider = ({ chainId }: ProviderInput) => {
+  const chain = chains.find((chain) => chain.id === chainId);
+
+  if (chain) {
+    return new providers.JsonRpcProvider(chain.rpcUrls[0]);
+  } else {
+    return new providers.JsonRpcProvider(chains[0].rpcUrls[0]);
+  }
+};
 
 try {
   Sentry.init({
@@ -125,10 +143,12 @@ ReactDOM.render(
       <Web3ProviderNetwork getLibrary={getLibrary}>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-            <Updaters />
-            <ThemeProvider>
-              <ComponentThemeProvider />
-            </ThemeProvider>
+              <EvmProvider autoConnect provider={provider} connectors={connectors}>
+                <Updaters />
+                <ThemeProvider>
+                  <ComponentThemeProvider />
+                </ThemeProvider>
+              </EvmProvider>
           </QueryClientProvider>
         </Provider>
       </Web3ProviderNetwork>

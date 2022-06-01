@@ -1,74 +1,129 @@
-import React from 'react'
-import { PageWrapper, Ibridge, ChainSelect, Separator, MaxButton, WrapButton } from './styleds'
-import { Text, Box, ToggleButtons, Button } from '@pangolindex/components'
-import { useActiveWeb3React } from 'src/hooks'
-import { useTranslation } from 'react-i18next'
-import { useWalletModalToggle } from 'src/state/application/hooks'
-import { QuestionAnswer } from './TabulationBox'
+import AmountInput from "./components/AmountInput";
+import ChainInput from "./components/ChainInput";
+import InputContainer from "./components/InputContainer";
+import SwapButton from "./components/SwapButton";
+import SwapContainer from "./components/SwapContainer";
+import TokenInput from "./components/TokenInput";
+import { useAppDispatch, useAppSelector } from "./hooks/useAppSelector";
+import {
+  selectAmount,
+  selectDestChain,
+  selectDestToken,
+  selectSrcChain,
+  selectSrcToken,
+} from "./slices/swapInputSlice";
+import React, { useEffect } from "react";
+import useAmountValidator from "./hooks/useAmountValidator";
+import useApproveChecker from "./hooks/useApproveChecker";
+import ApproveButton from "./components/ApproveButton";
+import { resetSwapStatus } from "./slices/swapStatusSlice";
+import SwapEstimator from "./components/SwapEstimator";
+import { TokenInputModalKey } from "./components/TokenInput/TokenInputModal";
+import { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
+import AddressInput from "./components/AddressInput";
+import SwapRoute from "./components/SwapRoute";
 
-const BridgeUI = () => {
-  const { account } = useActiveWeb3React()
-  const { t } = useTranslation()
-  const toggleWalletModal = useWalletModalToggle()
+const Bridge = () => {
+  const dispatch = useAppDispatch();
+  const amount = useAppSelector(selectAmount);
+  const srcChain = useAppSelector(selectSrcChain);
+  const srcToken = useAppSelector(selectSrcToken);
+  const destChain = useAppSelector(selectDestChain);
+  const destToken = useAppSelector(selectDestToken);
+  const isRequiredApproval = useApproveChecker();
+  const amountValidation = useAmountValidator(amount, srcToken);
 
-  const renderButton = () => {
-    if (!account) {
-      return (
-        <Button variant="primary" color="white" onClick={toggleWalletModal}>
-          <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>{t('swapPage.connectWallet')}</span>
-        </Button>
-      )
-    } else {
-      return (
-        <Button variant="primary" color="white">
-          <span style={{ whiteSpace: 'nowrap', color: '#000', fontSize: '20px' }}>BRIDGE</span>
-        </Button>
-      )
-    }
-  }
+  useEffect(() => {
+    dispatch(resetSwapStatus());
+  }, [dispatch]);
 
   return (
-    <PageWrapper>
-      <QuestionAnswer />
-      <Ibridge>
-        <Box p={20}>
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Text fontSize={24} fontWeight={500} lineHeight="36px" color="text10">
-              Cross Chain
-            </Text>
-            <Box width="120px">
-              <ToggleButtons options={['Bridge', 'Swap']} />
-            </Box>
-          </Box>
-          <Separator />
-          <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-            From
-          </Text>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-            Destination
-          </Text>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Text fontSize={16} fontWeight={500} lineHeight="24px" color="text10">
-              Amount
-            </Text>
-            <WrapButton>
-              <MaxButton width="20%">25%</MaxButton>
-              <MaxButton width="20%">50%</MaxButton>
-              <MaxButton width="20%">75%</MaxButton>
-              <MaxButton width="20%">100%</MaxButton>
-            </WrapButton>
-          </Box>
-          <ChainSelect></ChainSelect>
-          <Separator />
-          {renderButton()}
-        </Box>
-      </Ibridge>
-    </PageWrapper>
-  )
-}
+    <SwapContainer>
+      <h1 className="text-3xl font-thin text-center text-white">
+        Cross Chain Swap
+      </h1>
+      <div className="mt-5">
+        <div className="mb-2 font-light text-white">From</div>
+        <InputContainer>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <ChainInput
+                  selectedChain={srcChain}
+                  label="From"
+                  modalKey={ChainInputModalKey.ModalChainFrom}
+                  isSrcChain={true}
+                />
+              </div>
+              <div>
+                <TokenInput
+                  label="Send"
+                  className="mt-2"
+                  modalKey={TokenInputModalKey.ModalTokenInput}
+                  selectedToken={srcToken}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-5">
+            <div>
+              <AmountInput
+                className="mt-4"
+                selectedToken={srcToken}
+                validState={amountValidation}
+              />
+            </div>
+          </div>
+        </InputContainer>
+      </div>
 
-export default BridgeUI
+      <div className="mt-5">
+        <div className="mb-2 font-light text-white">To</div>
+        <InputContainer>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <ChainInput
+                  selectedChain={destChain}
+                  label="To"
+                  modalKey={ChainInputModalKey.ModalChainTo}
+                />
+              </div>
+              <div>
+                <TokenInput
+                  label="Receive"
+                  className="mt-2"
+                  modalKey={TokenInputModalKey.ModalTokenOutput}
+                  selectedToken={destToken}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <AddressInput />
+          </div>
+        </InputContainer>
+      </div>
+      {/* <div className="flex items-center justify-around my-4">
+        <ChainInputSwitch />
+        <TokenInputSwitch />
+      </div> */}
+      <div className="mt-10">
+        <InputContainer>
+          <SwapEstimator amount={amount} />
+        </InputContainer>
+        <SwapRoute />
+      </div>
+      <div className="flex flex-col mt-8">
+        {isRequiredApproval ? (
+          <ApproveButton />
+        ) : (
+          <SwapButton amount={amount} amountValidation={amountValidation} />
+        )}
+      </div>
+    </SwapContainer>
+  );
+};
+
+export default Bridge;
