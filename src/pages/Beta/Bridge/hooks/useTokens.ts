@@ -9,9 +9,8 @@ const useTokens = (chain?: Chain) => {
     selectFromResult: selectTokensByChainId(chain?.id),
   });
   const balances = useAppSelector((state) =>
-    selectBalancesByChainId(state, chain?.id)
+  selectBalancesByChainId(state, chain?.id)
   );
-
   return tokens.sort((a: any, b: any) => {
     if (!balances[a.address] || !balances[b.address]) return 0;
     const balanceA = ethers.BigNumber.from(balances[a.address]);

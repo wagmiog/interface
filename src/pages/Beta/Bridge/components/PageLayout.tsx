@@ -27,7 +27,6 @@ import Header from "./Header";
 import TokenInputModal, {
   TokenInputModalKey,
 } from "./TokenInput/TokenInputModal";
-import { Waves } from "./Waves";
 
 const PageLayout: FunctionComponent = ({ children }) => {
   const srcChain = useAppSelector(selectSrcChain);
@@ -105,7 +104,8 @@ const PageLayout: FunctionComponent = ({ children }) => {
     };
 
     switchWalletNetworkIfNeeded();
-  }, [srcChain, switchNetwork, data.chain]);
+    // eslint-disable-next-line
+  }, [data.chain?.id, srcChain, switchNetwork]);
 
   return (
     <div>
@@ -143,7 +143,6 @@ const PageLayout: FunctionComponent = ({ children }) => {
         onSelected={updateDestChain}
         chains={chains}
       />
-      <Waves />
     </div>
   );
 };

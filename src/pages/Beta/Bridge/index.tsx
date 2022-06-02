@@ -40,7 +40,6 @@ const Bridge = () => {
 
   return (
     <PageLayout>
-
     <SwapContainer>
       <h1>
         Cross Chain Swap
