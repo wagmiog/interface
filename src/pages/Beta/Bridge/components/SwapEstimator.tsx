@@ -19,7 +19,7 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
 
   const render = useCallback(() => {
     if (error) {
-      return <span className="text-red-200">{error}</span>;
+      return <span>{error}</span>;
     } else if (destToken && estimatedAmount) {
       const textAmount = ethers.utils.formatUnits(
         estimatedAmount,
@@ -27,7 +27,7 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
       );
       const floatTextAmount = parseFloat(textAmount).toFixed(3);
       return (
-        <span className="flex">
+        <span>
           {loading ? (
             <LoadingIndicator width={120} height={18} />
           ) : (
@@ -42,9 +42,9 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
   }, [destToken, error, estimatedAmount, loading]);
 
   return (
-    <div className="flex justify-between text-sm text-gray-200">
-      <div className="font-light">Estimated output:</div>
-      <div className="font-medium text-green-300">{render()}</div>
+    <div>
+      <div >Estimated output:</div>
+      <div>{render()}</div>
     </div>
   );
 };

@@ -9,6 +9,7 @@ const useCrosschainToken = (chain?: Chain) => {
   const srcToken = useAppSelector(selectSrcToken);
   const tokens = useTokens(chain);
   const [crosschainToken, setCrosschainToken] = useState<Token>();
+  const chainToken = chain?.crosschainToken
 
   useEffect(() => {
     const _crosschainToken = tokens.find(
@@ -16,7 +17,7 @@ const useCrosschainToken = (chain?: Chain) => {
         token.address.toLowerCase() === chain?.crosschainToken.toLowerCase()
     );
     setCrosschainToken(_crosschainToken);
-  }, [chain?.crosschainToken, srcToken, tokens]);
+  }, [chainToken, srcToken, tokens, chain]);
 
   return crosschainToken;
 };

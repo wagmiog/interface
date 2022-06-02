@@ -1,6 +1,5 @@
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import cn from "classnames";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
 import {
   selectDestChain,
@@ -96,12 +95,6 @@ const SwapButton: FunctionComponent<SwapButtonProps> = ({
   return (
     <button
       disabled={swapDisable || loading || swapEstimatorState.loading}
-      className={cn(
-        `btn text-white bg-gradient-to-r from-[#760FC8] to-[#7522DE] disabled:bg-opacity-30 transition-all ease-in ${className}`,
-        {
-          loading: loading,
-        }
-      )}
       onClick={swap}
     >
       Swap

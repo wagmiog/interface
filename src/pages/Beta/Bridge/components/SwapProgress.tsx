@@ -1,7 +1,6 @@
 import { useAppSelector } from "../hooks/useAppSelector";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import ReactLoading from "react-loading";
-import cn from "classnames";
 import { selectDestChain, selectSrcChain } from "../slices/swapInputSlice";
 import { ComponentStyle } from "../types/component";
 import { getTxLink } from "../utils/explorer";
@@ -65,28 +64,21 @@ const SwapProgress: FunctionComponent<SwapProgressProps> = ({
   const showSwapFailedUI = swapFailed && step === 2;
 
   return (
-    <div className="flex flex-col items-start">
-      <div className="text-sm font-thin text-blue-300">Step {step + 1}</div>
-      <div className="flex items-center">
+    <div>
+      <div>Step {step + 1}</div>
+      <div>
         {showSwapFailedUI && (
           <ExclamationCircleIcon
             width={24}
             height={24}
-            className="mr-2 text-yellow-600"
           />
         )}
 
-        <span
-          className={cn("mr-2 text-white font-thin", {
-            "opacity-100": currentStep >= step,
-            "opacity-30": currentStep < step,
-          })}
-        >
+        <span>
           {title}
         </span>
         {txHash && currentStep > step && srcChain && destChain && (
           <a
-            className="link link-accent"
             target="_blank"
             rel="noreferrer"
             href={getTxLink(step === 0 ? srcChain.id : destChain.id, txHash)}
@@ -104,7 +96,7 @@ const SwapProgress: FunctionComponent<SwapProgressProps> = ({
         )}
       </div>
       {showSwapFailedUI && swapRefundAddress && (
-        <span className="text-sm text-yellow-600">
+        <span>
           Refunded to {shortenAddress(swapRefundAddress)}
         </span>
       )}

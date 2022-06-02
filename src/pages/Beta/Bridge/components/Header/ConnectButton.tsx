@@ -42,7 +42,6 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
       return (
         <button
           // disabled={!injectedConnector.ready}
-          className={`btn btn-error`}
           onClick={() => injectedConnector?.switchChain?.(ChainId.AVALANCHE)}
         >
           Unsupported Chain. Switch?
@@ -52,18 +51,17 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
       const trimmedAddress =
         account?.address?.slice(0, 7) + "..." + account?.address?.slice(-7);
       return (
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="m-1 text-white btn btn-ghost">
+        <div>
+          <label tabIndex={0}>
             {trimmedAddress}
           </label>
           <ul
             tabIndex={0}
-            className="p-2 mt-4 shadow menu dropdown-content bg-base-100 rounded-box"
           >
             <li>
-              <a onClick={disconnect} className="flex-1">
+              <div onClick={disconnect}>
                 Disconnect
-              </a>
+              </div>
             </li>
           </ul>
         </div>
@@ -72,7 +70,6 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
       return (
         <button
           // disabled={!injectedConnector.ready}
-          className={`btn btn-ghost`}
           onClick={() => connect(injectedConnector)}
         >
           Failed to connect
@@ -82,7 +79,6 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
       return (
         <button
           // disabled={!injectedConnector.ready}
-          className={`btn btn-primary bg-gradient-to-r from-[#760FC8] to-[#7522DE]`}
           onClick={() => connect(injectedConnector)}
         >
           Connect Wallet
@@ -98,7 +94,7 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
   //   }
   // }
 
-  return <div className={`${className}`}>{renderButton()}</div>;
+  return <div>{renderButton()}</div>;
 };
 
 export default ConnectButton;

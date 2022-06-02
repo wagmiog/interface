@@ -30,12 +30,8 @@ const TextInput: FunctionComponent<TextInputProps> = ({
   },[aliasAddress, aliasaddresses, dispatch, validState?.error]);
   
   return (
-    <div className={`form-control ${className}`}>
-      <label
-        className={`input-group rounded-md border-2 border-neutral-content flex ${
-          !validState.isValid ? "border-red-300" : "hover:border-slate-300 "
-        }`}
-      >
+    <div>
+      <label>
         <DebounceInput
           type="text"
           placeholder="your_eth_alias.eth (+Enter)"
@@ -43,11 +39,10 @@ const TextInput: FunctionComponent<TextInputProps> = ({
           debounceTimeout={500}
           onChange={(e) => setAliasAddress(e.target.value)}
           onKeyDown={onKeyDown}
-          className={`flex-1 input input-bordered text-white hover:outline-none focus:outline-none active:outline-none border-0 appearance-none`}
         />
       </label>
       {validState.error && (
-        <span className="mt-1 text-sm text-right text-red-100">
+        <span>
           {validState.error}
         </span>
       )}

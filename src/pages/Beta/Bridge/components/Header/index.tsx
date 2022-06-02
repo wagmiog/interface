@@ -23,9 +23,9 @@ const Header = () => {
   }, [account]);
 
   return (
-    <div className="fixed w-full">
-      <div className="max-w-screen-xl mx-auto navbar">
-        <div className="flex-1">
+    <div>
+      <div>
+        <div>
           {/* <Link href={"/"} passHref>
             <a className="flex text-xl">
               <img
@@ -40,12 +40,11 @@ const Header = () => {
             </a>
           </Link> */}
         </div>
-        <div className="flex-none">
-          <ul className="items-center p-0 menu menu-horizontal">
-            <NativeBalance className="mr-4" />
+        <div>
+          <ul>
+            <NativeBalance />
             {chainIcon && (
               <img
-                className="p-1 bg-gray-200 rounded-full"
                 src={chainIcon}
                 width={32}
                 height={32}

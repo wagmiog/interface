@@ -50,7 +50,7 @@ const PageLayout: FunctionComponent = ({ children }) => {
         dispatch(setSrcToken(token));
       }
     },
-    [destToken?.symbol, destTokenAtSrcChain, dispatch, srcTokenAtDestChain]
+    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
   );
 
   const updateDestToken = useCallback(
@@ -62,7 +62,7 @@ const PageLayout: FunctionComponent = ({ children }) => {
         dispatch(setDestToken(token));
       }
     },
-    [destToken?.symbol, destTokenAtSrcChain, dispatch, srcTokenAtDestChain]
+    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
   );
 
   const updateSrcChain = useCallback(
@@ -96,7 +96,6 @@ const PageLayout: FunctionComponent = ({ children }) => {
     },
     [destChain, dispatch, srcChain, switchNetwork]
   );
-
   useEffect(() => {
     const switchWalletNetworkIfNeeded = async () => {
       if (!switchNetwork) return;
@@ -106,7 +105,7 @@ const PageLayout: FunctionComponent = ({ children }) => {
     };
 
     switchWalletNetworkIfNeeded();
-  }, [data.chain?.id, srcChain, switchNetwork]);
+  }, [srcChain, switchNetwork, data.chain]);
 
   return (
     <div>
@@ -114,9 +113,9 @@ const PageLayout: FunctionComponent = ({ children }) => {
         <title>SquiDex | The Cross Chain Decentralised Exchange</title>
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
-      <div className="flex flex-col w-screen h-screen overflow-x-hidden bg-gray-200">
+      <div>
         <Header />
-        <div className="bg-gradient-to-b from-[#0C213A] to-[#03070D] flex-1 items-center justify-center flex flex-col">
+        <div >
           {children}
         </div>
       </div>

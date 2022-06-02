@@ -38,29 +38,27 @@ const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
   });
   return (
     <>
-      <input type="checkbox" id={modalKey} className="modal-toggle" />
+      <input type="checkbox" id={modalKey} />
       <label
-        className="cursor-pointer select-none modal modal-bottom sm:modal-middle"
         htmlFor={modalKey}
       >
         <label
-          className="flex flex-col px-8 modal-box bg-gradient-to-b to-[#191E31] from-[#192431]"
           htmlFor=""
         >
-          <div className="z-50">
-            <h1 className="text-3xl font-thin text-center text-white">
+          <div>
+            <h1>
               Select Token
             </h1>
-            <div className="bg-[#181A25] rounded-xl text-white my-8">
-              <ul className="menu min-h-[400px]">{options}</ul>
+            <div>
+              <ul>{options}</ul>
             </div>
           </div>
 
-          <div className="absolute top-0 left-0 z-0 w-full h-full">
-            <div className="relative w-full h-full">
+          <div>
+            <div>
               <img
-                className="scale-110 rotate-3"
                 src={"/assets/svg/pattern.svg"}
+                alt=""
               />
             </div>
           </div>

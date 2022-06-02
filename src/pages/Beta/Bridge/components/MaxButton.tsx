@@ -33,7 +33,6 @@ const MaxButton: FunctionComponent<MaxButtonProps> = ({ selectedToken }) => {
 
   return (
     <button
-      className="btn bg-[#31FFCE] text-gray-900 h-6 text-xs w-0 px-7 min-h-0 rounded-2xl hover:bg-[#21e9ba]"
       onClick={() => dispatch(setAmount(maxAmount))}
     >
       max

@@ -26,7 +26,7 @@ destChainStartListening({
     const destChain = state.swapInputs.destChain;
     const tokens = tokenApi.endpoints.getTokens.select()(state)?.data;
     const newToken = tokens?.find(
-      (token) =>
+      (token: any) =>
         token.chainId === destChain.id && token.symbol === currentToken?.symbol
     );
     if (newToken && newToken?.address !== currentToken?.address) {

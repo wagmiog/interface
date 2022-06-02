@@ -44,9 +44,9 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
 
   function createRoute(chain: Chain, token: Token, amount: string) {
     return (
-      <div className="flex items-center" key={token.address}>
+      <div key={token.address}>
         <img src={chain.icon} width={24} height={24} alt={chain.name} />
-        <span className="mx-2">
+        <span>
           {toFixed(ethers.utils.formatUnits(amount, token.decimals))}
         </span>
         <span>{token.symbol}</span>
@@ -94,13 +94,12 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
   }
 
   return (
-    <div className={`flex flex-wrap items-center px-2 text-sm ${className}`}>
+    <div>
       {calculateRoutes()?.map((route, i) => {
         return (
-          <div className="flex items-center mt-2" key={i}>
+          <div key={i}>
             {i > 0 && (
               <ChevronRightIcon
-                className="text-gray-300 mx-1"
                 width={18}
                 height={18}
               />

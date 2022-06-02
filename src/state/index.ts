@@ -1,5 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
+// import { configureStore } from '@reduxjs/toolkit'
+// import { load } from 'redux-localstorage-simple'
 import application from './application/reducer'
 import { updateVersion } from './global/actions'
 import user from './user/reducer'
@@ -15,14 +17,22 @@ import token from './token/reducer'
 import pair from './pair/reducer'
 import stake from './stake/reducer'
 import { pangolinReducers, PANGOLIN_PERSISTED_KEYS } from '@pangolindex/components'
+
 import balanceReducer from "src/pages/Beta/Bridge/slices/balanceSlice";
 import swapInputReducer from "src/pages/Beta/Bridge/slices/swapInputSlice";
 import dropInputReducer from "src/pages/Beta/Bridge/slices/dropInputSlice";
 import tokenApprovalReducer from "src/pages/Beta/Bridge/slices/tokenApprovalSlice";
 import swapStatusReducer from "src/pages/Beta/Bridge/slices/swapStatusSlice";
-import swapEstimatorReducer from "src/pages/Beta/Bridge/slices/swapEstimatorSlice";
 import { tokenApi } from "src/pages/Beta/Bridge/slices/tokenSlice";
+import swapEstimatorReducer from "src/pages/Beta/Bridge/slices/swapEstimatorSlice";
 import { transferFeeApi } from "src/pages/Beta/Bridge/slices/transferFeeSlice";
+import { fetchBalanceMiddleware } from "src/pages/Beta/Bridge/middlewares/fetchBalanceMiddleware";
+import { resetStateMiddleware } from "src/pages/Beta/Bridge/middlewares/resetStateMiddleware";
+import { swapStatusMiddleware } from "src/pages/Beta/Bridge/middlewares/swapStatusMiddleware";
+import { destChainMiddleware } from "src/pages/Beta/Bridge/middlewares/destChainMiddleware";
+import { swapEstimatorMiddleware } from "src/pages/Beta/Bridge/middlewares/swapEstimatorMiddleware";
+import { srcChainMiddleware } from "src/pages/Beta/Bridge/middlewares/srcChainMiddleware";
+import { sendStatusMiddleware } from "src/pages/Beta/Bridge/middlewares/sendStatusMiddleware";
 
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'watchlists', 'stake', ...PANGOLIN_PERSISTED_KEYS]
@@ -52,7 +62,18 @@ const store = configureStore({
     [transferFeeApi.reducerPath]: transferFeeApi.reducer,
     ...pangolinReducers
   },
-  middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS })],
+  middleware: [...getDefaultMiddleware().concat([
+    fetchBalanceMiddleware.middleware,
+    resetStateMiddleware.middleware,
+    swapStatusMiddleware.middleware,
+    srcChainMiddleware.middleware,
+    destChainMiddleware.middleware,
+    swapEstimatorMiddleware.middleware,
+    sendStatusMiddleware.middleware,
+    tokenApi.middleware,
+    transferFeeApi.middleware
+  ]),
+  save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 

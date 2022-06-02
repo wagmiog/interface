@@ -34,9 +34,8 @@ type ProviderInput = {
   chainId?: number;
 };
 
-const provider = ({ chainId }: ProviderInput) => {
+export const provider = ({ chainId }: ProviderInput) => {
   const chain = chains.find((chain) => chain.id === chainId);
-
   if (chain) {
     return new providers.JsonRpcProvider(chain.rpcUrls[0]);
   } else {
@@ -63,7 +62,7 @@ try {
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 if ('ethereum' in window) {
-  ;(window.ethereum as any).autoRefreshOnNetworkChange = false
+  ; (window.ethereum as any).autoRefreshOnNetworkChange = false
 }
 
 const GOOGLE_ANALYTICS_ID: string | undefined = process.env.REACT_APP_GOOGLE_ANALYTICS_ID
@@ -142,14 +141,14 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ProviderNetwork getLibrary={getLibrary}>
         <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-              <EvmProvider autoConnect provider={provider} connectors={connectors}>
-                <Updaters />
-                <ThemeProvider>
-                  <ComponentThemeProvider />
-                </ThemeProvider>
-              </EvmProvider>
-          </QueryClientProvider>
+          <EvmProvider autoConnect provider={provider} connectors={connectors}>
+            <QueryClientProvider client={queryClient}>
+              <Updaters />
+              <ThemeProvider>
+                <ComponentThemeProvider />
+              </ThemeProvider>
+            </QueryClientProvider>
+          </EvmProvider>
         </Provider>
       </Web3ProviderNetwork>
     </Web3ReactProvider>

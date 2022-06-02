@@ -3,7 +3,6 @@ import { ComponentStyle } from "../../types/component";
 import { Token } from "../../types/token";
 import { selectBalancesByChainId } from "../../slices/balanceSlice";
 import { ethers } from "ethers";
-import cn from "classnames";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { selectSrcChain } from "../../slices/swapInputSlice";
 import LoadingIndicator from "../../components/LoadingIndicator";
@@ -45,30 +44,26 @@ const TokenBalance: FunctionComponent<TokenBalanceProps> = ({
     }
 
     return (
-      <span className="flex-1 text-right justify-self-end">{content}</span>
+      <span>{content}</span>
     );
   }
 
   return (
-    <div className={`${className}`}>
+    <div>
       <li key={token.address} onClick={() => onClick(token)}>
         <label
           htmlFor={modalKey}
-          className={cn("capitalize", {
-            active: active,
-          })}
         >
           <img
-            className="p-1 mr-2 rounded-full"
             src={token.logoURI || "/ic-unknown.svg"}
             width={32}
             height={32}
             alt={token.name}
           />{" "}
-          <div className="flex flex-col items-end flex-1">
-            <div className="flex">
+          <div>
+            <div>
               {renderBalance()}
-              <span className="w-12 text-right">{token.symbol}</span>
+              <span>{token.symbol}</span>
             </div>
           </div>
         </label>

@@ -216,23 +216,22 @@ const useSwap = () => {
     if (!srcToken) return;
     if (!amount) return;
     if (!recipientAddress) return;
-
     const gatewayContract = new ethers.Contract(
       srcChain?.gatewayAddress,
       gatewayAbi,
       signer
-    );
-    const sendAmount = ethers.utils
+      );
+      const sendAmount = ethers.utils
       .parseUnits(amount, srcToken?.decimals)
       .toString();
-
-    const tx = await gatewayContract.sendToken(
-      destChain.name,
-      recipientAddress,
-      srcCrosschainToken?.symbol,
-      sendAmount
-    );
-
+      
+      const tx = await gatewayContract.sendToken(
+        destChain.name,
+        recipientAddress,
+        srcCrosschainToken?.symbol,
+        sendAmount
+        );
+        
     return { tx, traceId: "", payloadHash: "" };
   }, [
     amount,
@@ -240,8 +239,8 @@ const useSwap = () => {
     recipientAddress,
     signer,
     srcChain,
-    srcCrosschainToken?.symbol,
     srcToken,
+    srcCrosschainToken,
   ]);
 
   return { swapSrcAndDest, swapOnlyDest, swapOnlySrc, sendToken };

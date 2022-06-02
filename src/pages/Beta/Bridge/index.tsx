@@ -22,6 +22,7 @@ import { TokenInputModalKey } from "./components/TokenInput/TokenInputModal";
 import { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
+import PageLayout from "./components/PageLayout";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -38,16 +39,18 @@ const Bridge = () => {
   }, [dispatch]);
 
   return (
+    <PageLayout>
+
     <SwapContainer>
-      <h1 className="text-3xl font-thin text-center text-white">
+      <h1>
         Cross Chain Swap
       </h1>
-      <div className="mt-5">
-        <div className="mb-2 font-light text-white">From</div>
+      <div>
+        <div>From</div>
         <InputContainer>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 gap-5">
-              <div>
+          <div>
+            <div>
+              <div >
                 <ChainInput
                   selectedChain={srcChain}
                   label="From"
@@ -58,17 +61,15 @@ const Bridge = () => {
               <div>
                 <TokenInput
                   label="Send"
-                  className="mt-2"
                   modalKey={TokenInputModalKey.ModalTokenInput}
                   selectedToken={srcToken}
                 />
               </div>
             </div>
           </div>
-          <div className="mt-5">
+          <div>
             <div>
               <AmountInput
-                className="mt-4"
                 selectedToken={srcToken}
                 validState={amountValidation}
               />
@@ -77,11 +78,11 @@ const Bridge = () => {
         </InputContainer>
       </div>
 
-      <div className="mt-5">
-        <div className="mb-2 font-light text-white">To</div>
+      <div>
+        <div >To</div>
         <InputContainer>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 gap-5">
+          <div>
+            <div>
               <div>
                 <ChainInput
                   selectedChain={destChain}
@@ -92,7 +93,6 @@ const Bridge = () => {
               <div>
                 <TokenInput
                   label="Receive"
-                  className="mt-2"
                   modalKey={TokenInputModalKey.ModalTokenOutput}
                   selectedToken={destToken}
                 />
@@ -100,7 +100,7 @@ const Bridge = () => {
             </div>
           </div>
 
-          <div className="mt-5">
+          <div>
             <AddressInput />
           </div>
         </InputContainer>
@@ -109,13 +109,13 @@ const Bridge = () => {
         <ChainInputSwitch />
         <TokenInputSwitch />
       </div> */}
-      <div className="mt-10">
+      <div>
         <InputContainer>
           <SwapEstimator amount={amount} />
         </InputContainer>
         <SwapRoute />
       </div>
-      <div className="flex flex-col mt-8">
+      <div>
         {isRequiredApproval ? (
           <ApproveButton />
         ) : (
@@ -123,6 +123,7 @@ const Bridge = () => {
         )}
       </div>
     </SwapContainer>
+    </PageLayout>
   );
 };
 

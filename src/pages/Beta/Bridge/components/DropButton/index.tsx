@@ -1,6 +1,5 @@
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import cn from "classnames";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
 import {
   resetSwapInputs,
@@ -130,10 +129,6 @@ const DropButton: FunctionComponent<SwapButtonProps> = ({
     <>
       <button
         disabled={dropDisable || loading || swapEstimatorState.loading}
-        className={cn(
-          `btn text-white bg-black disabled:bg-opacity-30 transition-all ease-in ${className}`,
-          { loading }
-        )}
         onClick={dropTx ? reset : swap}
       >
         {dropTx ? "Reset" : "Drop"}
@@ -141,10 +136,6 @@ const DropButton: FunctionComponent<SwapButtonProps> = ({
       <br />
       {dropTx && (
         <button
-          className={cn(
-            `btn text-white bg-black disabled:bg-opacity-30 transition-all ease-in ${className}`,
-            { loading }
-          )}
           onClick={() =>
             window.open(`https://testnet.axelarscan.io/gmp/${dropTx}`)
           }

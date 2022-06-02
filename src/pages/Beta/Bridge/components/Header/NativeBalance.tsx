@@ -27,7 +27,7 @@ const NativeBalance: FunctionComponent<ComponentStyle> = ({ className }) => {
     return ;
   }
 
-  return <div className={`${className}`}>{renderBalance()}</div>;
+  return <div>{renderBalance()}</div>;
 };
 
 export default NativeBalance;

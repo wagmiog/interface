@@ -30,7 +30,7 @@ srcChainStartListening({
 
     const tokens = tokenApi.endpoints.getTokens.select()(state)?.data;
     const newToken = tokens?.find(
-      (token) =>
+      (token: any) =>
         token.chainId === srcChain.id && token.symbol === currentToken?.symbol
     );
     if (newToken && newToken.address !== currentToken.address) {

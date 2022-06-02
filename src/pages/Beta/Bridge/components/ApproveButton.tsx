@@ -29,6 +29,7 @@ const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
   const [{ data: txReceipt, loading: txLoading }, wait] =
     useWaitForTransaction();
   const [loading, setLoading] = useState(false);
+  const srcTokenAddress = srcToken?.address
 
   useEffect(() => {
     setApproveDisable(!srcChain || !srcToken || !signer);
@@ -57,7 +58,7 @@ const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
     spenderAddress,
     srcChain,
     srcToken,
-    srcToken?.address,
+    srcTokenAddress,
     txReceipt,
   ]);
 
@@ -81,9 +82,6 @@ const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
   return (
     <button
       disabled={approveDisable || loading || txLoading}
-      className={`btn text-white bg-gradient-to-r from-[#760FC8] to-[#7522DE] disabled:bg-opacity-30 transition-all ease-in ${
-        (loading || txLoading) && "loading"
-      } ${className}`}
       onClick={approve}
     >
       Approve

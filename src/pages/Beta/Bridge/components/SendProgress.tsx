@@ -1,7 +1,6 @@
 import { useAppSelector } from "../hooks/useAppSelector";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import ReactLoading from "react-loading";
-import cn from "classnames";
 import { selectDestChain, selectSrcChain } from "../slices/swapInputSlice";
 import { ComponentStyle } from "../types/component";
 import { getTxLink } from "../utils/explorer";
@@ -40,18 +39,12 @@ const SendProgress: FunctionComponent<SendProgressProps> = ({
   }, [currentStep, destChain, srcChain, step, txHash]);
 
   return (
-    <div className="flex items-center">
-      <span
-        className={cn("mr-2", {
-          "opacity-100": currentStep >= step,
-          "opacity-30": currentStep < step,
-        })}
-      >
+    <div>
+      <span>
         {title}
       </span>
       {txHash && currentStep > step && srcChain && destChain && (
         <a
-          className="link link-accent"
           target="_blank"
           rel="noreferrer"
           href={getTxLink(step === 0 ? srcChain.id : destChain.id, txHash)}

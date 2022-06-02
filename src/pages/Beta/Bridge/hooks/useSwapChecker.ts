@@ -20,7 +20,8 @@ const useSwapChecker = () => {
   const srcChain = useAppSelector(selectSrcChain);
   const destChain = useAppSelector(selectDestChain);
   const [swapType, setSwapType] = useState<SWAP_TYPE>();
-
+  const setTokenAddress = destToken?.address
+  
   useEffect(() => {
     if (srcToken && srcChain) {
       if (
@@ -46,7 +47,7 @@ const useSwapChecker = () => {
         }
       }
     }
-  }, [srcChain, srcToken, destToken?.address, destChain.crosschainToken]);
+  }, [srcChain, srcToken, setTokenAddress, destChain.crosschainToken, destToken]);
 
   return swapType;
 };
