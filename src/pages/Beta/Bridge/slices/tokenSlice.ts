@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Token } from "../types/token";
-import { RootState } from "../store";
+import { RootState } from "src/state";
 
 export const tokenApi: any = createApi({
   reducerPath: "tokens",

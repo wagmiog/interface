@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { RootState } from "src/state";
 import { ChainName } from "../types/chain";
 
 export interface SwapStatusState {

@@ -1,4 +1,6 @@
-export function fetchBalance(
+// import { BETA_MENU_LINK } from 'src/constants'
+
+export async function fetchBalance(
   senderAddress: string,
   spenderAddresses: string[],
   tokenAddresses: string[],

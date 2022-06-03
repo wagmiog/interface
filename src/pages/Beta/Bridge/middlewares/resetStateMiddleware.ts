@@ -2,7 +2,7 @@ import {
   createListenerMiddleware,
   TypedStartListening,
 } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch, RootState } from "src/state";
 import { setSrcChain, setSrcToken } from "../slices/swapInputSlice";
 import { clear } from "../slices/balanceSlice";
 

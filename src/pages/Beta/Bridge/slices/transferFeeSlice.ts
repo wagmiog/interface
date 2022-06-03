@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-import { RootState } from "../store";
+import { RootState } from "src/state";
 import { FeeRequest, FeeResponse } from "../types/api";
 import { selectCrosschainTokenAtSrcChain } from "./tokenSlice";
 

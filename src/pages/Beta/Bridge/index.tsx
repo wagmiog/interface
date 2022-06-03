@@ -23,6 +23,25 @@ import { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
 import PageLayout from "./components/PageLayout";
+// import { providers } from "ethers";
+// import { chains } from "./constants/config";
+// import { Provider } from "react-redux";
+// import { store } from "./store";
+// import { Provider as EvmProvider } from "wagmi";
+// import { connectors } from "./clients/walletClient";
+
+// type ProviderInput = {
+//   chainId?: number;
+// };
+
+// export const provider = ({ chainId }: ProviderInput) => {
+//   const chain = chains.find((chain) => chain.id === chainId);
+//   if (chain) {
+//     return new providers.JsonRpcProvider(chain.rpcUrls[0]);
+//   } else {
+//     return new providers.JsonRpcProvider(chains[0].rpcUrls[0]);
+//   }
+// };
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -37,91 +56,86 @@ const Bridge = () => {
   useEffect(() => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
-
   return (
     <PageLayout>
-    <SwapContainer>
-      <h1>
-        Cross Chain Swap
-      </h1>
-      <div>
-        <div>From</div>
-        <InputContainer>
-          <div>
+      <SwapContainer>
+        <h1>
+          Cross Chain Swap
+        </h1>
+        <div>
+          <div>From</div>
+          <InputContainer>
             <div>
-              <div >
-                <ChainInput
-                  selectedChain={srcChain}
-                  label="From"
-                  modalKey={ChainInputModalKey.ModalChainFrom}
-                  isSrcChain={true}
-                />
-              </div>
               <div>
-                <TokenInput
-                  label="Send"
-                  modalKey={TokenInputModalKey.ModalTokenInput}
+                <div >
+                  <ChainInput
+                    selectedChain={srcChain}
+                    label="From"
+                    modalKey={ChainInputModalKey.ModalChainFrom}
+                    isSrcChain={true}
+                  />
+                </div>
+                <div>
+                  <TokenInput
+                    label="Send"
+                    modalKey={TokenInputModalKey.ModalTokenInput}
+                    selectedToken={srcToken}
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>
+                <AmountInput
                   selectedToken={srcToken}
+                  validState={amountValidation}
                 />
               </div>
             </div>
-          </div>
-          <div>
-            <div>
-              <AmountInput
-                selectedToken={srcToken}
-                validState={amountValidation}
-              />
-            </div>
-          </div>
-        </InputContainer>
-      </div>
+          </InputContainer>
+        </div>
 
-      <div>
-        <div >To</div>
-        <InputContainer>
-          <div>
+        <div>
+          <div >To</div>
+          <InputContainer>
             <div>
               <div>
-                <ChainInput
-                  selectedChain={destChain}
-                  label="To"
-                  modalKey={ChainInputModalKey.ModalChainTo}
-                />
-              </div>
-              <div>
-                <TokenInput
-                  label="Receive"
-                  modalKey={TokenInputModalKey.ModalTokenOutput}
-                  selectedToken={destToken}
-                />
+                <div>
+                  <ChainInput
+                    selectedChain={destChain}
+                    label="To"
+                    modalKey={ChainInputModalKey.ModalChainTo}
+                  />
+                </div>
+                <div>
+                  <TokenInput
+                    label="Receive"
+                    modalKey={TokenInputModalKey.ModalTokenOutput}
+                    selectedToken={destToken}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div>
-            <AddressInput />
-          </div>
-        </InputContainer>
-      </div>
-      {/* <div className="flex items-center justify-around my-4">
-        <ChainInputSwitch />
-        <TokenInputSwitch />
-      </div> */}
-      <div>
-        <InputContainer>
-          <SwapEstimator amount={amount} />
-        </InputContainer>
-        <SwapRoute />
-      </div>
-      <div>
-        {isRequiredApproval ? (
-          <ApproveButton />
-        ) : (
-          <SwapButton amount={amount} amountValidation={amountValidation} />
-        )}
-      </div>
-    </SwapContainer>
+            <div>
+              <AddressInput />
+            </div>
+          </InputContainer>
+        </div>
+        <div>
+          <InputContainer>
+            <SwapEstimator amount={amount} />
+          </InputContainer>
+          <SwapRoute />
+        </div>
+        <div>
+          {isRequiredApproval ? (
+            <ApproveButton />
+          ) : (
+            <SwapButton amount={amount} amountValidation={amountValidation} />
+          )}
+        </div>
+      </SwapContainer>
     </PageLayout>
   );
 };

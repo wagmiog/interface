@@ -16,7 +16,7 @@ import {
   selectCrosschainTokenAtSrcChain,
 } from "../slices/tokenSlice";
 import { ethers } from "ethers";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch, RootState } from "src/state";
 import { estimateSwapOutputAmount } from "../utils/contract";
 import { fetchTransferFee } from "../slices/transferFeeSlice";
 

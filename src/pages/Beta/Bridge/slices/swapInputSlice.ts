@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Chain } from "../types/chain";
 import { chains } from "../constants/config";
 import { Token } from "../types/token";
-import type { RootState } from "../store";
+import type { RootState } from "src/state";
 
 interface SwapInputState {
   srcChain?: Chain;

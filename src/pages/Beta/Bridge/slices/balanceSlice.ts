@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { RootState } from "src/state";
 import { ChainId } from "../types/chain";
 
 export interface Balance {
@@ -41,6 +41,8 @@ export const selectBalancesByChainId = (
   state: RootState,
   chainId?: ChainId
 ) => {
+  //ATTENTION ICI var state renvoit pas la meme chose que dans le vrai site
+  console.log("state", state)
   if (!chainId) return {};
   return state.balances[chainId];
 };

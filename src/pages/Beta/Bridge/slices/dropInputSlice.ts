@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Chain } from "../types/chain";
 import { chains } from "../constants/config";
-import type { RootState } from "../store";
+import type { RootState } from "src/state";
 
 interface DropInputState {
   amount: string;
