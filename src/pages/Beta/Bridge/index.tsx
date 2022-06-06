@@ -26,7 +26,7 @@ import PageLayout from "./components/PageLayout";
 // import { providers } from "ethers";
 // import { chains } from "./constants/config";
 // import { Provider } from "react-redux";
-// import { store } from "./store";
+import store from "src/state";
 // import { Provider as EvmProvider } from "wagmi";
 // import { connectors } from "./clients/walletClient";
 
@@ -56,6 +56,8 @@ const Bridge = () => {
   useEffect(() => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
+
+  console.log('state:', store)
   return (
     <PageLayout>
       <SwapContainer>
