@@ -1,3 +1,4 @@
+import { QuestionAnswer } from "./TabulationBox";
 import AmountInput from "./components/AmountInput";
 import ChainInput from "./components/ChainInput";
 import InputContainer from "./components/InputContainer";
@@ -26,7 +27,6 @@ import PageLayout from "./components/PageLayout";
 // import { providers } from "ethers";
 // import { chains } from "./constants/config";
 // import { Provider } from "react-redux";
-import store from "src/state";
 // import { Provider as EvmProvider } from "wagmi";
 // import { connectors } from "./clients/walletClient";
 
@@ -57,9 +57,9 @@ const Bridge = () => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
 
-  console.log('state:', store)
   return (
     <PageLayout>
+      <QuestionAnswer />
       <SwapContainer>
         <h1>
           Cross Chain Swap
