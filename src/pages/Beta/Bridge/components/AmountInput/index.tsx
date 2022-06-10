@@ -50,7 +50,7 @@ const AmountInput: FunctionComponent<AmountInputProps> = ({
       );
       return <span> {`(${balance} ${srcToken?.symbol})`}</span>;
     }
-    return ;
+    return;
   }
 
   return (

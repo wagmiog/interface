@@ -53,14 +53,7 @@ const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
               <ul>{options}</ul>
             </div>
           </div>
-
           <div>
-            <div>
-              <img
-                src={"/assets/svg/pattern.svg"}
-                alt=""
-              />
-            </div>
           </div>
         </label>
       </label>

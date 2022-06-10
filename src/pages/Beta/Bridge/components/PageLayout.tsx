@@ -23,10 +23,10 @@ import { useNetwork } from "wagmi";
 import ChainInputModal, {
   ChainInputModalKey,
 } from "./ChainInput/ChainInputModal";
-import Header from "./Header";
 import TokenInputModal, {
   TokenInputModalKey,
 } from "./TokenInput/TokenInputModal";
+// import Header from "./Header";
 
 const PageLayout: FunctionComponent = ({ children }) => {
   const srcChain = useAppSelector(selectSrcChain);
@@ -109,13 +109,9 @@ const PageLayout: FunctionComponent = ({ children }) => {
 
   return (
     <div>
-      {/* <Head>
-        <title>SquiDex | The Cross Chain Decentralised Exchange</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
       <div>
-        <Header />
-        <div >
+        {/* <Header /> */}
+        <div>
           {children}
         </div>
       </div>

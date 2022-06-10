@@ -39,27 +39,10 @@ const TokenInput: FunctionComponent<TokenInputProps> = ({
     <div>
       <label
         htmlFor={modalKey}
+        style={{ display: 'flex', alignItems: "start", gap: 15 }}
       >
         <div>
-          {selectedToken && (
-            <img
-              src={selectedToken.logoURI || "/ic-unknown.svg"}
-              width={20}
-              height={20}
-              alt="chain icon"
-            />
-          )}
-        </div>
-        <div>
-          <span>
             {selectedToken?.symbol || "Select token"}
-          </span>
-          <img
-            src={"/assets/svg/arrow-down.svg"}
-            height={20}
-            width={20}
-            alt=""
-          />
         </div>
       </label>
     </div>
