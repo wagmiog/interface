@@ -11,7 +11,7 @@ import {
 } from "../../slices/swapInputSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
 import { ChainInputModalKey } from "./ChainInputModal";
-import { Text } from "@pangolindex/components"
+import { Text, Button } from "@pangolindex/components"
 import { SelectParams } from "../../styleds"
 
 interface ChainInputProps extends ComponentStyle {
@@ -51,21 +51,23 @@ const ChainInput: FunctionComponent<ChainInputProps> = ({
   }, [dataChainId, destChainId, dispatch, isSrcChain, srcChain, data.chain, destChain]);
 
   return (
-    <SelectParams>
-      <div>
-        {selectedChain && (
-          <img
-            src={selectedChain.icon}
-            width={20}
-            height={20}
-            alt="chain icon"
-          />
-        )}
-      </div>
-      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
-        {selectedChain?.name || "Select Chain"}
-      </Text>
-    </SelectParams>
+    <Button variant="outline">
+      <SelectParams>
+        <div>
+          {selectedChain && (
+            <img
+              src={selectedChain.icon}
+              width={20}
+              height={20}
+              alt="chain icon"
+            />
+          )}
+        </div>
+        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
+          {selectedChain?.name || "Select Chain"}
+        </Text>
+      </SelectParams>
+    </Button>
   );
 };
 

@@ -1,12 +1,22 @@
 import { ComponentStyle } from "../../types/component";
 import React, { ChangeEvent } from "react";
 import { Validation } from "../../hooks/useAmountValidator";
-import { DebounceInput } from "react-debounce-input";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import { setRecipientAddress } from "../../slices/swapInputSlice";
 import { Text } from "@pangolindex/components"
+import styled from 'styled-components';
+
+const InputWrapper = styled.input`
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid transparent;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+`;
 
 interface AddressInputProps extends ComponentStyle {
   validState?: Validation;
@@ -32,9 +42,8 @@ const AddressInput: React.FC<AddressInputProps> = ({
         Destination Address
       </Text>
       <div>
-        <DebounceInput
+        <InputWrapper
           placeholder={account?.address}
-          debounceTimeout={300}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             updateDestinationAddress(e.target.value);
           }}

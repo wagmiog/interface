@@ -18,7 +18,6 @@ export const Ibridge = styled(Box)`
   min-width: 30%;
   border-radius: 16px;
   padding: 20px;
-  max-height: 550px;
   ${({ theme }) => theme.mediaWidth.upToMedium`
   min-height: 65vh;
   min-width: 90%;
