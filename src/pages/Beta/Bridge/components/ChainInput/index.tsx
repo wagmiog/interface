@@ -51,7 +51,7 @@ const ChainInput: FunctionComponent<ChainInputProps> = ({
   }, [dataChainId, destChainId, dispatch, isSrcChain, srcChain, data.chain, destChain]);
 
   return (
-    <Button variant="outline">
+    <Button variant="plain">
       <SelectParams>
         <div>
           {selectedChain && (

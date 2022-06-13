@@ -12,7 +12,7 @@ const TokenInput: FunctionComponent<TokenInputProps> = ({
   selectedToken,
 }) => {
   return (
-    <Button variant="plain">
+    <Button variant="outline">
       <SelectParams>
         <div>
           {selectedToken && (

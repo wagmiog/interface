@@ -57,7 +57,6 @@ export const selectBalancesByChainId = (
   chainId?: ChainId
 ) => {
   //ATTENTION ICI var state renvoit pas la meme chose que dans le vrai site
-  console.log("state", state)
   if (!chainId) return {};
   return state.balances[chainId];
 };

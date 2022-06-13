@@ -20,6 +20,7 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
 
   const render = useCallback(() => {
     if (error) {
+      console.log('rororoo')
       return <span>{error}</span>;
     } else if (destToken && estimatedAmount) {
       const textAmount = ethers.utils.formatUnits(

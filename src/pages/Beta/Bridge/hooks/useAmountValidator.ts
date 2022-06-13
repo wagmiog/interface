@@ -20,7 +20,6 @@ const useAmountValidator = (amount: string, token?: Token) => {
   const balances = useAppSelector((rootState) =>
     selectBalancesByChainId(rootState, token?.chainId)
   );
-  console.log(token)
   useEffect(() => {
     if (!token) return;
     if (!amount) return;
