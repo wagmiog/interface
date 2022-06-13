@@ -7,7 +7,6 @@ import {
   selectDestChain,
   selectDestToken,
   selectSrcChain,
-  selectSrcToken,
   setDestChain,
   setDestToken,
   setSrcChain,
@@ -23,12 +22,10 @@ import { useNetwork } from "wagmi";
 import ChainInputModal from "./ChainInput/ChainInputModal";
 // import Header from "./Header";
 import TokenInputModal, {
-  TokenInputModalKey,
 } from "./TokenInput/TokenInputModal";
 
 const PageLayout: FunctionComponent = ({ children }) => {
   const srcChain = useAppSelector(selectSrcChain);
-  const srcToken = useAppSelector(selectSrcToken);
   const destChain = useAppSelector(selectDestChain);
   const destToken = useAppSelector(selectDestToken);
   const srcTokenAtDestChain = useAppSelector(selectSrcTokenAtDestChain);
@@ -118,15 +115,11 @@ const PageLayout: FunctionComponent = ({ children }) => {
         </div>
       </div>
       <TokenInputModal
-        modalKey={TokenInputModalKey.ModalTokenInput}
-        selectedToken={srcToken}
         tokens={srcTokens}
         showBalance={true}
         onSelected={updateSrcToken}
       />
       <TokenInputModal
-        modalKey={TokenInputModalKey.ModalTokenOutput}
-        selectedToken={destToken}
         tokens={destTokens}
         showBalance={false}
         onSelected={updateDestToken}

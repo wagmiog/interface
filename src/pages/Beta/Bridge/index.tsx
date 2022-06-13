@@ -222,8 +222,6 @@ const Bridge = () => {
       </Ibridge>
       <Modal isOpen={tokenInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <TokenInputModal
-          modalKey={TokenInputModalKey.ModalTokenInput}
-          selectedToken={srcToken}
           tokens={srcTokens}
           showBalance={true}
           onSelected={updateSrcToken}
@@ -231,8 +229,6 @@ const Bridge = () => {
       </Modal>
       <Modal isOpen={tokenOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <TokenInputModal
-          modalKey={TokenInputModalKey.ModalTokenOutput}
-          selectedToken={destToken}
           tokens={destTokens}
           showBalance={false}
           onSelected={updateDestToken}

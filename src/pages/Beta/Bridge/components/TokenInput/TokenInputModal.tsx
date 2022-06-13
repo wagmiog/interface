@@ -1,14 +1,30 @@
+import React, { FunctionComponent } from "react";
 import { ComponentStyle } from "../../types/component";
 import { Token } from "../../types/token";
-import React, { FunctionComponent } from "react";
-
 import TokenBalance from "./TokenBalance";
+import styled from 'styled-components'
+import { Text } from "@pangolindex/components"
+
+
+const ModalCenter = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+`
+
+const ModalChain = styled.div`
+display: flex;
+gap: 20px;
+paddingTop: 10px;
+cursor: pointer;
+`
 
 interface TokenInputModalProps extends ComponentStyle {
   tokens: Token[];
-  selectedToken?: Token;
   showBalance?: boolean;
-  modalKey: TokenInputModalKey;
   onSelected: (tokenBalance: Token) => void;
 }
 
@@ -18,53 +34,33 @@ export enum TokenInputModalKey {
 }
 
 const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
-  modalKey,
   onSelected,
-  selectedToken,
   showBalance = false,
   tokens = [],
 }) => {
   const options = tokens.map((token) => {
     return (
-      <TokenBalance
-        modalKey={modalKey}
-        onClick={onSelected}
-        token={token}
-        showBalance={showBalance}
-        active={token.address === selectedToken?.address}
-        key={token.address}
-      />
+      <ModalChain>
+        <TokenBalance
+          onClick={onSelected}
+          token={token}
+          showBalance={showBalance}
+          key={token.address}
+        />
+      </ModalChain>
     );
   });
   return (
-    <>
-      <input type="checkbox" id={modalKey} />
-      <label
-        htmlFor={modalKey}
-      >
-        <label
-          htmlFor=""
-        >
-          <div>
-            <h1>
-              Select Token
-            </h1>
-            <div>
-              <ul>{options}</ul>
-            </div>
-          </div>
-
-          <div>
-            <div>
-              <img
-                src={"/assets/svg/pattern.svg"}
-                alt=""
-              />
-            </div>
-          </div>
-        </label>
-      </label>
-    </>
+    <ModalCenter>
+      <div>
+        <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
+          Select Token
+        </Text>
+        <div>
+          <ul>{options}</ul>
+        </div>
+      </div>
+    </ModalCenter>
   );
 };
 
