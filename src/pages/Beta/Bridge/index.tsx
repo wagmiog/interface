@@ -1,3 +1,4 @@
+import React, { useEffect, useCallback } from "react";
 import { QuestionAnswer } from "./TabulationBox";
 import AmountInput from "./components/AmountInput";
 import ChainInput from "./components/ChainInput";
@@ -12,36 +13,32 @@ import {
   selectDestToken,
   selectSrcChain,
   selectSrcToken,
+  setDestChain,
+  setDestToken,
+  setSrcChain,
+  setSrcToken,
 } from "./slices/swapInputSlice";
-import React, { useEffect } from "react";
 import useAmountValidator from "./hooks/useAmountValidator";
 import useApproveChecker from "./hooks/useApproveChecker";
 import ApproveButton from "./components/ApproveButton";
 import { resetSwapStatus } from "./slices/swapStatusSlice";
 import SwapEstimator from "./components/SwapEstimator";
-import { TokenInputModalKey } from "./components/TokenInput/TokenInputModal";
-import { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
+import TokenInputModal, { TokenInputModalKey } from "./components/TokenInput/TokenInputModal";
+import ChainInputModal, { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
-import PageLayout from "./components/PageLayout";
-// import { providers } from "ethers";
-// import { chains } from "./constants/config";
-// import { Provider } from "react-redux";
-// import { Provider as EvmProvider } from "wagmi";
-// import { connectors } from "./clients/walletClient";
+// import PageLayout from "./components/PageLayout";
 
-// type ProviderInput = {
-//   chainId?: number;
-// };
 
-// export const provider = ({ chainId }: ProviderInput) => {
-//   const chain = chains.find((chain) => chain.id === chainId);
-//   if (chain) {
-//     return new providers.JsonRpcProvider(chain.rpcUrls[0]);
-//   } else {
-//     return new providers.JsonRpcProvider(chains[0].rpcUrls[0]);
-//   }
-// };
+import { chains } from "./constants/config";
+import useTokens from "./hooks/useTokens";
+import {
+  selectDestTokenAtSrcChain,
+  selectSrcTokenAtDestChain,
+} from "./slices/tokenSlice";
+import { Chain } from "./types/chain";
+import { Token } from "./types/token";
+import { useNetwork } from "wagmi";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -57,8 +54,81 @@ const Bridge = () => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
 
+
+  const srcTokenAtDestChain = useAppSelector(selectSrcTokenAtDestChain);
+  const destTokenAtSrcChain = useAppSelector(selectDestTokenAtSrcChain);
+  const srcTokens = useTokens(srcChain);
+  const destTokens = useTokens(destChain);
+  const [{ data }, switchNetwork] = useNetwork();
+
+  const updateSrcToken = useCallback(
+    async (token: Token) => {
+      if (token.symbol === destToken?.symbol && srcTokenAtDestChain) {
+        dispatch(setSrcToken(destTokenAtSrcChain));
+        dispatch(setDestToken(srcTokenAtDestChain));
+      } else {
+        dispatch(setSrcToken(token));
+      }
+    },
+    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
+  );
+
+  const updateDestToken = useCallback(
+    async (token: Token) => {
+      if (token.symbol === destToken?.symbol && srcTokenAtDestChain) {
+        dispatch(setSrcToken(destTokenAtSrcChain));
+        dispatch(setDestToken(srcTokenAtDestChain));
+      } else {
+        dispatch(setDestToken(token));
+      }
+    },
+    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
+  );
+
+  const updateSrcChain = useCallback(
+    async (chain: Chain) => {
+      if (!switchNetwork) return;
+      const { data: _chain } = await switchNetwork(chain.id);
+      if (_chain?.id !== chain.id) return;
+
+      if (chain.id === destChain?.id && srcChain) {
+        dispatch(setSrcChain(destChain));
+        dispatch(setDestChain(srcChain));
+      } else {
+        dispatch(setSrcChain(chain));
+      }
+    },
+    [destChain, dispatch, srcChain, switchNetwork]
+  );
+
+  const updateDestChain = useCallback(
+    async (chain: Chain) => {
+      if (srcChain && destChain && chain.id === srcChain?.id) {
+        if (!switchNetwork) return;
+        const { data: _chain } = await switchNetwork(destChain.id);
+        if (_chain?.id !== destChain?.id) return;
+
+        dispatch(setSrcChain(destChain));
+        dispatch(setDestChain(srcChain));
+      } else {
+        dispatch(setDestChain(chain));
+      }
+    },
+    [destChain, dispatch, srcChain, switchNetwork]
+  );
+  useEffect(() => {
+    const switchWalletNetworkIfNeeded = async () => {
+      if (!switchNetwork) return;
+      if (!srcChain) return;
+      if (data.chain?.id === srcChain?.id) return;
+      return await switchNetwork(srcChain.id);
+    };
+
+    switchWalletNetworkIfNeeded();
+    // eslint-disable-next-line
+  }, [data.chain?.id, srcChain, switchNetwork]);
   return (
-    <PageLayout>
+    <>
       <QuestionAnswer />
       <SwapContainer>
         <h1>
@@ -138,7 +208,33 @@ const Bridge = () => {
           )}
         </div>
       </SwapContainer>
-    </PageLayout>
+
+      {/* ICI */}
+      <TokenInputModal
+        modalKey={TokenInputModalKey.ModalTokenInput}
+        selectedToken={srcToken}
+        tokens={srcTokens}
+        showBalance={true}
+        onSelected={updateSrcToken}
+      />
+      <TokenInputModal
+        modalKey={TokenInputModalKey.ModalTokenOutput}
+        selectedToken={destToken}
+        tokens={destTokens}
+        showBalance={false}
+        onSelected={updateDestToken}
+      />
+      <ChainInputModal
+        modalKey={ChainInputModalKey.ModalChainFrom}
+        onSelected={updateSrcChain}
+        chains={chains}
+      />
+      <ChainInputModal
+        modalKey={ChainInputModalKey.ModalChainTo}
+        onSelected={updateDestChain}
+        chains={chains}
+      />
+    </>
   );
 };
 
