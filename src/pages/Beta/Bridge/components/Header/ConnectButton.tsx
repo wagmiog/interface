@@ -6,15 +6,15 @@ import {
   setRecipientAddress,
   setSenderAddress,
 } from "../../slices/swapInputSlice";
-import { ChainId } from "../../types/chain";
 import { ComponentStyle } from "../../types/component";
 import { useConnect, useAccount } from "wagmi";
+import { Button } from '@pangolindex/components'
 
 const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
   const dispatch = useAppDispatch();
-  const [{ data, error }, connect] = useConnect();
-  const [{ data: account }, disconnect] = useAccount();
-  const [isUnsupportedChain, setIsUnsupportedChain] = useState(false);
+  const [{ data }, connect] = useConnect();
+  const [{ data: account }] = useAccount();
+  const [, setIsUnsupportedChain] = useState(false);
   const senderAddress = useAppSelector(selectSenderAddress);
   const injectedConnector = data.connectors[0];
 
@@ -38,62 +38,22 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
   }, [account, dispatch, senderAddress, setIsUnsupportedChain]);
 
   function renderButton() {
-    if (isUnsupportedChain) {
+    if (data.connected) {
       return (
-        <button
-          // disabled={!injectedConnector.ready}
-          onClick={() => injectedConnector?.switchChain?.(ChainId.AVALANCHE)}
-        >
-          Unsupported Chain. Switch?
-        </button>
-      );
-    } else if (data.connected) {
-      const trimmedAddress =
-        account?.address?.slice(0, 7) + "..." + account?.address?.slice(-7);
-      return (
-        <div>
-          <label tabIndex={0}>
-            {trimmedAddress}
-          </label>
-          <ul
-            tabIndex={0}
-          >
-            <li>
-              <div onClick={disconnect}>
-                Disconnect
-              </div>
-            </li>
-          </ul>
-        </div>
-      );
-    } else if (error) {
-      return (
-        <button
-          // disabled={!injectedConnector.ready}
-          onClick={() => connect(injectedConnector)}
-        >
-          Failed to connect
-        </button>
+        <> </>
       );
     } else {
       return (
-        <button
+        <Button
+        variant="primary"
           // disabled={!injectedConnector.ready}
           onClick={() => connect(injectedConnector)}
         >
           Connect Wallet
-        </button>
+        </Button>
       );
     }
   }
-
-  // function handleClick() {
-  //   if (data.connected) {
-  //     disconnect();
-  //   } else {
-  //   }
-  // }
-
   return <div>{renderButton()}</div>;
 };
 

@@ -15,6 +15,7 @@ import { setSrcTx } from "../../slices/swapStatusSlice";
 import { selectEstimateAmountState } from "../../slices/swapEstimatorSlice";
 import useSwapChecker, { SWAP_TYPE } from "../../hooks/useSwapChecker";
 import useSwap from "../../hooks/useSwap";
+import { Button } from '@pangolindex/components'
 
 interface SwapButtonProps extends ComponentStyle {
   amount: string;
@@ -93,12 +94,13 @@ const SwapButton: FunctionComponent<SwapButtonProps> = ({
   ]);
 
   return (
-    <button
-      disabled={swapDisable || loading || swapEstimatorState.loading}
+    <Button
+      variant="primary"
+      isDisabled={swapDisable || loading || swapEstimatorState.loading}
       onClick={swap}
     >
       Swap
-    </button>
+    </Button>
   );
 };
 

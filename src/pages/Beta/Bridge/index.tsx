@@ -35,10 +35,12 @@ import {
 } from "./slices/tokenSlice";
 import { Chain } from "./types/chain";
 import { Token } from "./types/token";
-import { useNetwork } from "wagmi";
+import { useNetwork, useAccount } from "wagmi";
 import { PageWrapper, Ibridge } from './styleds'
 import Modal from 'src/components/Modal'
-import Header from "./components/Header";
+import ConnectButton from "./components/Header/ConnectButton";
+
+// import Header from "./components/Header";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +51,6 @@ const Bridge = () => {
   const destToken = useAppSelector(selectDestToken);
   const isRequiredApproval = useApproveChecker();
   const amountValidation = useAmountValidator(amount, srcToken);
-
   useEffect(() => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
@@ -64,7 +65,7 @@ const Bridge = () => {
   const [tokenOutput, setTokenOutput] = useState<boolean>(false)
   const [chainInput, setChainInput] = useState<boolean>(false)
   const [chainOutput, setChainOutput] = useState<boolean>(false)
-
+  const [{ data: account }] = useAccount();
   const updateSrcToken = useCallback(
     async (token: Token) => {
       if (token.symbol === destToken?.symbol && srcTokenAtDestChain) {
@@ -140,7 +141,6 @@ const Bridge = () => {
   }
   return (
     <PageWrapper>
-      <Header /> 
       <QuestionAnswer />
       <Ibridge>
         <h1>
@@ -213,10 +213,16 @@ const Bridge = () => {
           <SwapRoute />
         </div>
         <div>
-          {isRequiredApproval ? (
-            <ApproveButton />
+          {!account ? (
+            <ConnectButton />
           ) : (
-            <SwapButton amount={amount} amountValidation={amountValidation} />
+            <>
+              {isRequiredApproval ? (
+                <ApproveButton />
+              ) : (
+                <SwapButton amount={amount} amountValidation={amountValidation} />
+              )}
+            </>
           )}
         </div>
       </Ibridge>

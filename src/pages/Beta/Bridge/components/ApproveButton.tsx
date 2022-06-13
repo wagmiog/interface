@@ -13,6 +13,7 @@ import { setAllowance } from "../slices/tokenApprovalSlice";
 import erc20Abi from "../abi/erc20.json";
 // import { useRouter } from "next/router";
 import useSpenderAddress from "../hooks/useSpenderAddress";
+import { Button } from '@pangolindex/components'
 
 interface ApproveButtonProps extends ComponentStyle {}
 
@@ -80,12 +81,13 @@ const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
   }, [signer, spenderAddress, srcChain, srcToken, wait]);
 
   return (
-    <button
-      disabled={approveDisable || loading || txLoading}
+    <Button
+      variant="primary"
+      isDisabled={approveDisable || loading || txLoading}
       onClick={approve}
     >
       Approve
-    </button>
+    </Button>
   );
 };
 
