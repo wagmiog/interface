@@ -115,6 +115,12 @@ export const TableContent = styled(Box)`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-left-radius: 0px;
-
   `};
+`
+
+export const SelectParams = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
 `

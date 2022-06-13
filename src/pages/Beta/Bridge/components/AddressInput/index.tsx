@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import { setRecipientAddress } from "../../slices/swapInputSlice";
+import { Text } from "@pangolindex/components"
 
 interface AddressInputProps extends ComponentStyle {
   validState?: Validation;
@@ -27,9 +28,9 @@ const AddressInput: React.FC<AddressInputProps> = ({
 
   return (
     <div>
-      <label>
+      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
         Destination Address
-      </label>
+      </Text>
       <div>
         <DebounceInput
           placeholder={account?.address}
@@ -41,7 +42,7 @@ const AddressInput: React.FC<AddressInputProps> = ({
       </div>
       <div>
         {validState?.error && (
-          <span >{validState?.error}</span>
+          <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{validState?.error}</Text>
         )}
       </div>
     </div>

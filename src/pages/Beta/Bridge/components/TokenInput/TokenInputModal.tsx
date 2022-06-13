@@ -18,7 +18,7 @@ const ModalCenter = styled.div`
 const ModalChain = styled.div`
 display: flex;
 gap: 20px;
-paddingTop: 10px;
+padding-top: 10px;
 cursor: pointer;
 `
 

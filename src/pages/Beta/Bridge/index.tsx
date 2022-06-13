@@ -23,7 +23,7 @@ import useApproveChecker from "./hooks/useApproveChecker";
 import ApproveButton from "./components/ApproveButton";
 import { resetSwapStatus } from "./slices/swapStatusSlice";
 import SwapEstimator from "./components/SwapEstimator";
-import TokenInputModal, { TokenInputModalKey } from "./components/TokenInput/TokenInputModal";
+import TokenInputModal from "./components/TokenInput/TokenInputModal";
 import ChainInputModal, { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
@@ -160,8 +160,6 @@ const Bridge = () => {
               </div>
               <div onClick={() => setTokenInput(!tokenInput)}>
                 <TokenInput
-                  label="Send"
-                  modalKey={TokenInputModalKey.ModalTokenInput}
                   selectedToken={srcToken}
                 />
               </div>
@@ -190,8 +188,6 @@ const Bridge = () => {
               </div>
               <div onClick={() => setTokenOutput(!tokenOutput)}>
                 <TokenInput
-                  label="Receive"
-                  modalKey={TokenInputModalKey.ModalTokenOutput}
                   selectedToken={destToken}
                 />
               </div>

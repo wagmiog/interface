@@ -35,7 +35,6 @@ const TokenBalance: FunctionComponent<TokenBalanceProps> = ({
         content = <LoadingIndicator width={40} height={18} />;
       }
     }
-
     return (
       <span>{content}</span>
     );

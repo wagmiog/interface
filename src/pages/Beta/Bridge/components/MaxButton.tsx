@@ -6,6 +6,7 @@ import { selectSrcChain, setAmount } from "../slices/swapInputSlice";
 import { selectBalancesByChainId } from "../slices/balanceSlice";
 // import LoadingIndicator from "./LoadingIndicator";
 import { ethers } from "ethers";
+import { Button } from "@pangolindex/components"
 
 interface MaxButtonProps extends ComponentStyle {
   selectedToken?: Token;
@@ -32,11 +33,13 @@ const MaxButton: FunctionComponent<MaxButtonProps> = ({ selectedToken }) => {
   // }
 
   return (
-    <button
+    <Button
+      variant="plain"
+      color='text1'
       onClick={() => dispatch(setAmount(maxAmount))}
     >
       max
-    </button>
+    </Button>
   );
 };
 
