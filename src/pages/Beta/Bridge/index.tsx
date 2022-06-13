@@ -1,10 +1,10 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { QuestionAnswer } from "./TabulationBox";
 import AmountInput from "./components/AmountInput";
 import ChainInput from "./components/ChainInput";
 import InputContainer from "./components/InputContainer";
 import SwapButton from "./components/SwapButton";
-import SwapContainer from "./components/SwapContainer";
+// import SwapContainer from "./components/SwapContainer";
 import TokenInput from "./components/TokenInput";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppSelector";
 import {
@@ -27,9 +27,6 @@ import TokenInputModal, { TokenInputModalKey } from "./components/TokenInput/Tok
 import ChainInputModal, { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
-// import PageLayout from "./components/PageLayout";
-
-
 import { chains } from "./constants/config";
 import useTokens from "./hooks/useTokens";
 import {
@@ -39,6 +36,9 @@ import {
 import { Chain } from "./types/chain";
 import { Token } from "./types/token";
 import { useNetwork } from "wagmi";
+import { PageWrapper, Ibridge } from './styleds'
+import Modal from 'src/components/Modal'
+import Header from "./components/Header";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +60,10 @@ const Bridge = () => {
   const srcTokens = useTokens(srcChain);
   const destTokens = useTokens(destChain);
   const [{ data }, switchNetwork] = useNetwork();
+  const [tokenInput, setTokenInput] = useState<boolean>(false)
+  const [tokenOutput, setTokenOutput] = useState<boolean>(false)
+  const [chainInput, setChainInput] = useState<boolean>(false)
+  const [chainOutput, setChainOutput] = useState<boolean>(false)
 
   const updateSrcToken = useCallback(
     async (token: Token) => {
@@ -127,10 +131,18 @@ const Bridge = () => {
     switchWalletNetworkIfNeeded();
     // eslint-disable-next-line
   }, [data.chain?.id, srcChain, switchNetwork]);
+
+  function wrappedOnDismiss() {
+    setTokenInput(false)
+    setChainInput(false)
+    setChainOutput(false)
+    setTokenOutput(false)
+  }
   return (
-    <>
+    <PageWrapper>
+      <Header /> 
       <QuestionAnswer />
-      <SwapContainer>
+      <Ibridge>
         <h1>
           Cross Chain Swap
         </h1>
@@ -139,7 +151,7 @@ const Bridge = () => {
           <InputContainer>
             <div>
               <div>
-                <div >
+                <div onClick={() => setChainInput(!chainInput)}>
                   <ChainInput
                     selectedChain={srcChain}
                     label="From"
@@ -147,7 +159,7 @@ const Bridge = () => {
                     isSrcChain={true}
                   />
                 </div>
-                <div>
+                <div onClick={() => setTokenInput(!tokenInput)}>
                   <TokenInput
                     label="Send"
                     modalKey={TokenInputModalKey.ModalTokenInput}
@@ -172,14 +184,14 @@ const Bridge = () => {
           <InputContainer>
             <div>
               <div>
-                <div>
+                <div onClick={() => setChainOutput(!chainOutput)}>
                   <ChainInput
                     selectedChain={destChain}
                     label="To"
                     modalKey={ChainInputModalKey.ModalChainTo}
                   />
                 </div>
-                <div>
+                <div onClick={() => setTokenOutput(!tokenOutput)}>
                   <TokenInput
                     label="Receive"
                     modalKey={TokenInputModalKey.ModalTokenOutput}
@@ -207,16 +219,19 @@ const Bridge = () => {
             <SwapButton amount={amount} amountValidation={amountValidation} />
           )}
         </div>
-      </SwapContainer>
+      </Ibridge>
 
       {/* ICI */}
-      <TokenInputModal
-        modalKey={TokenInputModalKey.ModalTokenInput}
-        selectedToken={srcToken}
-        tokens={srcTokens}
-        showBalance={true}
-        onSelected={updateSrcToken}
-      />
+      <Modal isOpen={tokenInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
+        <TokenInputModal
+          modalKey={TokenInputModalKey.ModalTokenInput}
+          selectedToken={srcToken}
+          tokens={srcTokens}
+          showBalance={true}
+          onSelected={updateSrcToken}
+        />
+      </Modal>
+      <Modal isOpen={tokenOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
       <TokenInputModal
         modalKey={TokenInputModalKey.ModalTokenOutput}
         selectedToken={destToken}
@@ -224,17 +239,22 @@ const Bridge = () => {
         showBalance={false}
         onSelected={updateDestToken}
       />
-      <ChainInputModal
-        modalKey={ChainInputModalKey.ModalChainFrom}
-        onSelected={updateSrcChain}
-        chains={chains}
-      />
+      </Modal>
+      <Modal isOpen={chainInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
+        <ChainInputModal
+          modalKey={ChainInputModalKey.ModalChainFrom}
+          onSelected={updateSrcChain}
+          chains={chains}
+        />
+      </Modal>
+      <Modal isOpen={chainOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
       <ChainInputModal
         modalKey={ChainInputModalKey.ModalChainTo}
         onSelected={updateDestChain}
         chains={chains}
       />
-    </>
+      </Modal>
+    </PageWrapper>
   );
 };
 
