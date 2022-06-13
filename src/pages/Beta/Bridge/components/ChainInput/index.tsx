@@ -52,20 +52,27 @@ const ChainInput: FunctionComponent<ChainInputProps> = ({
     <div>
       <label
         htmlFor={modalKey}
-        style={{ display: 'flex', alignItems: "start", gap: 15 }}
       >
-        <div>
-          {selectedChain?.name || "Select Chain"}
-        </div>
         <div>
           {selectedChain && (
             <img
               src={selectedChain.icon}
-              width={30}
-              height={30}
+              width={20}
+              height={20}
               alt="chain icon"
             />
           )}
+        </div>
+        <div>
+          <span>
+            {selectedChain?.name || "Select Chain"}
+          </span>
+          <img
+            src={"/assets/svg/arrow-down.svg"}
+            height={20}
+            width={20}
+            alt=""
+          />
         </div>
       </label>
     </div>

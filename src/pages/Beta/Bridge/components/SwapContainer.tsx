@@ -7,10 +7,12 @@ const SwapContainer: FunctionComponent<SwapContainerProps> = ({ children }) => {
     <div>
       <div>{children}</div>
       <div>
+        <div>
           <img
             src={"/assets/svg/pattern.svg"}
             alt=""
           />
+        </div>
       </div>
     </div>
   );

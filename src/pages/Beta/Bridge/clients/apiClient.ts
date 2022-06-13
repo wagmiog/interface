@@ -6,7 +6,7 @@ export function fetchBalance(
   tokenAddresses: string[],
   chainId: number
 ) {
-  return fetch(window.origin + "/api/balance", {
+  return fetch("http://localhost:3000/#/beta/bridge/api/balance", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
