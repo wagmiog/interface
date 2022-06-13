@@ -20,9 +20,7 @@ import {
 import { Chain } from "../types/chain";
 import { Token } from "../types/token";
 import { useNetwork } from "wagmi";
-import ChainInputModal, {
-  ChainInputModalKey,
-} from "./ChainInput/ChainInputModal";
+import ChainInputModal from "./ChainInput/ChainInputModal";
 // import Header from "./Header";
 import TokenInputModal, {
   TokenInputModalKey,
@@ -134,12 +132,10 @@ const PageLayout: FunctionComponent = ({ children }) => {
         onSelected={updateDestToken}
       />
       <ChainInputModal
-        modalKey={ChainInputModalKey.ModalChainFrom}
         onSelected={updateSrcChain}
         chains={chains}
       />
       <ChainInputModal
-        modalKey={ChainInputModalKey.ModalChainTo}
         onSelected={updateDestChain}
         chains={chains}
       />
