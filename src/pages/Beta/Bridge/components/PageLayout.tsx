@@ -23,7 +23,7 @@ import { useNetwork } from "wagmi";
 import ChainInputModal, {
   ChainInputModalKey,
 } from "./ChainInput/ChainInputModal";
-import Header from "./Header";
+// import Header from "./Header";
 import TokenInputModal, {
   TokenInputModalKey,
 } from "./TokenInput/TokenInputModal";
@@ -114,7 +114,7 @@ const PageLayout: FunctionComponent = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
       <div>
-        <Header />
+        {/* <Header /> */}
         <div >
           {children}
         </div>
