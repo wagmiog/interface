@@ -23,6 +23,7 @@ cursor: pointer;
 interface ChainInputModalProps extends ComponentStyle {
   chains: Chain[];
   onSelected: (chain: Chain) => void;
+  wrappedOnDismiss: () => void;
 }
 
 export enum ChainInputModalKey {
@@ -33,10 +34,11 @@ export enum ChainInputModalKey {
 const ChainInputModal: FunctionComponent<ChainInputModalProps> = ({
   chains = [],
   onSelected,
+  wrappedOnDismiss,
 }) => {
   const options = chains.map((chain) => {
     return (
-      <ModalChain key={chain.id} onClick={() => onSelected(chain)}>
+      <ModalChain key={chain.id} onClick={() => {onSelected(chain)}} >
         <img
           src={chain.icon}
           width={32}
@@ -55,7 +57,7 @@ const ChainInputModal: FunctionComponent<ChainInputModalProps> = ({
         <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
           Select Chain
         </Text>
-        <div>
+        <div onClick={() => wrappedOnDismiss()}>
           {options}
         </div>
       </ModalCenter>

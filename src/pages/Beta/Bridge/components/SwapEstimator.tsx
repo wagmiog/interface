@@ -20,7 +20,8 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
 
   const render = useCallback(() => {
     if (error) {
-      return <span>{error}</span>;
+      // return <span>{error}</span>;
+      return <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">&nbsp;Error. Can't estimate amount</Text>
     } else if (destToken && estimatedAmount) {
       const textAmount = ethers.utils.formatUnits(
         estimatedAmount,
@@ -39,7 +40,7 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
         </span>
       );
     }
-    return (<span>Can not estimate</span>);
+    return ;
   }, [destToken, error, estimatedAmount, loading]);
   return (
     <div style={{display: 'flex'}}>

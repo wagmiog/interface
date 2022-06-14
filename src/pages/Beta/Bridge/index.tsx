@@ -132,7 +132,7 @@ const Bridge = () => {
     // eslint-disable-next-line
   }, [data.chain?.id, srcChain, switchNetwork]);
 
-  function wrappedOnDismiss() {
+  const wrappedOnDismiss = () => {
     setTokenInput(false)
     setChainInput(false)
     setChainOutput(false)
@@ -220,6 +220,7 @@ const Bridge = () => {
           tokens={srcTokens}
           showBalance={true}
           onSelected={updateSrcToken}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={tokenOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
@@ -227,18 +228,21 @@ const Bridge = () => {
           tokens={destTokens}
           showBalance={false}
           onSelected={updateDestToken}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={chainInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <ChainInputModal
           onSelected={updateSrcChain}
           chains={chains}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={chainOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <ChainInputModal
           onSelected={updateDestChain}
           chains={chains}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
     </PageWrapper>

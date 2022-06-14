@@ -26,6 +26,7 @@ interface TokenInputModalProps extends ComponentStyle {
   tokens: Token[];
   showBalance?: boolean;
   onSelected: (tokenBalance: Token) => void;
+  wrappedOnDismiss: () => void;
 }
 
 export enum TokenInputModalKey {
@@ -37,6 +38,7 @@ const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
   onSelected,
   showBalance = false,
   tokens = [],
+  wrappedOnDismiss,
 }) => {
   const options = tokens.map((token) => {
     return (
@@ -56,7 +58,7 @@ const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
         <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
           Select Token
         </Text>
-        <div>
+        <div onClick={() => wrappedOnDismiss()}>
           <ul>{options}</ul>
         </div>
       </div>
