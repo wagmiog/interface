@@ -16,6 +16,7 @@ import { Token } from "../types/token";
 import useSwapChecker, { SWAP_TYPE } from "../hooks/useSwapChecker";
 import { ChevronRightIcon } from "@heroicons/react/outline";
 import { toFixed } from "../utils/parser";
+import { Text } from '@pangolindex/components'
 
 const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
   const { swapSrcAmount, swapDestAmount, sendDestAmount, error } =
@@ -44,12 +45,12 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
 
   function createRoute(chain: Chain, token: Token, amount: string) {
     return (
-      <div key={token.address}>
+      <div key={token.address} style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
         <img src={chain.icon} width={24} height={24} alt={chain.name} />
-        <span>
+        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
           {toFixed(ethers.utils.formatUnits(amount, token.decimals))}
-        </span>
-        <span>{token.symbol}</span>
+        </Text>
+        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{token.symbol}</Text>
       </div>
     );
   }
@@ -94,14 +95,15 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
   }
 
   return (
-    <div>
+    <div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '10px'}}>
       {calculateRoutes()?.map((route, i) => {
         return (
-          <div key={i}>
+          <div key={i} style={{display: 'flex', alignItems: 'center'}}>
             {i > 0 && (
               <ChevronRightIcon
                 width={18}
                 height={18}
+                color="#FFF"
               />
             )}
             {route}
