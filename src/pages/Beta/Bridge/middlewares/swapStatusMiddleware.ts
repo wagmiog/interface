@@ -29,7 +29,7 @@ swapStatusStartListening({
   predicate: (action, currentState, _prevState) => {
     const destTokenAddress =
       currentState.swapInputs.destToken?.address?.toLowerCase();
-    const destCrosschainTokenAddress =
+    const destCrosschainTokenAddress: any =
       currentState.swapInputs.destChain?.crosschainToken?.toLowerCase();
     return (
       action.type === setSrcTx.type &&

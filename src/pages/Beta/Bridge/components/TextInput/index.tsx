@@ -1,6 +1,5 @@
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import { DebounceInput } from "react-debounce-input";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
 import { addAliasAddress, selectAliasAddresses } from "../../slices/dropInputSlice";
 import useAddressValidator from "../../hooks/useAddressValidator";
@@ -32,11 +31,10 @@ const TextInput: FunctionComponent<TextInputProps> = ({
   return (
     <div>
       <label>
-        <DebounceInput
+        <input
           type="text"
           placeholder="your_eth_alias.eth (+Enter)"
           value={aliasAddress}
-          debounceTimeout={500}
           onChange={(e) => setAliasAddress(e.target.value)}
           onKeyDown={onKeyDown}
         />

@@ -40,7 +40,6 @@ import { PageWrapper, Ibridge } from './styleds'
 import Modal from 'src/components/Modal'
 import ConnectButton from "./components/Header/ConnectButton";
 import { Text } from "@pangolindex/components"
-// import Header from "./components/Header";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();

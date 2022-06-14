@@ -47,6 +47,7 @@ const AddressInput: React.FC<AddressInputProps> = ({
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             updateDestinationAddress(e.target.value);
           }}
+          disabled
         />
       </div>
       <div>

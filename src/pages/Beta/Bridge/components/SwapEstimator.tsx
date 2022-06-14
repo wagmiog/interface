@@ -17,10 +17,12 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
     selectEstimateAmountState
   );
   const estimatedAmount = swapDestAmount || sendDestAmount;
+  console.log('swapDestAmount', swapDestAmount)
+  console.log('sendDestAmount', sendDestAmount)
+
 
   const render = useCallback(() => {
     if (error) {
-      console.log('rororoo')
       return <span>{error}</span>;
     } else if (destToken && estimatedAmount) {
       const textAmount = ethers.utils.formatUnits(
@@ -40,9 +42,8 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
         </span>
       );
     }
-    return ;
+    return (<span>Can not estimate</span>);
   }, [destToken, error, estimatedAmount, loading]);
-
   return (
     <div style={{display: 'flex'}}>
       <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">Estimated output:</Text>

@@ -170,7 +170,6 @@
     "graphql-request": "^4.2.0",
     "lightweight-charts": "^3.7.0",
     "lodash.isequal": "^4.5.0",
-    "react-debounce-input": "^3.2.5",
     "react-loading": "^2.0.3",
     "react-loading-skeleton": "^3.0.3",
     "react-portal": "^4.2.1",
