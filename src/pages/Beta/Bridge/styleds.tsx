@@ -15,7 +15,7 @@ export const PageWrapper = styled(Box)`
 
 export const Ibridge = styled(Box)`
   background-color: #111111;
-  min-width: 30%;
+  min-width: 35%;
   border-radius: 16px;
   padding: 20px;
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -75,8 +75,8 @@ export const StyledLogoMinus = styled.img<{ size: string; height: string }>`
 
 export const FullBox = styled(Box)`
   display: flex;
-  min-width: 70%;
-  max-width: 70%;
+  min-width: 65%;
+  max-width: 65%;
   min-height: 90vh;
   ${({ theme }) => theme.mediaWidth.upToMedium`
   min-width: 90%;
@@ -91,7 +91,6 @@ export const QuestionBox = styled(Box)`
   background-color: #111111;
   padding: 30px;
   cursor: pointer;
-  width: 70%;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   ${({ theme }) => theme.mediaWidth.upToMedium`

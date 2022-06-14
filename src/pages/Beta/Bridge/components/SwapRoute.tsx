@@ -47,10 +47,10 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
     return (
       <div key={token.address} style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
         <img src={chain.icon} width={24} height={24} alt={chain.name} />
-        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
+        <Text fontSize={10} fontWeight={500} lineHeight="42px" color="text1">
           {toFixed(ethers.utils.formatUnits(amount, token.decimals))}
         </Text>
-        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{token.symbol}</Text>
+        <Text fontSize={10} fontWeight={500} lineHeight="42px" color="text1">{token.symbol}</Text>
       </div>
     );
   }
@@ -101,8 +101,8 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
           <div key={i} style={{display: 'flex', alignItems: 'center'}}>
             {i > 0 && (
               <ChevronRightIcon
-                width={18}
-                height={18}
+                width={15}
+                height={15}
                 color="#FFF"
               />
             )}
