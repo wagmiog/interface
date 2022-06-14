@@ -91,10 +91,10 @@ export const QuestionBox = styled(Box)`
   background-color: #111111;
   padding: 30px;
   cursor: pointer;
+  width: 70%;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   ${({ theme }) => theme.mediaWidth.upToMedium`
-  min-width: 100%;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -104,7 +104,7 @@ export const QuestionBox = styled(Box)`
 export const TableContent = styled(Box)`
   background-color: #212427;
   padding: 20px;
-  width: 30%
+  width: 30%;
   cursor: pointer;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
