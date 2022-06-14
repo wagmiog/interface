@@ -17,9 +17,6 @@ const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({ amount }) => {
     selectEstimateAmountState
   );
   const estimatedAmount = swapDestAmount || sendDestAmount;
-  console.log('swapDestAmount', swapDestAmount)
-  console.log('sendDestAmount', sendDestAmount)
-
 
   const render = useCallback(() => {
     if (error) {

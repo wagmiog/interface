@@ -3,7 +3,7 @@ import { RootState } from "src/state";
 import { FeeRequest, FeeResponse } from "../types/api";
 import { selectCrosschainTokenAtSrcChain } from "./tokenSlice";
 
-export const transferFeeApi: any = createApi({
+export const transferFeeApi = createApi({
   reducerPath: "transferFee",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
   endpoints: (builder) => ({
@@ -26,7 +26,7 @@ export const transferFeeApi: any = createApi({
     }),
   }),
 });
-
+//@ts-ignore
 export const { useGetTransferFeeQuery } = transferFeeApi;
 
 export const fetchTransferFee = (state: RootState) => {

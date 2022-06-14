@@ -33,20 +33,21 @@ swapEstimatorStartListening({
     const state = listenerApi.getState();
     const { srcChain, srcToken, destChain, destToken, amount } =
       state.swapInputs;
-    if (!srcChain) return;
-    if (!amount) return;
-    if (!srcToken) return;
-    if (!destToken) return;
-    const crosschainTokenAtDestChain = selectCrosschainTokenAtDestChain(state);
-    const crosschainTokenAtSrcChain = selectCrosschainTokenAtSrcChain(state);
-    const feeResponse = await listenerApi.dispatch(fetchTransferFee(state));
-    const fee = feeResponse.data;
-    if (!fee) return;
-    if (!crosschainTokenAtDestChain || !crosschainTokenAtSrcChain) return;
-
-    listenerApi.dispatch(setLoading(true));
-    listenerApi.dispatch(setError(""));
-
+      if (!srcChain) return;
+      if (!amount) return;
+      if (!srcToken) return;
+      if (!destToken) return;
+      const crosschainTokenAtDestChain = selectCrosschainTokenAtDestChain(state);
+      const crosschainTokenAtSrcChain = selectCrosschainTokenAtSrcChain(state);
+      const feeResponse = await listenerApi.dispatch(fetchTransferFee(state));
+      // const fee = feeResponse.data;
+      const fee = 200000;
+      if (!fee) return;
+      if (!crosschainTokenAtDestChain || !crosschainTokenAtSrcChain) return;
+      listenerApi.dispatch(setLoading(true));
+      listenerApi.dispatch(setError(""));
+      
+      console.log('feeResponse', feeResponse)
     const isRequiredSwapAtSrc =
       srcToken.address !== crosschainTokenAtSrcChain?.address;
     const isRequiredSwapAtDest =

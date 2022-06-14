@@ -28,10 +28,6 @@ const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
   const crosschainTokenAtDestChain = useCrosschainToken(destChain);
   const amount = useAppSelector(selectAmount);
   const swapType = useSwapChecker();
-  console.log("swapSrcAmount: ", swapSrcAmount)
-  console.log("swapDestAmount: ", swapDestAmount)
-  console.log("sendDestAmount: ", sendDestAmount)
-  console.log("error: ", error)
 
   if (
     !srcToken ||

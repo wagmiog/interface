@@ -1,7 +1,7 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { save, load } from 'redux-localstorage-simple'
-// import { configureStore } from '@reduxjs/toolkit'
-// import { load } from 'redux-localstorage-simple'
+// import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+// import { save, load } from 'redux-localstorage-simple'
+import { configureStore } from '@reduxjs/toolkit'
+import { load } from 'redux-localstorage-simple'
 import application from './application/reducer'
 import { updateVersion } from './global/actions'
 import user from './user/reducer'
@@ -62,7 +62,20 @@ const store = configureStore({
     [transferFeeApi.reducerPath]: transferFeeApi.reducer,
     ...pangolinReducers
   },
-  middleware: [...getDefaultMiddleware().concat([
+  // middleware: [...getDefaultMiddleware().concat([
+  //   fetchBalanceMiddleware.middleware,
+  //   resetStateMiddleware.middleware,
+  //   swapStatusMiddleware.middleware,
+  //   srcChainMiddleware.middleware,
+  //   destChainMiddleware.middleware,
+  //   swapEstimatorMiddleware.middleware,
+  //   sendStatusMiddleware.middleware,
+  //   tokenApi.middleware,
+  //   transferFeeApi.middleware
+  // ]),
+  // save({ states: PERSISTED_KEYS })],
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware().concat([
     fetchBalanceMiddleware.middleware,
     resetStateMiddleware.middleware,
     swapStatusMiddleware.middleware,
@@ -71,9 +84,8 @@ const store = configureStore({
     swapEstimatorMiddleware.middleware,
     sendStatusMiddleware.middleware,
     tokenApi.middleware,
-    transferFeeApi.middleware
+    transferFeeApi.middleware,
   ]),
-  save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 

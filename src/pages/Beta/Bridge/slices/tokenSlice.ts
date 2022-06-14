@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Token } from "../types/token";
 import { RootState } from "src/state";
 
-export const tokenApi: any = createApi({
+export const tokenApi = createApi({
   reducerPath: "tokens",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
   endpoints: (builder) => ({
@@ -12,6 +12,7 @@ export const tokenApi: any = createApi({
   }),
 });
 
+//@ts-ignore
 export const { useGetTokensQuery } = tokenApi;
 
 export const selectSrcTokenAtDestChain = (state: RootState) =>
