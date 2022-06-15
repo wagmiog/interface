@@ -46,7 +46,6 @@ const ConnectButton: FunctionComponent<ComponentStyle> = ({ className }) => {
       return (
         <Button
         variant="primary"
-          // disabled={!injectedConnector.ready}
           onClick={() => connect(injectedConnector)}
         >
           Connect Wallet

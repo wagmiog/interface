@@ -42,12 +42,11 @@ const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
 }) => {
   const options = tokens.map((token) => {
     return (
-      <ModalChain>
+      <ModalChain key={token.address}>
         <TokenBalance
           onClick={onSelected}
           token={token}
           showBalance={showBalance}
-          key={token.address}
         />
       </ModalChain>
     );

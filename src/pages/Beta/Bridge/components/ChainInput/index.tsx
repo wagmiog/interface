@@ -10,22 +10,16 @@ import {
   setSrcChain,
 } from "../../slices/swapInputSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
-import { ChainInputModalKey } from "./ChainInputModal";
 import { Text, Button } from "@pangolindex/components"
 import { SelectParams } from "../../styleds"
 
 interface ChainInputProps extends ComponentStyle {
   selectedChain?: Chain;
-  label: string;
-  modalKey: ChainInputModalKey;
   isSrcChain?: boolean;
 }
 
 const ChainInput: FunctionComponent<ChainInputProps> = ({
-  className,
   selectedChain,
-  modalKey,
-  label,
   isSrcChain = false,
 }) => {
   const [{ data }] = useNetwork();

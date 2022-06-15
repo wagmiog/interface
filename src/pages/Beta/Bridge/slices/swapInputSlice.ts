@@ -22,7 +22,7 @@ const initialState: SwapInputState = {
   srcChain: chains[2],
   destChain: chains[1],
   swappable: true,
-  amount: "",
+  amount: "0",
 };
 
 export const swapInputSlice = createSlice({

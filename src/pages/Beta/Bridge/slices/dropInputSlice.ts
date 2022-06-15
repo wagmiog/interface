@@ -10,7 +10,7 @@ interface DropInputState {
 }
 
 const initialState: DropInputState = {
-  amount: "0",
+  amount: "",
   aliasAddresses: [],
   destChain: chains[0],
 };

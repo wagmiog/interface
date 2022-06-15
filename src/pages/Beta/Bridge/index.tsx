@@ -24,7 +24,7 @@ import ApproveButton from "./components/ApproveButton";
 import { resetSwapStatus } from "./slices/swapStatusSlice";
 import SwapEstimator from "./components/SwapEstimator";
 import TokenInputModal from "./components/TokenInput/TokenInputModal";
-import ChainInputModal, { ChainInputModalKey } from "./components/ChainInput/ChainInputModal";
+import ChainInputModal from "./components/ChainInput/ChainInputModal";
 import AddressInput from "./components/AddressInput";
 import SwapRoute from "./components/SwapRoute";
 import { chains } from "./constants/config";
@@ -152,8 +152,6 @@ const Bridge = () => {
               <div onClick={() => setChainInput(!chainInput)}>
                 <ChainInput
                   selectedChain={srcChain}
-                  label="From"
-                  modalKey={ChainInputModalKey.ModalChainFrom}
                   isSrcChain={true}
                 />
               </div>
@@ -181,8 +179,6 @@ const Bridge = () => {
               <div onClick={() => setChainOutput(!chainOutput)}>
                 <ChainInput
                   selectedChain={destChain}
-                  label="To"
-                  modalKey={ChainInputModalKey.ModalChainTo}
                 />
               </div>
               <div onClick={() => setTokenOutput(!tokenOutput)}>

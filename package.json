@@ -173,7 +173,6 @@
     "react-loading": "^2.0.3",
     "react-loading-skeleton": "^3.0.3",
     "react-portal": "^4.2.1",
-    "react-rewards": "^2.0.3",
     "uuid": "^8.3.2",
     "wagmi": "^0.2.24"
   }
