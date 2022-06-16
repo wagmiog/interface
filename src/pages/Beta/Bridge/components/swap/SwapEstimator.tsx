@@ -44,8 +44,8 @@ export const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({
   }, [destToken, error, estimatedAmount, loading]);
 
   return (
-    <div>
-      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">Estimated output:</Text>
+    <div style={{display: 'flex'}}>
+      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">Estimated output:&nbsp;</Text>
       <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{render()}</Text>
     </div>
   );

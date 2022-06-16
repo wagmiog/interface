@@ -22,8 +22,9 @@ export const TokenBalance: FunctionComponent<TokenBalanceProps> = ({
 }) => {
   const srcChain = useAppSelector(selectSrcChain);
   const balances = useAppSelector((state) =>
-    selectBalancesByChainId(state, srcChain?.id)
+  selectBalancesByChainId(state, srcChain?.id)
   );
+  console.log("lol", balances)
 
   function renderBalance() {
     let content = null;

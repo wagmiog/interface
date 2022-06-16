@@ -1,7 +1,6 @@
 import { ComponentStyle } from "../../types/component";
 import React, { ChangeEvent } from "react";
 import { Validation } from "../../hooks/useAmountValidator";
-// import { DebounceInput } from "react-debounce-input";
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import {
