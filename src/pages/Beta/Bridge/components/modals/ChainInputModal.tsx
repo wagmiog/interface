@@ -24,8 +24,8 @@ export const ChainInputModal: FunctionComponent<ChainInputModalProps> = ({
         <label
           htmlFor={modalKey}
         >
-          <div className="flex flex-col items-end flex-1">
-            <span className="ml-2">{chain.name}</span>
+          <div>
+            <span>{chain.name}</span>
           </div>
         </label>
       </li>
@@ -33,25 +33,23 @@ export const ChainInputModal: FunctionComponent<ChainInputModalProps> = ({
   });
   return (
     <>
-      <input type="checkbox" id={modalKey} className="modal-toggle" />
+      <input type="checkbox" id={modalKey}/>
       <label
-        className="cursor-pointer select-none modal modal-bottom sm:modal-middle"
         htmlFor={modalKey}
       >
         <label
-          className="flex flex-col modal-box bg-gradient-to-b to-[#191E31] from-[#192431]"
           htmlFor=""
         >
-          <div className="z-50">
-            <h1 className="text-3xl font-thin text-center text-white">
+          <div>
+            <h1>
               Select Chain
             </h1>
-            <div className="bg-[#181A25] rounded-xl text-white my-8">
-              <ul className="menu min-h-[400px]">{options}</ul>
+            <div>
+              <ul>{options}</ul>
             </div>
           </div>
-          <div className="absolute top-0 left-0 z-0 w-full h-full">
-            <div className="relative w-full h-full">
+          <div>
+            <div>
             </div>
           </div>
         </label>

@@ -18,7 +18,6 @@ interface AmountInputProps extends ComponentStyle {
 }
 
 export const AmountInput: FunctionComponent<AmountInputProps> = ({
-  className,
   selectedToken,
   validState,
 }) => {
@@ -55,15 +54,14 @@ export const AmountInput: FunctionComponent<AmountInputProps> = ({
 
   return (
     <div>
-      <label className="text-[#93BEFF] font-light text-sm">
+      <label>
         <span>Balance</span>
         {renderTokenBalance()}
       </label>
       <div>
-        <div className="px-4 flex items-center justify-end border border-[#282B3D] w-full rounded-md mt-2">
+        <div>
           <DebounceInput
             type={"number"}
-            className="w-full h-full px-4 py-3 font-medium text-right text-white bg-transparent outline-none text-md placeholder:text-gray-500 placeholder:font-normal"
             value={amount}
             onWheel={(e: React.WheelEvent<HTMLInputElement>) =>
               e.currentTarget.blur()
@@ -74,9 +72,9 @@ export const AmountInput: FunctionComponent<AmountInputProps> = ({
           {selectedToken && <MaxButton selectedToken={selectedToken} />}
         </div>
       </div>
-      <div className="h-5 mt-3 text-xs font-light text-right">
+      <div>
         {validState.error && (
-          <span className="text-red-100">{validState?.error}</span>
+          <span>{validState?.error}</span>
         )}
       </div>
     </div>

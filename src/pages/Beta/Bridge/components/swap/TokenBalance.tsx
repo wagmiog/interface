@@ -18,7 +18,6 @@ interface TokenBalanceProps extends ComponentStyle {
 
 export const TokenBalance: FunctionComponent<TokenBalanceProps> = ({
   token,
-  className,
   modalKey,
   onClick,
   showBalance = true,
@@ -44,20 +43,20 @@ export const TokenBalance: FunctionComponent<TokenBalanceProps> = ({
     }
 
     return (
-      <span className="flex-1 text-right justify-self-end">{content}</span>
+      <span>{content}</span>
     );
   }
 
   return (
-    <div className={`${className}`}>
+    <div>
       <li key={token.address} onClick={() => onClick(token)}>
         <label
           htmlFor={modalKey}
         >
-          <div className="flex flex-col items-end flex-1">
-            <div className="flex">
+          <div>
+            <div>
               {renderBalance()}
-              <span className="w-12 text-right">{token.symbol}</span>
+              <span>{token.symbol}</span>
             </div>
           </div>
         </label>

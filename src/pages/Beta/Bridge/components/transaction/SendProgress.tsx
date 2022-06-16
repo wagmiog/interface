@@ -39,13 +39,12 @@ export const SendProgress: FunctionComponent<SendProgressProps> = ({
   }, [currentStep, destChain, srcChain, step, txHash]);
 
   return (
-    <div className="flex items-center">
+    <div>
       <span>
         {title}
       </span>
       {txHash && currentStep > step && srcChain && destChain && (
         <a
-          className="link link-accent"
           target="_blank"
           rel="noreferrer"
           href={getTxLink(step === 0 ? srcChain.id : destChain.id, txHash)}

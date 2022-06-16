@@ -8,6 +8,7 @@ import {
   ApproveButton,
   ChainInput,
   SwapContainer,
+  SwapEstimator,
 } from "./components/swap";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppSelector";
 import {
@@ -23,9 +24,8 @@ import {
 } from "./slices/swapInputSlice";
 import useAmountValidator from "./hooks/useAmountValidator";
 import useApproveChecker from "./hooks/useApproveChecker";
-import { useNetwork } from "wagmi";
+import { useNetwork, useConnect } from "wagmi";
 import { resetSwapStatus } from "./slices/swapStatusSlice";
-import { SwapEstimator } from "./components/swap";
 import { TokenInputModalKey, ChainInputModalKey } from "./components/modals";
 import { SwapRoute } from "./components/utils";
 import { useNetworkSwitcher } from "./hooks";
@@ -36,6 +36,7 @@ import useTokens from "./hooks/useTokens";
 import { SquidChain } from "./types/chain";
 import { TokenInputModal, ChainInputModal } from "./components/modals"
 import { chains } from "./config/constants";
+import { ConnectButton } from "./components/common";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -46,6 +47,8 @@ const Bridge = () => {
   const destToken = useAppSelector(selectDestToken);
   const isRequiredApproval = useApproveChecker();
   const amountValidation = useAmountValidator(amount, srcToken);
+  const { isConnected } = useConnect();
+
 
 
   const [tokenInput, setTokenInput] = useState<boolean>(false)
@@ -113,14 +116,14 @@ const Bridge = () => {
       <QuestionAnswer />
       <Ibridge>
         <SwapContainer>
-          <h1 className="text-3xl font-thin text-center text-white">
+          <h1>
             Cross Chain Swap
           </h1>
-          <div className="mt-5">
-            <div className="mb-2 font-light text-white">From</div>
+          <div>
+            <div>From</div>
             <InputContainer>
-              <div className="flex justify-center">
-                <div className="grid grid-cols-2 gap-5">
+              <div>
+                <div>
                   <div onClick={() => setChainInput(!chainInput)}>
                     <ChainInput
                       selectedChain={srcChain}
@@ -132,17 +135,15 @@ const Bridge = () => {
                   <div onClick={() => setTokenInput(!tokenInput)}>
                     <TokenInput
                       label="Send"
-                      className="mt-2"
                       modalKey={TokenInputModalKey.ModalTokenInput}
                       selectedToken={srcToken}
                     />
                   </div>
                 </div>
               </div>
-              <div className="mt-5">
+              <div>
                 <div>
                   <AmountInput
-                    className="mt-4"
                     selectedToken={srcToken}
                     validState={amountValidation}
                   />
@@ -151,11 +152,11 @@ const Bridge = () => {
             </InputContainer>
           </div>
 
-          <div className="mt-5">
-            <div className="mb-2 font-light text-white">To</div>
+          <div>
+            <div>To</div>
             <InputContainer>
-              <div className="flex justify-center">
-                <div className="grid grid-cols-2 gap-5">
+              <div>
+                <div>
                   <div onClick={() => setChainOutput(!chainOutput)}>
                     <ChainInput
                       selectedChain={destChain}
@@ -166,7 +167,6 @@ const Bridge = () => {
                   <div onClick={() => setTokenOutput(!tokenOutput)}>
                     <TokenInput
                       label="Receive"
-                      className="mt-2"
                       modalKey={TokenInputModalKey.ModalTokenOutput}
                       selectedToken={destToken}
                     />
@@ -174,23 +174,29 @@ const Bridge = () => {
                 </div>
               </div>
 
-              <div className="mt-5">
+              <div>
                 <AddressInput />
               </div>
             </InputContainer>
           </div>
-          <div className="mt-10">
+          <div>
             <InputContainer>
               <SwapEstimator amount={amount} />
             </InputContainer>
             <SwapRoute />
           </div>
-          <div className="flex flex-col mt-8">
-            {isRequiredApproval ? (
-              <ApproveButton />
-            ) : (
-              <SwapButton amount={amount} amountValidation={amountValidation} />
-            )}
+          <div>
+          {!isConnected ? (
+            <ConnectButton />
+          ) : (
+            <>
+              {isRequiredApproval ? (
+                <ApproveButton />
+              ) : (
+                <SwapButton amount={amount} amountValidation={amountValidation} />
+              )}
+            </>
+          )}
           </div>
         </SwapContainer>
       </Ibridge>

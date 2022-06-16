@@ -64,14 +64,13 @@ export const SwapProgress: FunctionComponent<SwapProgressProps> = ({
   const showSwapFailedUI = swapFailed && step === 2;
 
   return (
-    <div className="flex flex-col items-start">
-      <div className="text-sm font-thin text-blue-300">Step {step + 1}</div>
-      <div className="flex items-center">
+    <div>
+      <div>Step {step + 1}</div>
+      <div>
         {showSwapFailedUI && (
           <ExclamationCircleIcon
             width={24}
             height={24}
-            className="mr-2 text-yellow-600"
           />
         )}
 
@@ -80,7 +79,6 @@ export const SwapProgress: FunctionComponent<SwapProgressProps> = ({
         </span>
         {txHash && currentStep > step && srcChain && destChain && (
           <a
-            className="link link-accent"
             target="_blank"
             rel="noreferrer"
             href={getTxLink(step === 0 ? srcChain.id : destChain.id, txHash)}
@@ -98,7 +96,7 @@ export const SwapProgress: FunctionComponent<SwapProgressProps> = ({
         )}
       </div>
       {showSwapFailedUI && swapRefundAddress && (
-        <span className="text-sm text-yellow-600">
+        <span>
           Refunded to {shortenAddress(swapRefundAddress)}
         </span>
       )}

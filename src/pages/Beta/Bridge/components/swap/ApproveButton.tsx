@@ -17,9 +17,7 @@ import { SquidChain } from "../../types/chain";
 
 interface ApproveButtonProps extends ComponentStyle {}
 
-export const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
-  className,
-}) => {
+export const ApproveButton: FunctionComponent<ApproveButtonProps> = () => {
   const srcChain = useAppSelector(selectSrcChain) as SquidChain;
   const srcToken = useAppSelector(selectSrcToken) as Token;
   const dispatch = useAppDispatch();
@@ -83,9 +81,6 @@ export const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
   return (
     <button
       disabled={approveDisable || loading || isLoading}
-      className={`btn text-white bg-gradient-to-r from-[#760FC8] to-[#7522DE] disabled:bg-opacity-30 transition-all ease-in ${
-        (loading || isLoading) && "loading"
-      } ${className}`}
       onClick={approve}
     >
       Approve

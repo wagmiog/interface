@@ -70,9 +70,9 @@ export const PageLayout: FunctionComponent = ({ children }) => {
 
   return (
     <>
-      <div className="flex flex-col w-screen h-screen overflow-x-hidden bg-gray-200">
+      <div>
         <Header />
-        <div className="bg-gradient-to-b from-[#0C213A] to-[#03070D] flex-1 items-center justify-center flex flex-col px-4">
+        <div>
           {children}
         </div>
       </div>

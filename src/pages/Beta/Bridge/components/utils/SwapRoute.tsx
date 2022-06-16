@@ -17,7 +17,7 @@ import useSwapChecker, { SWAP_TYPE } from "../../hooks/useSwapChecker";
 import { ChevronRightIcon } from "@heroicons/react/outline";
 import { toFixed } from "../../utils/parser";
 
-export const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
+export const SwapRoute: FunctionComponent<ComponentStyle> = () => {
   const { swapSrcAmount, swapDestAmount, sendDestAmount, error } =
     useAppSelector(selectEstimateAmountState);
   const srcChain = useAppSelector(selectSrcChain);
@@ -61,8 +61,8 @@ export const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
 
   function createRoute(chain: SquidChain, token: Token, amount: string) {
     return (
-      <div className="flex items-center" key={token.address}>
-        <span className="mx-2">
+      <div key={token.address}>
+        <span>
           {toFixed(ethers.utils.formatUnits(amount, token.decimals))}
         </span>
         <span>{token.symbol}</span>
@@ -110,15 +110,12 @@ export const SwapRoute: FunctionComponent<ComponentStyle> = ({ className }) => {
   }
 
   return (
-    <div
-      className={`flex flex-wrap justify-center mt-4 items-center px-2 text-sm ${className}`}
-    >
+    <div>
       {calculateRoutes()?.map((route, i) => {
         return (
-          <div className="flex items-center mt-2" key={i}>
+          <div key={i}>
             {i > 0 && (
               <ChevronRightIcon
-                className="mx-1 text-gray-300"
                 width={18}
                 height={18}
               />

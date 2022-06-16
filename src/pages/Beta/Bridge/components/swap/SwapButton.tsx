@@ -1,6 +1,5 @@
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import cn from "classnames";
 import { useAppDispatch } from "../../hooks/useAppSelector";
 import { Validation } from "../../hooks/useAmountValidator";
 import { setSrcTx } from "../../slices/swapStatusSlice";
@@ -14,14 +13,13 @@ interface SwapButtonProps extends ComponentStyle {
 }
 
 export const SwapButton: FunctionComponent<SwapButtonProps> = ({
-  className,
   amount,
   amountValidation,
 }) => {
   const { isConnected } = useConnect();
   const swapType = useSwapChecker();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const { swapOnlyDest, swapSrcAndDest, swapOnlySrc, sendToken } = useSwap();
 
   const selectSwapFunction = useCallback(() => {
@@ -61,22 +59,14 @@ export const SwapButton: FunctionComponent<SwapButtonProps> = ({
 
   if (!isConnected) {
     return (
-      <button disabled className={"btn"}>
+      <button disabled>
         CONNECT YOUR WALLET TO SWAP
       </button>
     );
   }
 
   return (
-    <button
-      className={cn(
-        `btn text-white bg-gradient-to-r from-[#760FC8] to-[#7522DE] disabled:bg-opacity-30 transition-all ease-in ${className}`,
-        {
-          loading: loading,
-        }
-      )}
-      onClick={swap}
-    >
+    <button onClick={swap}>
       Swap
     </button>
   );

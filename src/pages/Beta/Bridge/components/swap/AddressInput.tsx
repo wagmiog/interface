@@ -15,7 +15,6 @@ interface AddressInputProps extends ComponentStyle {
 }
 
 export const AddressInput: React.FC<AddressInputProps> = ({
-  className,
   validState,
 }) => {
   const dispatch = useDispatch();
@@ -27,15 +26,14 @@ export const AddressInput: React.FC<AddressInputProps> = ({
       dispatch(setRecipientAddress(address));
     }
   };
-
+  console.log("receipientAddress", receipientAddress)
   return (
     <div>
-      <label className={`text-[#93BEFF] font-light text-sm ${className}`}>
+      <label>
         Destination Address
       </label>
-      <div className="border border-[#282B3D] w-full rounded-md mt-2">
+      <div>
         <DebounceInput
-          className="w-full h-full px-4 py-3 text-sm font-medium text-right text-white bg-transparent outline-none placeholder:text-gray-500 placeholder:font-normal"
           placeholder={receipientAddress}
           debounceTimeout={300}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -43,9 +41,9 @@ export const AddressInput: React.FC<AddressInputProps> = ({
           }}
         />
       </div>
-      <div className="mt-3 text-xs font-light text-right">
+      <div>
         {validState?.error && (
-          <span className="text-red-100">{validState?.error}</span>
+          <span>{validState?.error}</span>
         )}
       </div>
     </div>

@@ -17,7 +17,6 @@ export const LoadingIndicator: FunctionComponent<LoadingIndicatorProps> = ({
 }) => {
   return (
     <SpinnerDotted
-      className="block"
       size={30}
       thickness={150}
       speed={100}

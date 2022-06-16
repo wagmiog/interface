@@ -6,10 +6,10 @@ export const Header = () => {
   const { data: account } = useAccount();
   const { isConnected } = useConnect();
   return (
-    <div className="fixed z-50 w-full border-b border-[#192431] backdrop-blur-sm bg-black/10">
-      <div className="h-20 max-w-screen-xl mx-auto navbar">
+    <div>
+      <div>
 
-        <div className="flex items-center ml-auto gap-x-4">
+        <div>
           {isConnected && account?.address && <NativeBalance />}
           {isConnected && (
             <></>

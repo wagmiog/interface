@@ -18,14 +18,14 @@ export const TokenInput: FunctionComponent<TokenInputProps> = ({
       htmlFor={modalKey}
       style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
     >
-      <div className="flex items-center justify-between w-full cursor-pointer">
-        <div className="flex items-center">
+      <div>
+        <div>
           {selectedToken && (
             <></>
           )}
         </div>
-        <div className="flex items-center ml-2">
-          <span className="uppercase">
+        <div>
+          <span>
             {selectedToken?.symbol || "Select token"}
           </span>
         </div>
