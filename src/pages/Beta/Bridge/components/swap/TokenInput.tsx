@@ -1,35 +1,35 @@
 import { ComponentStyle } from "../../types/component";
 import { Token } from "../../types/token";
 import React, { FunctionComponent } from "react";
-import { TokenInputModalKey } from "../modals";
+import { Text, Button } from "@pangolindex/components"
+import { SelectParams } from "../../styleds"
 
 interface TokenInputProps extends ComponentStyle {
-  modalKey: TokenInputModalKey;
   selectedToken?: Token;
-  label: string;
 }
 
 export const TokenInput: FunctionComponent<TokenInputProps> = ({
-  modalKey,
   selectedToken,
 }) => {
   return (
-    <label
-      htmlFor={modalKey}
-      style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-    >
-      <div>
+    <Button variant="outline">
+      <SelectParams>
         <div>
           {selectedToken && (
-            <></>
+            <img
+              src={selectedToken.logoURI || "/ic-unknown.svg"}
+              width={20}
+              height={20}
+              alt="chain icon"
+            />
           )}
         </div>
         <div>
-          <span>
+          <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
             {selectedToken?.symbol || "Select token"}
-          </span>
+          </Text>
         </div>
-      </div>
-    </label>
+      </SelectParams>
+    </Button>
   );
 };

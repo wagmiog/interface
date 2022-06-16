@@ -27,12 +27,12 @@ import { tokenApi } from "src/pages/Beta/Bridge/slices/tokenSlice";
 import swapEstimatorReducer from "src/pages/Beta/Bridge/slices/swapEstimatorSlice";
 import { transferFeeApi } from "src/pages/Beta/Bridge/slices/transferFeeSlice";
 import { fetchBalanceMiddleware } from "src/pages/Beta/Bridge/middlewares/fetchBalanceMiddleware";
-import { resetStateMiddleware } from "src/pages/Beta/Bridge/middlewares/resetStateMiddleware";
 import { swapStatusMiddleware } from "src/pages/Beta/Bridge/middlewares/swapStatusMiddleware";
 import { destChainMiddleware } from "src/pages/Beta/Bridge/middlewares/destChainMiddleware";
 import { swapEstimatorMiddleware } from "src/pages/Beta/Bridge/middlewares/swapEstimatorMiddleware";
 import { srcChainMiddleware } from "src/pages/Beta/Bridge/middlewares/srcChainMiddleware";
 import { sendStatusMiddleware } from "src/pages/Beta/Bridge/middlewares/sendStatusMiddleware";
+import { resetBalanceStateMiddleware } from "src/pages/Beta/Bridge/middlewares/resetBalanceMiddleware";
 
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'watchlists', 'stake', ...PANGOLIN_PERSISTED_KEYS]
@@ -62,22 +62,10 @@ const store = configureStore({
     [transferFeeApi.reducerPath]: transferFeeApi.reducer,
     ...pangolinReducers
   },
-  // middleware: [...getDefaultMiddleware().concat([
-  //   fetchBalanceMiddleware.middleware,
-  //   resetStateMiddleware.middleware,
-  //   swapStatusMiddleware.middleware,
-  //   srcChainMiddleware.middleware,
-  //   destChainMiddleware.middleware,
-  //   swapEstimatorMiddleware.middleware,
-  //   sendStatusMiddleware.middleware,
-  //   tokenApi.middleware,
-  //   transferFeeApi.middleware
-  // ]),
-  // save({ states: PERSISTED_KEYS })],
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware().concat([
     fetchBalanceMiddleware.middleware,
-    resetStateMiddleware.middleware,
+    resetBalanceStateMiddleware.middleware,
     swapStatusMiddleware.middleware,
     srcChainMiddleware.middleware,
     destChainMiddleware.middleware,

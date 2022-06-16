@@ -6,7 +6,7 @@ import { useConnect } from "wagmi";
 
 
 export const ConnectButton: FunctionComponent<ComponentStyle> = () => {
-
+  
   const { connect, connectors } = useConnect();
 
   function handleOnMetamaskSwitch() {

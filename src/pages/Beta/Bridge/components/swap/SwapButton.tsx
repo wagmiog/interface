@@ -6,6 +6,7 @@ import { setSrcTx } from "../../slices/swapStatusSlice";
 import useSwapChecker, { SWAP_TYPE } from "../../hooks/useSwapChecker";
 import useSwap from "../../hooks/useSwap";
 import { useConnect } from "wagmi";
+import { Button } from '@pangolindex/components'
 
 interface SwapButtonProps extends ComponentStyle {
   amount: string;
@@ -32,7 +33,7 @@ export const SwapButton: FunctionComponent<SwapButtonProps> = ({
     } else if (swapType === SWAP_TYPE.SEND) {
       return () => sendToken();
     }
-    return ;
+    return;
   }, [sendToken, swapOnlyDest, swapOnlySrc, swapSrcAndDest, swapType]);
 
   const swap = useCallback(async () => {
@@ -66,8 +67,11 @@ export const SwapButton: FunctionComponent<SwapButtonProps> = ({
   }
 
   return (
-    <button onClick={swap}>
+    <Button
+      variant="primary"
+      onClick={swap}
+    >
       Swap
-    </button>
+    </Button>
   );
 };

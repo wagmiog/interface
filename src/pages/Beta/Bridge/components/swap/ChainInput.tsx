@@ -2,6 +2,8 @@ import { SquidChain } from "../../types/chain";
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent } from "react";
 import { ChainInputModalKey } from "../../components/modals";
+import { Text, Button } from "@pangolindex/components"
+import { SelectParams } from "../../styleds"
 
 interface ChainInputProps extends ComponentStyle {
   selectedChain?: SquidChain;
@@ -15,20 +17,22 @@ export const ChainInput: FunctionComponent<ChainInputProps> = ({
   modalKey,
 }) => {
   return (
-    <label
-      htmlFor={modalKey}>
-      <div>
+    <Button variant="plain">
+      <SelectParams>
         <div>
           {selectedChain && (
-            <></>
+            <img
+              src={selectedChain.icon}
+              width={20}
+              height={20}
+              alt="chain icon"
+            />
           )}
         </div>
-        <div>
-          <span>
-            {selectedChain?.name || "Select Chain"}
-          </span>
-        </div>
-      </div>
-    </label>
+        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
+          {selectedChain?.name || "Select Chain"}
+        </Text>
+      </SelectParams>
+    </Button>
   );
 };

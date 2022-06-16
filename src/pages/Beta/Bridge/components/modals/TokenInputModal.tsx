@@ -1,15 +1,33 @@
 import { ComponentStyle } from "../../types/component";
 import { Token } from "../../types/token";
 import React, { FunctionComponent } from "react";
-
 import { TokenBalance } from "../swap";
+import styled from 'styled-components'
+import { Text } from "@pangolindex/components"
+
+const ModalCenter = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+`
+
+const ModalChain = styled.div`
+display: flex;
+gap: 20px;
+padding-top: 10px;
+cursor: pointer;
+`
 
 interface TokenInputModalProps extends ComponentStyle {
   tokens: Token[];
   selectedToken?: Token;
   showBalance?: boolean;
-  modalKey: TokenInputModalKey;
   onSelected: (tokenBalance: Token) => void;
+  wrappedOnDismiss: () => void;
+
 }
 
 export enum TokenInputModalKey {
@@ -18,48 +36,35 @@ export enum TokenInputModalKey {
 }
 
 export const TokenInputModal: FunctionComponent<TokenInputModalProps> = ({
-  modalKey,
   onSelected,
   selectedToken,
   showBalance = false,
   tokens = [],
+  wrappedOnDismiss
 }) => {
   const options = tokens.map((token) => {
     return (
-      <TokenBalance
-        modalKey={modalKey}
-        onClick={onSelected}
-        token={token}
-        showBalance={showBalance}
-        active={token.address === selectedToken?.address}
-        key={token.address}
-      />
+      <ModalChain key={token.address}>
+        <TokenBalance
+          onClick={onSelected}
+          token={token}
+          showBalance={showBalance}
+          active={token.address === selectedToken?.address}
+          key={token.address}
+        />
+      </ModalChain>
     );
   });
   return (
-    <>
-      <input type="checkbox" id={modalKey} />
-      <label
-        htmlFor={modalKey}
-      >
-        <label
-          htmlFor=""
-        >
-          <div>
-            <h1>
-              Select Token
-            </h1>
-            <div>
-              <ul>{options}</ul>
-            </div>
-          </div>
-
-          <div>
-            <div>
-            </div>
-          </div>
-        </label>
-      </label>
-    </>
+    <ModalCenter>
+      <div>
+        <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
+          Select Token
+        </Text>
+        <div onClick={() => wrappedOnDismiss()}>
+          <ul>{options}</ul>
+        </div>
+      </div>
+    </ModalCenter>
   );
 };

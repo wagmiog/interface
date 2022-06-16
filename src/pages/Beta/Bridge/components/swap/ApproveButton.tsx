@@ -14,6 +14,7 @@ import erc20Abi from "../../abi/erc20.json";
 import useSpenderAddress from "../../hooks/useSpenderAddress";
 import { Token } from "../../types/token";
 import { SquidChain } from "../../types/chain";
+import { Button } from "@pangolindex/components"
 
 interface ApproveButtonProps extends ComponentStyle {}
 
@@ -79,11 +80,12 @@ export const ApproveButton: FunctionComponent<ApproveButtonProps> = () => {
   }, [contractWrite, spenderAddress]);
 
   return (
-    <button
-      disabled={approveDisable || loading || isLoading}
+    <Button
+      variant="primary"
+      isDisabled={approveDisable || loading || isLoading}
       onClick={approve}
     >
       Approve
-    </button>
+    </Button>
   );
 };

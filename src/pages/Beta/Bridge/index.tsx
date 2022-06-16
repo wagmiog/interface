@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { InputContainer } from "./components/swap";
 import {
   SwapButton,
   AmountInput,
@@ -26,7 +25,7 @@ import useAmountValidator from "./hooks/useAmountValidator";
 import useApproveChecker from "./hooks/useApproveChecker";
 import { useNetwork, useConnect } from "wagmi";
 import { resetSwapStatus } from "./slices/swapStatusSlice";
-import { TokenInputModalKey, ChainInputModalKey } from "./components/modals";
+import { ChainInputModalKey } from "./components/modals";
 import { SwapRoute } from "./components/utils";
 import { useNetworkSwitcher } from "./hooks";
 import { PageWrapper, Ibridge } from './styleds'
@@ -37,6 +36,7 @@ import { SquidChain } from "./types/chain";
 import { TokenInputModal, ChainInputModal } from "./components/modals"
 import { chains } from "./config/constants";
 import { ConnectButton } from "./components/common";
+import { Text } from "@pangolindex/components"
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -116,12 +116,11 @@ const Bridge = () => {
       <QuestionAnswer />
       <Ibridge>
         <SwapContainer>
-          <h1>
+          <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
             Cross Chain Swap
-          </h1>
+          </Text>
           <div>
-            <div>From</div>
-            <InputContainer>
+            <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">From</Text>
               <div>
                 <div>
                   <div onClick={() => setChainInput(!chainInput)}>
@@ -134,8 +133,6 @@ const Bridge = () => {
                   </div>
                   <div onClick={() => setTokenInput(!tokenInput)}>
                     <TokenInput
-                      label="Send"
-                      modalKey={TokenInputModalKey.ModalTokenInput}
                       selectedToken={srcToken}
                     />
                   </div>
@@ -149,12 +146,10 @@ const Bridge = () => {
                   />
                 </div>
               </div>
-            </InputContainer>
           </div>
 
           <div>
-            <div>To</div>
-            <InputContainer>
+            <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1" >To</Text>
               <div>
                 <div>
                   <div onClick={() => setChainOutput(!chainOutput)}>
@@ -166,8 +161,6 @@ const Bridge = () => {
                   </div>
                   <div onClick={() => setTokenOutput(!tokenOutput)}>
                     <TokenInput
-                      label="Receive"
-                      modalKey={TokenInputModalKey.ModalTokenOutput}
                       selectedToken={destToken}
                     />
                   </div>
@@ -177,12 +170,9 @@ const Bridge = () => {
               <div>
                 <AddressInput />
               </div>
-            </InputContainer>
           </div>
           <div>
-            <InputContainer>
-              <SwapEstimator amount={amount} />
-            </InputContainer>
+            <SwapEstimator amount={amount} />
             <SwapRoute />
           </div>
           <div>
@@ -202,34 +192,34 @@ const Bridge = () => {
       </Ibridge>
       <Modal isOpen={tokenInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <TokenInputModal
-          modalKey={TokenInputModalKey.ModalTokenInput}
           selectedToken={srcToken}
           tokens={srcTokens}
           showBalance={true}
           onSelected={(token) => dispatch(setSrcToken(token))}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={tokenOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <TokenInputModal
-          modalKey={TokenInputModalKey.ModalTokenOutput}
           selectedToken={destToken}
           tokens={destTokens}
           showBalance={false}
           onSelected={(token) => dispatch(setDestToken(token))}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={chainInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <ChainInputModal
-          modalKey={ChainInputModalKey.ModalChainFrom}
           onSelected={updateSrcChain}
           chains={chains}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
       <Modal isOpen={chainOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
         <ChainInputModal
-          modalKey={ChainInputModalKey.ModalChainTo}
           onSelected={updateDestChain}
           chains={chains}
+          wrappedOnDismiss={wrappedOnDismiss}
         />
       </Modal>
     </PageWrapper>

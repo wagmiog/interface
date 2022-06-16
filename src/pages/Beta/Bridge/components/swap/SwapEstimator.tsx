@@ -5,6 +5,7 @@ import { selectEstimateAmountState } from "../../slices/swapEstimatorSlice";
 import { selectDestToken } from "../../slices/swapInputSlice";
 import { ComponentStyle } from "../../types/component";
 import { LoadingIndicator } from "../../components/common";
+import { Text } from "@pangolindex/components"
 
 interface SwapEstimatorProps extends ComponentStyle {
   amount: string;
@@ -45,8 +46,8 @@ export const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({
 
   return (
     <div>
-      <div>Estimated output:</div>
-      <div>{render()}</div>
+      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">Estimated output:</Text>
+      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{render()}</Text>
     </div>
   );
 };

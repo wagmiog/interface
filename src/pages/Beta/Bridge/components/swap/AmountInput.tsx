@@ -2,7 +2,6 @@ import { ComponentStyle } from "../../types/component";
 import { Token } from "../../types/token";
 import React, { FunctionComponent } from "react";
 import { Validation } from "../../hooks/useAmountValidator";
-import { DebounceInput } from "react-debounce-input";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
 import { selectSrcChain, selectSrcToken } from "../../slices/swapInputSlice";
 import { selectBalancesByChainId } from "../../slices/balanceSlice";
@@ -11,6 +10,19 @@ import { selectAmount, setAmount } from "../../slices/swapInputSlice";
 import { MaxButton } from "../../components/common";
 import { useConnect } from "wagmi";
 import { ethers } from "ethers";
+import { SelectParams } from "../../styleds"
+import styled from 'styled-components';
+import { Text } from "@pangolindex/components"
+
+const InputWrapper = styled.input`
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid transparent;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+`;
 
 interface AmountInputProps extends ComponentStyle {
   selectedToken?: Token;
@@ -47,34 +59,34 @@ export const AmountInput: FunctionComponent<AmountInputProps> = ({
         balances[srcToken?.address as string],
         srcToken?.decimals
       );
-      return <span> {`(${balance} ${srcToken?.symbol})`}</span>;
+      return <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1"> {`(${balance} ${srcToken?.symbol})`}</Text>;
     }
     return ;
   }
 
   return (
     <div>
-      <label>
-        <span>Balance</span>
+      <SelectParams>
+        <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">Balance:</Text>
         {renderTokenBalance()}
-      </label>
+      </SelectParams>
       <div>
-        <div>
-          <DebounceInput
+        <div style={{display: 'flex'}}>
+          <InputWrapper
             type={"number"}
             value={amount}
-            onWheel={(e: React.WheelEvent<HTMLInputElement>) =>
-              e.currentTarget.blur()
-            }
-            debounceTimeout={300}
             onChange={(e) => dispatch(setAmount(e.target.value))}
           />
-          {selectedToken && <MaxButton selectedToken={selectedToken} />}
+          {selectedToken && 
+          <div style={{width: '20%'}}>
+            <MaxButton selectedToken={selectedToken} />
+          </div>
+          }
         </div>
       </div>
       <div>
         {validState.error && (
-          <span>{validState?.error}</span>
+          <span >{validState?.error}</span>
         )}
       </div>
     </div>

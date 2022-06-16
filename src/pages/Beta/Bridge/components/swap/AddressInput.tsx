@@ -1,14 +1,25 @@
 import { ComponentStyle } from "../../types/component";
 import React, { ChangeEvent } from "react";
 import { Validation } from "../../hooks/useAmountValidator";
-import { DebounceInput } from "react-debounce-input";
+// import { DebounceInput } from "react-debounce-input";
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import {
-  selectSenderAddress,
   setRecipientAddress,
 } from "../../slices/swapInputSlice";
-import { useAppSelector } from "../../hooks/useAppSelector";
+import { useActiveWeb3React } from 'src/hooks'
+import { Text } from "@pangolindex/components"
+import styled from 'styled-components';
+
+const InputWrapper = styled.input`
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid transparent;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+`;
 
 interface AddressInputProps extends ComponentStyle {
   validState?: Validation;
@@ -17,33 +28,33 @@ interface AddressInputProps extends ComponentStyle {
 export const AddressInput: React.FC<AddressInputProps> = ({
   validState,
 }) => {
+  const { account } = useActiveWeb3React()
   const dispatch = useDispatch();
-  const receipientAddress = useAppSelector(selectSenderAddress);
-
+  const receipientAddress = account;
   const updateDestinationAddress = (address: string) => {
     const isAddress = ethers.utils.isAddress(address);
     if (isAddress) {
       dispatch(setRecipientAddress(address));
     }
   };
-  console.log("receipientAddress", receipientAddress)
   return (
     <div>
-      <label>
+      <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
         Destination Address
-      </label>
+      </Text>
       <div>
-        <DebounceInput
+        <InputWrapper
+          //@ts-ignore
           placeholder={receipientAddress}
-          debounceTimeout={300}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             updateDestinationAddress(e.target.value);
           }}
+          disabled
         />
       </div>
       <div>
         {validState?.error && (
-          <span>{validState?.error}</span>
+           <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">{validState?.error}</Text>
         )}
       </div>
     </div>

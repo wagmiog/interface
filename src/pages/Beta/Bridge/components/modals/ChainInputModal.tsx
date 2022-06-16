@@ -1,11 +1,35 @@
 import { ComponentStyle } from "../../types/component";
 import { SquidChain } from "../../types/chain";
 import React, { FunctionComponent } from "react";
+import { Text } from "@pangolindex/components"
+import styled from 'styled-components'
+
+const ModalCenter = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+`
+
+const ModalChain = styled.div`
+display: flex;
+gap: 20px;
+paddingTop: 10px;
+cursor: pointer;
+`
 
 interface ChainInputModalProps extends ComponentStyle {
   chains: SquidChain[];
   onSelected: (chain: SquidChain) => void;
-  modalKey: ChainInputModalKey;
+  wrappedOnDismiss: () => void;
+}
+
+interface ChainInputModalProps extends ComponentStyle {
+  chains: SquidChain[];
+  onSelected: (chain: SquidChain) => void;
+  wrappedOnDismiss: () => void;
 }
 
 export enum ChainInputModalKey {
@@ -16,44 +40,33 @@ export enum ChainInputModalKey {
 export const ChainInputModal: FunctionComponent<ChainInputModalProps> = ({
   chains = [],
   onSelected,
-  modalKey,
+  wrappedOnDismiss
 }) => {
   const options = chains.map((chain) => {
     return (
-      <li key={chain.id} onClick={() => onSelected(chain)}>
-        <label
-          htmlFor={modalKey}
-        >
-          <div>
-            <span>{chain.name}</span>
-          </div>
-        </label>
-      </li>
+      <ModalChain key={chain.id} onClick={() => {onSelected(chain)}} >
+        <img
+          src={chain.icon}
+          width={32}
+          height={32}
+          alt="chain icon"
+        />
+        <div>
+          <span>{chain.name}</span>
+        </div>
+      </ModalChain>
     );
   });
   return (
     <>
-      <input type="checkbox" id={modalKey}/>
-      <label
-        htmlFor={modalKey}
-      >
-        <label
-          htmlFor=""
-        >
-          <div>
-            <h1>
-              Select Chain
-            </h1>
-            <div>
-              <ul>{options}</ul>
-            </div>
-          </div>
-          <div>
-            <div>
-            </div>
-          </div>
-        </label>
-      </label>
+      <ModalCenter>
+        <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
+          Select Chain
+        </Text>
+        <div onClick={() => wrappedOnDismiss()}>
+          {options}
+        </div>
+      </ModalCenter>
     </>
   );
 };
