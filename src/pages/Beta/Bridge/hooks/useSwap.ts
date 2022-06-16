@@ -175,7 +175,7 @@ const useSwap = () => {
     return { tx, traceId: "", payloadHash: "" };
   }, [
     amount,
-    destChain?.name,
+    destChain,
     contract,
     recipientAddress,
     srcChain,
@@ -198,11 +198,10 @@ const useSwap = () => {
     return { tx, traceId: "", payloadHash: "" };
   }, [
     amount,
-    destChain.name,
+    destChain,
     gatewayContract,
     recipientAddress,
-    srcToken?.decimals,
-    srcToken?.symbol,
+    srcToken,
   ]);
 
   return { swapSrcAndDest, swapOnlyDest, swapOnlySrc, sendToken };

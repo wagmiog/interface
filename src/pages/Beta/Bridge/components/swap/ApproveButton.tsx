@@ -66,7 +66,6 @@ export const ApproveButton: FunctionComponent<ApproveButtonProps> = ({
     spenderAddress,
     srcChain,
     srcToken,
-    srcToken?.address,
     txReceipt,
   ]);
 

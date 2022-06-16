@@ -66,7 +66,7 @@ export const PageLayout: FunctionComponent = ({ children }) => {
     };
 
     switchWalletNetworkIfNeeded();
-  }, [data?.id, srcChain, switchNetworkAsync]);
+  }, [data, srcChain, switchNetworkAsync]);
 
   return (
     <>

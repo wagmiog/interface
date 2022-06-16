@@ -1,14 +1,12 @@
 import { ComponentStyle } from "../../types/component";
 import React, { FunctionComponent, useCallback, useState } from "react";
 import cn from "classnames";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppSelector";
-import { selectSrcChain } from "../../slices/swapInputSlice";
+import { useAppDispatch } from "../../hooks/useAppSelector";
 import { Validation } from "../../hooks/useAmountValidator";
 import { setSrcTx } from "../../slices/swapStatusSlice";
 import useSwapChecker, { SWAP_TYPE } from "../../hooks/useSwapChecker";
 import useSwap from "../../hooks/useSwap";
 import { useConnect } from "wagmi";
-import { SquidChain } from "../../types/chain";
 
 interface SwapButtonProps extends ComponentStyle {
   amount: string;
@@ -21,7 +19,6 @@ export const SwapButton: FunctionComponent<SwapButtonProps> = ({
   amountValidation,
 }) => {
   const { isConnected } = useConnect();
-  const srcChain = useAppSelector(selectSrcChain) as SquidChain;
   const swapType = useSwapChecker();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -60,7 +57,7 @@ export const SwapButton: FunctionComponent<SwapButtonProps> = ({
     }
 
     setLoading(false);
-  }, [srcChain, selectSwapFunction, dispatch]);
+  }, [selectSwapFunction, dispatch]);
 
   if (!isConnected) {
     return (

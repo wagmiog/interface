@@ -25,7 +25,7 @@ const useCrosschainToken = (chain?: SquidChain, token?: Token) => {
     }
 
     setCrosschainToken(_crosschainToken);
-  }, [chain?.defaultCrosschainToken, srcToken, token, tokens]);
+  }, [chain, srcToken, token, tokens]);
 
   return crosschainToken;
 };
