@@ -19,7 +19,6 @@ export const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({
     selectEstimateAmountState
   );
   const estimatedAmount = swapDestAmount || sendDestAmount;
-
   const render = useCallback(() => {
     if (error) {
       return <span>{error}</span>;
@@ -34,9 +33,9 @@ export const SwapEstimator: FunctionComponent<SwapEstimatorProps> = ({
           {loading ? (
             <LoadingIndicator width={120} height={18} />
           ) : (
-            <span>
+            <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">
               {floatTextAmount} {destToken?.symbol}
-            </span>
+            </Text>
           )}
         </span>
       );

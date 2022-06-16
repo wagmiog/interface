@@ -124,7 +124,7 @@ export const selectTokenApprovalByChainId = (
   state: RootState,
   chainId?: ChainId
 ) => {
-  console.log("state",state)
+  // console.log("state",state)
   if (!chainId) return {};
   return state.tokenApprovals[chainId];
 };

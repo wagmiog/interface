@@ -63,7 +63,6 @@ export const AmountInput: FunctionComponent<AmountInputProps> = ({
     }
     return ;
   }
-
   return (
     <div>
       <SelectParams>

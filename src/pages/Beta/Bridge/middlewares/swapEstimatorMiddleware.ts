@@ -19,7 +19,7 @@ import { ethers } from "ethers";
 import { AppDispatch, RootState } from "src/state";
 import { estimateSwapOutputAmount } from "../utils/contract";
 import { requiredSwapDest, requiredSwapSrc } from "../utils/swap";
-import { fetchTransferFee } from "../slices/transferFeeSlice";
+// import { fetchTransferFee } from "../slices/transferFeeSlice";
 
 // import { fetchTransferFee } from "../slices/transferFeeSlice";
 
@@ -52,10 +52,12 @@ swapEstimatorStartListening({
       destChain
     );
 
-    const feeResponse = await listenerApi.dispatch(
-      fetchTransferFee(state, crosschainTokenAtSrcChain)
-    );
-    const fee = feeResponse.data;
+    // const feeResponse = await listenerApi.dispatch(
+    //   fetchTransferFee(state, crosschainTokenAtSrcChain)
+    // );
+    //ATTENTION ICI
+    // const fee = feeResponse.data;
+    const fee = 200000;
     if (!fee) return;
 
     listenerApi.dispatch(setLoading(true));
