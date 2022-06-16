@@ -25,10 +25,10 @@ import { useIsBetaUI } from './hooks/useLocation'
 import { useActiveWeb3React } from './hooks'
 import Package from '../package.json'
 import { fetchMinichefData } from './state/stake/hooks'
-import { Provider as EvmProvider } from "wagmi";
+import { WagmiConfig } from "wagmi";
 import { providers } from "ethers";
 import { chains } from "./pages/Beta/Bridge/constants/config";
-import { connectors } from "./pages/Beta/Bridge/clients/walletClient";
+import { wagmiClient } from "src/pages/Beta/Bridge/config/wagmi-client";
 
 type ProviderInput = {
   chainId?: number;
@@ -141,14 +141,14 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ProviderNetwork getLibrary={getLibrary}>
         <Provider store={store}>
-          <EvmProvider autoConnect provider={provider} connectors={connectors}>
+          <WagmiConfig client={wagmiClient}>
             <QueryClientProvider client={queryClient}>
               <Updaters />
               <ThemeProvider>
                 <ComponentThemeProvider />
               </ThemeProvider>
             </QueryClientProvider>
-          </EvmProvider>
+          </WagmiConfig>
         </Provider>
       </Web3ProviderNetwork>
     </Web3ReactProvider>

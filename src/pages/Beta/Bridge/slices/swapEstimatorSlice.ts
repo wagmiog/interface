@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Token } from "../types/token";
-import { Chain } from "../types/chain";
 import { RootState } from "src/state";
+import { SquidChain } from "../types/chain";
 
 export type SwapEstimatorPayload = {
   routerAddress: string;
-  chain: Chain;
+  chain: SquidChain;
   tokenA: Token;
   tokenB: Token;
   amount: string;

@@ -1,17 +1,18 @@
 import { ethers } from "ethers";
 import { selectBalancesByChainId } from "../slices/balanceSlice";
-import { useGetTokensQuery, selectTokensByChainId } from "../slices/tokenSlice";
-import { Chain } from "../types/chain";
+import { useGetTokensQuery, selectTokensByChainIdHook } from "../slices/tokenSlice";
 import { useAppSelector } from "./useAppSelector";
+import { SquidChain } from "../types/chain";
 
-const useTokens = (chain?: Chain) => {
+const useTokens = (chain?: SquidChain) => {
   const { tokens = [] } = useGetTokensQuery(undefined, {
-    selectFromResult: selectTokensByChainId(chain?.id),
+    selectFromResult: selectTokensByChainIdHook(chain?.id),
   });
   const balances = useAppSelector((state) =>
-  selectBalancesByChainId(state, chain?.id)
+    selectBalancesByChainId(state, chain?.id)
   );
-  return tokens.sort((a: any, b: any) => {
+
+  return tokens.sort((a, b) => {
     if (!balances[a.address] || !balances[b.address]) return 0;
     const balanceA = ethers.BigNumber.from(balances[a.address]);
     const balanceB = ethers.BigNumber.from(balances[b.address]);
@@ -21,3 +22,4 @@ const useTokens = (chain?: Chain) => {
   });
 };
 export default useTokens;
+

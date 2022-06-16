@@ -1,4 +1,4 @@
-import { Chain } from "./chain";
+import { SquidChain } from "./chain";
 import { Token } from "./token";
 
 export type FeeResponse = {
@@ -8,7 +8,7 @@ export type FeeResponse = {
 };
 
 export type FeeRequest = {
-  srcChain?: Chain;
-  destChain: Chain;
+  srcChain?: SquidChain;
+  destChain: SquidChain;
   srcToken?: Token;
 };

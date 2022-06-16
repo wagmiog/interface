@@ -1,8 +1,9 @@
-import { ethers } from "ethers";
-import { Chain } from "../types/chain";
+import { Contract, ethers } from "ethers";
+import { SquidChain } from "../types/chain";
 import routerAbi from "../abi/router.json";
 import { getProvider } from "./provider";
 import { SwapEstimatorPayload } from "../slices/swapEstimatorSlice";
+import { chains } from "../config/constants";
 
 export function createSwapPayload(
   swapPath: string[],
@@ -27,7 +28,7 @@ export function createSwapPayload(
 
 export function createTradeData(
   swapPath: string[],
-  chain: Chain,
+  chain: SquidChain,
   recipientAddress: string,
   amount: ethers.BigNumberish
 ) {
@@ -56,12 +57,20 @@ export async function estimateSwapOutputAmount(payload: SwapEstimatorPayload) {
   const { routerAddress, tokenA, tokenB, amount, chain } = payload;
   const provider = getProvider(chain);
   const contract = new ethers.Contract(routerAddress, routerAbi, provider);
-  const amountOuts = await contract.getAmountsOut(amount, [
-    tokenA.address,
-    chain.wrappedNativeToken,
-    tokenB.address,
-  ]);
-  return amountOuts[amountOuts.length - 1].toString();
+  try {
+    const amountOuts = await contract.getAmountsOut(amount, [
+      tokenA.address,
+      chain.wrappedNativeToken,
+      tokenB.address,
+    ]);
+    return amountOuts[amountOuts.length - 1].toString();
+  } catch (e: any) {
+    let errMsg = `No ${tokenB.symbol} liquidity at ${chain.name}`;
+    if (e.message.indexOf("out-of-bounds") > -1) {
+      errMsg = "Swap amount is too low";
+    }
+    throw new Error(errMsg);
+  }
 }
 
 function getSwapRouterAbi() {
@@ -90,4 +99,73 @@ export function createDropPayload(
   };
 }
 
-export function createGatewayCallerPayload() {}
+export const getSwapPendingEvent = (
+  contract: Contract,
+  txReceipt: ethers.providers.TransactionReceipt
+) => {
+  const eventLogs = txReceipt.logs;
+  const swapPendingEventId = ethers.utils.id(
+    "SwapPending(bytes32,bytes32,string,uint256,string,bytes)"
+  );
+  for (const log of eventLogs) {
+    if (log.topics[0] === swapPendingEventId) {
+      const swapPendingEvent = contract.interface.parseLog(log);
+      const [
+        traceId,
+        payloadHash,
+        symbol,
+        amount,
+        destinationChainName,
+        payload,
+      ] = swapPendingEvent.args;
+
+      const destChain = chains.find(
+        (chain) =>
+          chain.name.toLowerCase() === destinationChainName.toLowerCase()
+      );
+
+      return {
+        traceId,
+        symbol,
+        amount: amount.toString(),
+        destChain,
+        payload,
+        payloadHash,
+      };
+    }
+  }
+
+  return null;
+};
+
+export const getSwapFailedEvent = (
+  contract: Contract,
+  txReceipt: ethers.providers.TransactionReceipt
+) => {
+  const eventLogs = txReceipt.logs;
+  const swapFailedEventId = ethers.utils.id(
+    "SwapFailed(bytes32,string,uint256,address)"
+  );
+  for (const log of eventLogs) {
+    if (log.topics[0] === swapFailedEventId) {
+      return contract.interface.parseLog(log);
+    }
+  }
+  return ;
+};
+
+export const getSwapSuccessEvent = (
+  contract: Contract,
+  txReceipt: ethers.providers.TransactionReceipt
+) => {
+  const eventLogs = txReceipt.logs;
+  const swapSuccessEventId = ethers.utils.id(
+    "SwapSuccess(bytes32,string,uint256,bytes)"
+  );
+  for (const log of eventLogs) {
+    if (log.topics[0] === swapSuccessEventId) {
+      return contract.interface.parseLog(log);
+    }
+  }
+  return null;
+};

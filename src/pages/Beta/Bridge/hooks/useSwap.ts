@@ -11,45 +11,40 @@ import {
 import { useAppSelector } from "./useAppSelector";
 import useCrosschainToken from "./useCrosschainToken";
 import squidSwapExecutableAbi from "../abi/squidSwapExecutable.json";
-import { useAccount, useSigner } from "wagmi";
+import { useContract, useSigner } from "wagmi";
 import { v4 as uuidv4 } from "uuid";
 import { createPayloadHash, createTradeData } from "../utils/contract";
 import gatewayAbi from "../abi/axelarGateway.json";
+import { SquidChain } from "../types/chain";
+import { Token } from "../types/token";
 
 const AMOUNT_INPUT_POS = 196; // length of tradeData (32) + token in (32) + amount in (32) + router (32) + length of data (32) + 36
 
 const useSwap = () => {
-  const srcChain = useAppSelector(selectSrcChain);
-  const srcToken = useAppSelector(selectSrcToken);
+  const srcChain = useAppSelector(selectSrcChain) as SquidChain;
+  const srcToken = useAppSelector(selectSrcToken) as Token;
   const destChain = useAppSelector(selectDestChain);
-  const destToken = useAppSelector(selectDestToken);
-  const recipientAddress = useAppSelector(selectRecipientAddress);
+  const destToken = useAppSelector(selectDestToken) as Token;
+  const recipientAddress = useAppSelector(selectRecipientAddress) as string;
   const amount = useAppSelector(selectAmount);
-  const [{ data: account }] = useAccount();
-  const srcCrosschainToken = useCrosschainToken(srcChain);
-  const destCrosschainToken = useCrosschainToken(destChain);
-  const [{ data: signer }] = useSigner();
-  const getContract = useCallback(() => {
-    if (!srcChain) return;
-    return new ethers.Contract(
-      srcChain?.swapExecutorAddress,
-      squidSwapExecutableAbi,
-      signer
-    );
-  }, [signer, srcChain]);
+  const srcCrosschainToken = useCrosschainToken(srcChain) as Token;
+  const destCrosschainToken = useCrosschainToken(destChain) as Token;
+  const srcTokenAtDestChain = useCrosschainToken(destChain, srcToken) as Token;
+  const { data: signer } = useSigner();
+
+  const contract = useContract({
+    addressOrName: srcChain?.swapExecutorAddress,
+    contractInterface: squidSwapExecutableAbi,
+    signerOrProvider: signer,
+  });
+
+  const gatewayContract = useContract({
+    addressOrName: srcChain?.gatewayAddress,
+    contractInterface: gatewayAbi,
+    signerOrProvider: signer,
+  });
 
   const swapSrcAndDest = useCallback(async () => {
-    const contract = getContract();
-    if (!contract) return;
-    if (!srcChain) return;
-    if (!srcToken) return;
-    if (!srcCrosschainToken) return;
-    if (!destCrosschainToken) return;
-    if (!signer) return;
-    if (!destToken) return;
-    if (!account) return;
-    if (!recipientAddress) return;
-
     const traceId = ethers.utils.id(uuidv4());
     const sendAmount = ethers.utils
       .parseUnits(amount, srcToken?.decimals)
@@ -97,30 +92,18 @@ const useSwap = () => {
 
     return { tx, traceId, payloadHash };
   }, [
-    account,
     amount,
     destChain,
     destCrosschainToken,
     destToken,
-    getContract,
+    contract,
     recipientAddress,
-    signer,
     srcChain,
     srcCrosschainToken,
     srcToken,
   ]);
 
   const swapOnlyDest = useCallback(async () => {
-    const contract = getContract();
-    if (!contract) return;
-    if (!srcChain) return;
-    if (!srcToken) return;
-    if (!srcCrosschainToken) return;
-    if (!destCrosschainToken) return;
-    if (!signer) return;
-    if (!destToken) return;
-    if (!recipientAddress) return;
-
     const traceId = ethers.utils.id(uuidv4());
     const sendAmount = ethers.utils
       .parseUnits(amount, srcToken?.decimals)
@@ -128,7 +111,7 @@ const useSwap = () => {
 
     const tradeData = createTradeData(
       [
-        destCrosschainToken?.address,
+        srcTokenAtDestChain.address,
         destChain.wrappedNativeToken,
         destToken.address,
       ],
@@ -159,24 +142,14 @@ const useSwap = () => {
   }, [
     amount,
     destChain,
-    destCrosschainToken,
     destToken,
-    getContract,
+    contract,
     recipientAddress,
-    signer,
-    srcChain,
-    srcCrosschainToken,
     srcToken,
+    srcTokenAtDestChain,
   ]);
 
   const swapOnlySrc = useCallback(async () => {
-    const contract = getContract();
-    if (!contract) return;
-    if (!srcChain) return;
-    if (!srcToken) return;
-    if (!srcCrosschainToken) return;
-    if (!recipientAddress) return;
-
     const sendAmount = ethers.utils
       .parseUnits(amount, srcToken?.decimals)
       .toString();
@@ -202,8 +175,8 @@ const useSwap = () => {
     return { tx, traceId: "", payloadHash: "" };
   }, [
     amount,
-    destChain.name,
-    getContract,
+    destChain?.name,
+    contract,
     recipientAddress,
     srcChain,
     srcCrosschainToken,
@@ -211,36 +184,25 @@ const useSwap = () => {
   ]);
 
   const sendToken = useCallback(async () => {
-    if (!srcChain) return;
-    if (!signer) return;
-    if (!srcToken) return;
-    if (!amount) return;
-    if (!recipientAddress) return;
-    const gatewayContract = new ethers.Contract(
-      srcChain?.gatewayAddress,
-      gatewayAbi,
-      signer
-      );
-      const sendAmount = ethers.utils
+    const sendAmount = ethers.utils
       .parseUnits(amount, srcToken?.decimals)
       .toString();
-      
-      const tx = await gatewayContract.sendToken(
-        destChain.name,
-        recipientAddress,
-        srcCrosschainToken?.symbol,
-        sendAmount
-        );
-        
+
+    const tx = await gatewayContract.sendToken(
+      destChain.name,
+      recipientAddress,
+      srcToken.symbol,
+      sendAmount
+    );
+
     return { tx, traceId: "", payloadHash: "" };
   }, [
     amount,
     destChain.name,
+    gatewayContract,
     recipientAddress,
-    signer,
-    srcChain,
-    srcToken,
-    srcCrosschainToken,
+    srcToken?.decimals,
+    srcToken?.symbol,
   ]);
 
   return { swapSrcAndDest, swapOnlyDest, swapOnlySrc, sendToken };

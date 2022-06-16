@@ -1,11 +1,14 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { QuestionAnswer } from "./TabulationBox";
-import AmountInput from "./components/AmountInput";
-import ChainInput from "./components/ChainInput";
-// import InputContainer from "./components/InputContainer";
-import SwapButton from "./components/SwapButton";
-// import SwapContainer from "./components/SwapContainer";
-import TokenInput from "./components/TokenInput";
+import React, { useEffect } from "react";
+import { InputContainer } from "./components/swap";
+import {
+  SwapButton,
+  AmountInput,
+  TokenInput,
+  AddressInput,
+  ApproveButton,
+  ChainInput,
+  SwapContainer,
+} from "./components/swap";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppSelector";
 import {
   selectAmount,
@@ -13,33 +16,16 @@ import {
   selectDestToken,
   selectSrcChain,
   selectSrcToken,
-  setDestChain,
-  setDestToken,
-  setSrcChain,
-  setSrcToken,
 } from "./slices/swapInputSlice";
 import useAmountValidator from "./hooks/useAmountValidator";
 import useApproveChecker from "./hooks/useApproveChecker";
-import ApproveButton from "./components/ApproveButton";
+
 import { resetSwapStatus } from "./slices/swapStatusSlice";
-import SwapEstimator from "./components/SwapEstimator";
-import TokenInputModal from "./components/TokenInput/TokenInputModal";
-import ChainInputModal from "./components/ChainInput/ChainInputModal";
-import AddressInput from "./components/AddressInput";
-import SwapRoute from "./components/SwapRoute";
-import { chains } from "./constants/config";
-import useTokens from "./hooks/useTokens";
-import {
-  selectDestTokenAtSrcChain,
-  selectSrcTokenAtDestChain,
-} from "./slices/tokenSlice";
-import { Chain } from "./types/chain";
-import { Token } from "./types/token";
-import { useNetwork, useAccount } from "wagmi";
-import { PageWrapper, Ibridge } from './styleds'
-import Modal from 'src/components/Modal'
-import ConnectButton from "./components/Header/ConnectButton";
-import { Text } from "@pangolindex/components"
+import { SwapEstimator } from "./components/swap";
+import { TokenInputModalKey, ChainInputModalKey } from "./components/modals";
+import { SwapRoute } from "./components/utils";
+import { useNetworkSwitcher } from "./hooks";
+import { PageLayout } from "./components/layout";
 
 const Bridge = () => {
   const dispatch = useAppDispatch();
@@ -50,198 +36,98 @@ const Bridge = () => {
   const destToken = useAppSelector(selectDestToken);
   const isRequiredApproval = useApproveChecker();
   const amountValidation = useAmountValidator(amount, srcToken);
+
+  // Automatically update `srcChai`n and `destChain` whenever connected wallet's network has changed.
+  useNetworkSwitcher();
+
   useEffect(() => {
     dispatch(resetSwapStatus());
   }, [dispatch]);
 
-
-  const srcTokenAtDestChain = useAppSelector(selectSrcTokenAtDestChain);
-  const destTokenAtSrcChain = useAppSelector(selectDestTokenAtSrcChain);
-  const srcTokens = useTokens(srcChain);
-  const destTokens = useTokens(destChain);
-  const [{ data }, switchNetwork] = useNetwork();
-  const [tokenInput, setTokenInput] = useState<boolean>(false)
-  const [tokenOutput, setTokenOutput] = useState<boolean>(false)
-  const [chainInput, setChainInput] = useState<boolean>(false)
-  const [chainOutput, setChainOutput] = useState<boolean>(false)
-  const [{ data: account }] = useAccount();
-  const updateSrcToken = useCallback(
-    async (token: Token) => {
-      if (token.symbol === destToken?.symbol && srcTokenAtDestChain) {
-        dispatch(setSrcToken(destTokenAtSrcChain));
-        dispatch(setDestToken(srcTokenAtDestChain));
-      } else {
-        dispatch(setSrcToken(token));
-      }
-    },
-    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
-  );
-
-  const updateDestToken = useCallback(
-    async (token: Token) => {
-      if (token.symbol === destToken?.symbol && srcTokenAtDestChain) {
-        dispatch(setSrcToken(destTokenAtSrcChain));
-        dispatch(setDestToken(srcTokenAtDestChain));
-      } else {
-        dispatch(setDestToken(token));
-      }
-    },
-    [destTokenAtSrcChain, dispatch, srcTokenAtDestChain, destToken]
-  );
-
-  const updateSrcChain = useCallback(
-    async (chain: Chain) => {
-      if (!switchNetwork) return;
-      const { data: _chain } = await switchNetwork(chain.id);
-      if (_chain?.id !== chain.id) return;
-
-      if (chain.id === destChain?.id && srcChain) {
-        dispatch(setSrcChain(destChain));
-        dispatch(setDestChain(srcChain));
-      } else {
-        dispatch(setSrcChain(chain));
-      }
-    },
-    [destChain, dispatch, srcChain, switchNetwork]
-  );
-
-  const updateDestChain = useCallback(
-    async (chain: Chain) => {
-      if (srcChain && destChain && chain.id === srcChain?.id) {
-        if (!switchNetwork) return;
-        const { data: _chain } = await switchNetwork(destChain.id);
-        if (_chain?.id !== destChain?.id) return;
-
-        dispatch(setSrcChain(destChain));
-        dispatch(setDestChain(srcChain));
-      } else {
-        dispatch(setDestChain(chain));
-      }
-    },
-    [destChain, dispatch, srcChain, switchNetwork]
-  );
-  useEffect(() => {
-    const switchWalletNetworkIfNeeded = async () => {
-      if (!switchNetwork) return;
-      if (!srcChain) return;
-      if (data.chain?.id === srcChain?.id) return;
-      return await switchNetwork(srcChain.id);
-    };
-
-    switchWalletNetworkIfNeeded();
-    // eslint-disable-next-line
-  }, [data.chain?.id, srcChain, switchNetwork]);
-
-  const wrappedOnDismiss = () => {
-    setTokenInput(false)
-    setChainInput(false)
-    setChainOutput(false)
-    setTokenOutput(false)
-  }
   return (
-    <PageWrapper>
-      <QuestionAnswer />
-      <Ibridge>
-        <Text fontSize={30} fontWeight={500} lineHeight="42px" color="text1">
-          Cross Chain
-        </Text>
-        <div>
-          <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1">From</Text>
-          <div>
-            <div>
-              <div onClick={() => setChainInput(!chainInput)}>
+    <PageLayout>
+    <SwapContainer>
+      <h1 className="text-3xl font-thin text-center text-white">
+        Cross Chain Swap
+      </h1>
+      <div className="mt-5">
+        <div className="mb-2 font-light text-white">From</div>
+        <InputContainer>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-5">
+              <div>
                 <ChainInput
                   selectedChain={srcChain}
+                  label="From"
+                  modalKey={ChainInputModalKey.ModalChainFrom}
                   isSrcChain={true}
                 />
               </div>
-              <div onClick={() => setTokenInput(!tokenInput)}>
+              <div>
                 <TokenInput
+                  label="Send"
+                  className="mt-2"
+                  modalKey={TokenInputModalKey.ModalTokenInput}
                   selectedToken={srcToken}
                 />
               </div>
             </div>
           </div>
-          <div>
+          <div className="mt-5">
             <div>
               <AmountInput
+                className="mt-4"
                 selectedToken={srcToken}
                 validState={amountValidation}
               />
             </div>
           </div>
-        </div>
+        </InputContainer>
+      </div>
 
-        <div>
-          <Text fontSize={15} fontWeight={500} lineHeight="42px" color="text1" >To</Text>
-          <div>
-            <div>
-              <div onClick={() => setChainOutput(!chainOutput)}>
+      <div className="mt-5">
+        <div className="mb-2 font-light text-white">To</div>
+        <InputContainer>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-5">
+              <div>
                 <ChainInput
                   selectedChain={destChain}
+                  label="To"
+                  modalKey={ChainInputModalKey.ModalChainTo}
                 />
               </div>
-              <div onClick={() => setTokenOutput(!tokenOutput)}>
+              <div>
                 <TokenInput
+                  label="Receive"
+                  className="mt-2"
+                  modalKey={TokenInputModalKey.ModalTokenOutput}
                   selectedToken={destToken}
                 />
               </div>
             </div>
           </div>
 
-          <div>
+          <div className="mt-5">
             <AddressInput />
           </div>
-        </div>
-        <div>
+        </InputContainer>
+      </div>
+      <div className="mt-10">
+        <InputContainer>
           <SwapEstimator amount={amount} />
-          <SwapRoute />
-        </div>
-        <div>
-          {!account ? (
-            <ConnectButton />
-          ) : (
-            <>
-              {isRequiredApproval ? (
-                <ApproveButton />
-              ) : (
-                <SwapButton amount={amount} amountValidation={amountValidation} />
-              )}
-            </>
-          )}
-        </div>
-      </Ibridge>
-      <Modal isOpen={tokenInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
-        <TokenInputModal
-          tokens={srcTokens}
-          showBalance={true}
-          onSelected={updateSrcToken}
-          wrappedOnDismiss={wrappedOnDismiss}
-        />
-      </Modal>
-      <Modal isOpen={tokenOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
-        <TokenInputModal
-          tokens={destTokens}
-          showBalance={false}
-          onSelected={updateDestToken}
-          wrappedOnDismiss={wrappedOnDismiss}
-        />
-      </Modal>
-      <Modal isOpen={chainInput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
-        <ChainInputModal
-          onSelected={updateSrcChain}
-          chains={chains}
-          wrappedOnDismiss={wrappedOnDismiss}
-        />
-      </Modal>
-      <Modal isOpen={chainOutput} onDismiss={wrappedOnDismiss} maxHeight={250} minHeight={30} isBeta={true}>
-        <ChainInputModal
-          onSelected={updateDestChain}
-          chains={chains}
-          wrappedOnDismiss={wrappedOnDismiss}
-        />
-      </Modal>
-    </PageWrapper>
+        </InputContainer>
+        <SwapRoute />
+      </div>
+      <div className="flex flex-col mt-8">
+        {isRequiredApproval ? (
+          <ApproveButton />
+        ) : (
+          <SwapButton amount={amount} amountValidation={amountValidation} />
+        )}
+      </div>
+    </SwapContainer>
+    </PageLayout>
   );
 };
 

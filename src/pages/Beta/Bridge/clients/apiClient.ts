@@ -1,4 +1,4 @@
-// import { BETA_MENU_LINK } from 'src/constants'
+import { AXELAR_SCAN_GMP } from "../config/constants";
 
 export function fetchBalance(
   senderAddress: string,
@@ -6,7 +6,7 @@ export function fetchBalance(
   tokenAddresses: string[],
   chainId: number
 ) {
-  return fetch("http://localhost:3000/#/beta/bridge/api/balance", {
+  return fetch(window.origin + "/api/balance", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,5 +17,25 @@ export function fetchBalance(
       tokenAddresses,
       chainId,
     }),
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (!res.ok)
+      return res.text().then((text) => {
+        throw new Error(text);
+      });
+    return res.json();
+  });
+}
+
+export function fetchSwapStatus(txHash: string) {
+  return fetch(AXELAR_SCAN_GMP + `/?method=searchGMP&txHash=${txHash}`).then(
+    async (res) => {
+      if (!res.ok) {
+        return null;
+      }
+      return res
+        .json()
+        .then((events) => events.data[0])
+        .catch((e) => null);
+    }
+  );
 }

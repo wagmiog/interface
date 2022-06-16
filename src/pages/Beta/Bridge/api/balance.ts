@@ -1,17 +1,23 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ethers } from "ethers";
 import { chains } from "../constants/config";
 import erc20Abi from "../abi/erc20.json";
 import { makeCalls } from "../utils/multicall";
 import { getProvider } from "../utils/provider";
 import { Approval } from "../slices/tokenApprovalSlice";
-//ATTENTION ICIs
+
 type TokenInfo = {
   address: string;
   amount: string;
   approvals: Approval[];
 };
 
+// type BalanceResponse = {
+//   status: boolean;
+//   data: {
+//     tokenInfos: TokenInfo[];
+//   };
+//   error?: string;
+// };
 
 interface BalanceApiRequest {
   body: {

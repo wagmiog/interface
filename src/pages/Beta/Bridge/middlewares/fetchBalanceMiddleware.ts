@@ -4,7 +4,7 @@ import {
 } from "@reduxjs/toolkit";
 import { tokenApi } from "../slices/tokenSlice";
 import { AppDispatch, RootState } from "../store";
-import { Chain } from "../types/chain";
+import { SquidChain } from "../types/chain";
 import { Token } from "../types/token";
 import { setBalances } from "../slices/balanceSlice";
 import { setSenderAddress, setSrcChain } from "../slices/swapInputSlice";
@@ -35,7 +35,7 @@ fetchBalanceStartListening({
   },
   effect: async (_action, listenerApi) => {
     const state = listenerApi.getState();
-    const srcChain = state.swapInputs.srcChain as Chain;
+    const srcChain = state.swapInputs.srcChain as SquidChain;
     const { data } = tokenApi.endpoints.getTokens.select()(state);
     const senderAddress = state.swapInputs.senderAddress as string;
     const tokenAddresses = (data as Token[])

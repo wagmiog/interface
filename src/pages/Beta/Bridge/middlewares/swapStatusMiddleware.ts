@@ -16,7 +16,23 @@ import {
 import { ethers } from "ethers";
 import { getProvider } from "../utils/provider";
 import gatewayAbi from "../abi/axelarGateway.json";
-import swapExecutorAbi from "../abi/swapExecutor.json";
+import { fetchSwapStatus } from "../clients/apiClient";
+import { Token } from "../types/token";
+import { selectTokensByChainId } from "../slices/tokenSlice";
+import {
+  getSwapFailedEvent,
+  getSwapPendingEvent,
+  getSwapSuccessEvent,
+} from "../utils/contract";
+import { SquidChain } from "../types/chain";
+import { requiredSwapDest } from "../utils/swap";
+import squidSwapExecutableAbi from "../abi/squidSwapExecutable.json";
+import {
+  setDestChain,
+  setDestToken,
+  setSrcChain,
+  setSrcToken,
+} from "../slices/swapInputSlice";
 
 export const swapStatusMiddleware = createListenerMiddleware();
 
@@ -25,15 +41,109 @@ type RootStartListening = TypedStartListening<RootState, AppDispatch>;
 const swapStatusStartListening =
   swapStatusMiddleware.startListening as RootStartListening;
 
+// Recover state from source tx hash
 swapStatusStartListening({
   predicate: (action, currentState, _prevState) => {
-    const destTokenAddress =
-      currentState.swapInputs.destToken?.address?.toLowerCase();
-    const destCrosschainTokenAddress: any =
-      currentState.swapInputs.destChain?.crosschainToken?.toLowerCase();
+    const srcToken = currentState.swapInputs.srcToken;
+    const srcChain = currentState.swapInputs.srcChain;
+
+    return action.type === setSrcTx.type && !srcToken && !!srcChain;
+  },
+  effect: async (action, listenerApi) => {
+    const state = listenerApi.getState();
+    const dispatch = listenerApi.dispatch;
+    const txHash = state.swapStatus.srcTx as string;
+    const srcChain = state.swapInputs.srcChain as SquidChain;
+
+    const srcProvider = getProvider(srcChain);
+    const srcTxReceipt = await srcProvider.getTransactionReceipt(txHash);
+    const contract = new ethers.Contract(
+      srcChain.swapExecutorAddress,
+      squidSwapExecutableAbi
+    );
+    const swapPendingEvent = getSwapPendingEvent(contract, srcTxReceipt);
+    if (swapPendingEvent) {
+      const { traceId, symbol, destChain, payloadHash } = swapPendingEvent;
+
+      const srcTokens = selectTokensByChainId(state, srcChain.id);
+      const srcToken = srcTokens?.find(
+        (token) => token.symbol === symbol
+      ) as Token;
+
+      dispatch(setSrcToken(srcToken));
+      dispatch(setSrcChain(srcChain));
+      dispatch(setDestChain(destChain as SquidChain));
+
+      const swapStatusData = await fetchSwapStatus(txHash);
+      if (!swapStatusData) return;
+
+      const approveData = swapStatusData.approved;
+      const executeData = swapStatusData.executed;
+
+      if (executeData) {
+        const executeTxHash = executeData.transactionHash;
+        const executeTxReceipt = executeData.receipt;
+        dispatch(setDestSwapTx(executeTxHash));
+        const swapSuccessEvent = getSwapSuccessEvent(
+          contract,
+          executeTxReceipt
+        );
+        const swapFailedEvent = getSwapFailedEvent(contract, executeTxReceipt);
+        if (swapSuccessEvent) {
+          dispatch(setSwapFailed(false));
+        } else if (swapFailedEvent) {
+          dispatch(setSwapFailed(true));
+          const refundAddress =
+            swapFailedEvent.args[swapFailedEvent.args.length - 1];
+          dispatch(setRefundAddress(refundAddress));
+        }
+      }
+
+      if (approveData) {
+        const approveTxHash = approveData.transactionHash;
+        const commandId = approveData.returnValues.commandId;
+        dispatch(setCommandId(commandId));
+        dispatch(setDestApprovalTx(approveTxHash));
+      }
+
+      if (swapStatusData.status === "executed") {
+        dispatch(setStep(3));
+        return;
+      } else if (swapStatusData.status === "approved") dispatch(setStep(2));
+
+      const destTokens = selectTokensByChainId(state, destChain?.id);
+      const destToken = destTokens?.find(
+        (token) => token.symbol !== symbol
+      ) as Token;
+      dispatch(setDestToken(destToken));
+      dispatch(
+        setSrcTx({
+          txHash,
+          traceId,
+          payloadHash,
+        })
+      );
+    }
+  },
+});
+
+// Listening for approval status.
+swapStatusStartListening({
+  predicate: (action, currentState, _prevState) => {
+    const srcToken = currentState.swapInputs.srcToken;
+    const destToken = currentState.swapInputs.destToken;
+    const destChain = currentState.swapInputs.destChain;
+    const payloadHash = currentState.swapStatus.payloadHash;
+    const step = currentState.swapStatus.step;
+
+    if (!srcToken) return false;
+    if (!destToken) return false;
+    if (!payloadHash) return false;
+
     return (
       action.type === setSrcTx.type &&
-      destTokenAddress !== destCrosschainTokenAddress
+      requiredSwapDest(srcToken, destToken, destChain) &&
+      step === 0
     );
   },
   effect: async (action, listenerApi) => {
@@ -74,18 +184,21 @@ swapStatusStartListening({
   },
 });
 
+// Listening for executed status.
 swapStatusStartListening({
-  actionCreator: setDestApprovalTx,
+  predicate: (action, currentState, _prevState) => {
+    const step = currentState.swapStatus.step;
+    return action.type === setDestApprovalTx.type && step === 2;
+  },
   effect: async (_action, listenerApi) => {
     const state = listenerApi.getState();
     const destChain = state.swapInputs.destChain;
     const traceId = state.swapStatus.traceId;
-    if (!destChain) return;
 
     const destProvider = getProvider(destChain);
     const swapContract = new ethers.Contract(
       destChain.swapExecutorAddress,
-      swapExecutorAbi,
+      squidSwapExecutableAbi,
       destProvider
     );
     const swapSuccessEvent = swapContract.filters.SwapSuccess(traceId);

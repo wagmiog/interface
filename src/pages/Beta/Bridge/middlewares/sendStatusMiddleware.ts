@@ -12,6 +12,7 @@ import {
 import { ethers } from "ethers";
 import { getProvider } from "../utils/provider";
 import erc20Abi from "../abi/erc20.json";
+import { requiredSwapDest } from "../utils/swap";
 
 export const sendStatusMiddleware = createListenerMiddleware();
 
@@ -22,13 +23,16 @@ const sendStatusStartListening =
 
 sendStatusStartListening({
   predicate: (action, currentState, _prevState) => {
-    const destTokenAddress =
-      currentState.swapInputs.destToken?.address?.toLowerCase();
-    const destCrosschainTokenAddress =
-      currentState.swapInputs.destChain?.crosschainToken?.toLowerCase();
+    const srcToken = currentState.swapInputs.srcToken;
+    const destToken = currentState.swapInputs.destToken;
+    const destChain = currentState.swapInputs.destChain;
+
+    if (!srcToken) return false;
+    if (!destToken) return false;
+
     return (
       action.type === setSrcTx.type &&
-      destTokenAddress === destCrosschainTokenAddress
+      !requiredSwapDest(srcToken, destToken, destChain)
     );
   },
   effect: async (action, listenerApi) => {
@@ -39,7 +43,6 @@ sendStatusStartListening({
     if (!srcChain || !destChain || !txHash) return;
     const srcProvider = getProvider(srcChain);
     const destProvider = getProvider(destChain);
-
     listenerApi.dispatch(setChain(srcChain.name));
 
     await srcProvider.waitForTransaction(txHash, 1);
@@ -47,7 +50,7 @@ sendStatusStartListening({
 
     // wait for TransferEvent
     const erc20Contract = new ethers.Contract(
-      destChain.crosschainToken,
+      destChain.defaultCrosschainToken,
       erc20Abi,
       destProvider
     );
@@ -55,6 +58,7 @@ sendStatusStartListening({
       ethers.constants.AddressZero,
       state.swapInputs.recipientAddress
     );
+
     erc20Contract.once(eventFilter, (...args) => {
       const txHash = args[args.length - 1].transactionHash;
       listenerApi.dispatch(setStep(2));

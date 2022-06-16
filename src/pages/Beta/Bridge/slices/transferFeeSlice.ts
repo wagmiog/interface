@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { RootState } from "src/state";
 import { FeeRequest, FeeResponse } from "../types/api";
-import { selectCrosschainTokenAtSrcChain } from "./tokenSlice";
+import { Token } from "../types/token";
 
 export const transferFeeApi = createApi({
   reducerPath: "transferFee",
@@ -26,14 +26,13 @@ export const transferFeeApi = createApi({
     }),
   }),
 });
-//@ts-ignore
+
 export const { useGetTransferFeeQuery } = transferFeeApi;
 
-export const fetchTransferFee = (state: RootState) => {
-  const srcToken = selectCrosschainTokenAtSrcChain(state);
+export const fetchTransferFee = (state: RootState, crosschainToken: Token) => {
   return transferFeeApi.endpoints.getTransferFee.initiate({
     destChain: state.swapInputs.destChain,
     srcChain: state.swapInputs.srcChain,
-    srcToken,
+    srcToken: crosschainToken,
   });
 };

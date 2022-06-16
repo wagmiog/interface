@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Chain } from "../types/chain";
 import { chains } from "../constants/config";
 import type { RootState } from "src/state";
+import { SquidChain } from "../types/chain";
 
 interface DropInputState {
   amount: string;
-  destChain: Chain;
+  destChain: SquidChain;
   aliasAddresses: string[];
 }
 
@@ -26,8 +26,9 @@ export const dropInputSlice = createSlice({
       state.aliasAddresses = [...state.aliasAddresses, action.payload];
     },
     removeAliasAddress: (state: any, action: PayloadAction<string>) => {
-      // @ts-ignore
-      state.aliasAddresses = state.aliasAddresses.filter(address => address !== action.payload);
+      state.aliasAddresses = state.aliasAddresses.filter(
+        (address: any) => address !== action.payload
+      );
     },
     resetDropInputs: (state: any) => initialState,
   },
@@ -37,9 +38,10 @@ export const {
   setAliasAddresses,
   addAliasAddress,
   removeAliasAddress,
-  resetDropInputs
+  resetDropInputs,
 } = dropInputSlice.actions;
 
-export const selectAliasAddresses = (state: RootState) => state.dropInputs.aliasAddresses;
+export const selectAliasAddresses = (state: RootState) =>
+  state.dropInputs.aliasAddresses;
 
 export default dropInputSlice.reducer;

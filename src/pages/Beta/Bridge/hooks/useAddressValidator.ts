@@ -11,30 +11,30 @@ const useAddressValidator = (aliasAddress: string | undefined) => {
   const [valid, setValid] = useState<Validation>({ isValid: true });
 
   useEffect(() => {
-      (async () => {
-        if (!aliasAddress) return;
-    
-        try {
-          const addr = aliasAddress?.trim();
-          if (!await getProvider(chains[0]).resolveName(addr)) {
-              setValid({
-                isValid: false,
-                error: `Unresolved alias address: ${addr}`,
-              });
-              return;
-            } else {
-              setValid({
-                isValid: true,
-              });
-            }
-        } catch (e) {
-          console.log(e);
+    (async () => {
+      if (!aliasAddress) return;
+
+      try {
+        const addr = aliasAddress?.trim();
+        if (!(await getProvider(chains[0]).resolveName(addr))) {
           setValid({
             isValid: false,
-            error: "Incorrect alias",
+            error: `Unresolved alias address: ${addr}`,
+          });
+          return;
+        } else {
+          setValid({
+            isValid: true,
           });
         }
-      })()
+      } catch (e) {
+        console.log(e);
+        setValid({
+          isValid: false,
+          error: "Incorrect alias",
+        });
+      }
+    })();
   }, [aliasAddress]);
 
   return valid;

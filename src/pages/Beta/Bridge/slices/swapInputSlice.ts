@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Chain } from "../types/chain";
 import { chains } from "../constants/config";
 import { Token } from "../types/token";
 import type { RootState } from "src/state";
+import { SquidChain } from "../types/chain";
 
 interface SwapInputState {
-  srcChain?: Chain;
-  destChain: Chain;
+  srcChain?: SquidChain;
+  destChain: SquidChain;
   srcToken?: Token;
   destToken?: Token;
   amount: string;
@@ -22,7 +22,7 @@ const initialState: SwapInputState = {
   srcChain: chains[2],
   destChain: chains[1],
   swappable: true,
-  amount: "0",
+  amount: "",
 };
 
 export const swapInputSlice = createSlice({
@@ -31,7 +31,7 @@ export const swapInputSlice = createSlice({
   reducers: {
     setSrcChain: (
       state: SwapInputState,
-      action: PayloadAction<Chain | undefined>
+      action: PayloadAction<SquidChain | undefined>
     ) => {
       state.srcChain = action.payload;
     },
@@ -59,7 +59,10 @@ export const swapInputSlice = createSlice({
     ) => {
       state.destContractAddress = action.payload;
     },
-    setDestChain: (state: SwapInputState, action: PayloadAction<Chain>) => {
+    setDestChain: (
+      state: SwapInputState,
+      action: PayloadAction<SquidChain>
+    ) => {
       state.destChain = action.payload;
     },
     setDestNativeAmount: (

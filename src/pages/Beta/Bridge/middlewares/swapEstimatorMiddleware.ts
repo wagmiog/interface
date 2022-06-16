@@ -18,6 +18,9 @@ import {
 import { ethers } from "ethers";
 import { AppDispatch, RootState } from "src/state";
 import { estimateSwapOutputAmount } from "../utils/contract";
+import { requiredSwapDest, requiredSwapSrc } from "../utils/swap";
+import { fetchTransferFee } from "../slices/transferFeeSlice";
+
 // import { fetchTransferFee } from "../slices/transferFeeSlice";
 
 export const swapEstimatorMiddleware = createListenerMiddleware();
@@ -33,24 +36,30 @@ swapEstimatorStartListening({
     const state = listenerApi.getState();
     const { srcChain, srcToken, destChain, destToken, amount } =
       state.swapInputs;
-      if (!srcChain) return;
-      if (!amount) return;
-      if (!srcToken) return;
-      if (!destToken) return;
-      const crosschainTokenAtDestChain = selectCrosschainTokenAtDestChain(state);
-      const crosschainTokenAtSrcChain = selectCrosschainTokenAtSrcChain(state);
-      // const feeResponse = await listenerApi.dispatch(fetchTransferFee(state));
-      // const fee = feeResponse.data;
-      const fee = 200000;
-      if (!fee) return;
-      if (!crosschainTokenAtDestChain || !crosschainTokenAtSrcChain) return;
-      listenerApi.dispatch(setLoading(true));
-      listenerApi.dispatch(setError(""));
-      
-    const isRequiredSwapAtSrc =
-      srcToken.address !== crosschainTokenAtSrcChain?.address;
-    const isRequiredSwapAtDest =
-      destToken.address !== crosschainTokenAtDestChain?.address;
+    if (!srcChain) return;
+    if (!amount) return;
+    if (!srcToken) return;
+    if (!destToken) return;
+    const crosschainTokenAtDestChain = selectCrosschainTokenAtDestChain(state);
+    const crosschainTokenAtSrcChain = selectCrosschainTokenAtSrcChain(state);
+    if (!crosschainTokenAtSrcChain) return;
+    if (!crosschainTokenAtDestChain) return;
+
+    const isRequiredSwapAtSrc = requiredSwapSrc(srcToken);
+    const isRequiredSwapAtDest = requiredSwapDest(
+      srcToken,
+      destToken,
+      destChain
+    );
+
+    const feeResponse = await listenerApi.dispatch(
+      fetchTransferFee(state, crosschainTokenAtSrcChain)
+    );
+    const fee = feeResponse.data;
+    if (!fee) return;
+
+    listenerApi.dispatch(setLoading(true));
+    listenerApi.dispatch(setError(""));
 
     let _amount = ethers.utils.parseUnits(amount, srcToken.decimals).toString();
     try {
@@ -77,22 +86,17 @@ swapEstimatorStartListening({
       }
 
       if (isRequiredSwapAtDest) {
-        await estimateSwapOutputAmount({
+        const destSwapAmount = await estimateSwapOutputAmount({
           tokenA: crosschainTokenAtDestChain,
           tokenB: destToken,
           chain: destChain,
           routerAddress: destChain.routerAddress,
           amount: _amount,
-        }).then((amount) => {
-          listenerApi.dispatch(setSwapDestAmount(amount));
         });
+        listenerApi.dispatch(setSwapDestAmount(destSwapAmount));
       }
-    } catch (e) {
-      if (e instanceof Error) {
-        listenerApi.dispatch(setError(e.message));
-      } else {
-        console.log('Unexpected error', e);
-      }
+    } catch (e: any) {
+      listenerApi.dispatch(setError(e.message));
     }
 
     listenerApi.dispatch(setLoading(false));
