@@ -1,13 +1,13 @@
+import React, { StrictMode, useContext, useEffect } from 'react'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import 'inter-ui'
-import React, { StrictMode, useContext, useEffect } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactDOM from 'react-dom'
 import ReactGA from 'react-ga'
 import { Provider } from 'react-redux'
 import { HashRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { NetworkContextName, PangolinProvider } from '@pangolindex/components'
+import { NetworkContextName, PangolinProvider, useLibrary } from '@pangolindex/components'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import './i18n'
@@ -29,6 +29,7 @@ import { WagmiConfig } from "wagmi";
 import { providers } from "ethers";
 import { chains } from "./pages/Beta/Bridge/constants/config";
 import { wagmiClient } from "src/pages/Beta/Bridge/config/wagmi-client";
+import { ChainId } from '@pangolindex/sdk'
 
 type ProviderInput = {
   chainId?: number;
@@ -105,11 +106,14 @@ const ComponentThemeProvider = () => {
   const isBeta = useIsBetaUI()
   const theme = useContext(ThemeContext)
 
-  const { library, chainId, account } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
 
+  const { library } = useLibrary()
   useEffect(() => {
-    prefetchImportantQueries(account || '')
-  }, [account])
+    if (chainId === ChainId.AVALANCHE) {
+      prefetchImportantQueries(account || '')
+    }
+  }, [account, chainId])
 
   useEffect(() => {
     if (window.pendo && account) {
